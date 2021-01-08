@@ -1,0 +1,8 @@
+
+
+01/08/2021:  
+
+gen teach=0
+- replace teach=1 if teaching=="A" | teaching=="X"
+type mismatch
+
