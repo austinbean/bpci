@@ -1,4 +1,8 @@
 
+01/11/2021:
+- in 2010 Q 1 the original variable "teaching" is actually 0/1 (numeric).  Later quarters and years may be strings.   Some years which in which the data is a string are actually "(A)" "(X)", rather than "A" or "X" (though you can strip out the parentheses).  I would do an "if else" for string vs numeric type and make changes depending on the result.  This will apply to other indicator variables too.
+
+
 
 01/08/2021:  
 
