@@ -173,29 +173,34 @@ label variable highsev "Severity risk: Major  of extreme loss of function"
 
 // FROM HERE // 
 
-*gen teaching facility indicator
-gen teach=0
-replace teach=1 if teaching=="A" | teaching=="X"
+*gen teaching facility indicator*
+gen teach="0"
+replace teach="1" if teaching=="A" | teaching=="X"
+destring teach, replace force
 label variable teach "Indicates teaching hospital"
 
-*gen snf indicator
-gen snf_=0
-replace snf_=1 if snf=="X"
+*gen snf indicator*
+gen snf_="0"
+replace snf_="1" if snf=="X"
+destring snf_, replace force
 label variable snf_ "Indicates snf"
 
-*gen rehab indicator
-gen rehab_=0
-replace rehab_=1 if rehab=="X"
+*gen rehab indicator*
+gen rehab_="0"
+replace rehab_="1" if rehab=="X"
+destring rehab_, replace force
 label variable rehab_ "Indicates rehab"
 
-*gen long term care indicator
-gen ltc_=0
-replace ltc_=1 if long_term_ac=="X"
+*gen long term care indicator*
+gen ltc_="0"
+replace ltc_="1" if long_term_ac=="X" | other_ltc=="X"
+destring ltc_, replace force
 label variable ltc_ "Indicates long term care"
 
-*gen var indicating that patient spent most days in icu  
-gen icu=0
-replace icu=1 if spec_unit_1=="I"
+*gen var indicating that patient spent most days in icu*
+gen icu="0"
+replace icu="1" if spec_unit_1=="I"
+destring icu, replace force
 label variable icu "Indicates ICU was where patient spent most days during stay" 
 
 
