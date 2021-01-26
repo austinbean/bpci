@@ -1,4 +1,15 @@
 
+01/26/2021:
+In this block:
+
+*gen var indicating that patient spent most days in icu  
+gen icu=0
+replace icu=1 if spec_unit_1=="I"
+label variable icu "Indicates ICU was where patient spent most days during stay" 
+The variable spec_unit_1 does not exist in ever year.  2010 has just a single spec_unit, whereas 2011 - 2018 has SPEC_UNIT_1 - SPEC_UNIT_5. 
+
+
+
 01/11/2021:
 - in 2010 Q 1 the original variable "teaching" is actually 0/1 (numeric).  Later quarters and years may be strings.   Some years which in which the data is a string are actually "(A)" "(X)", rather than "A" or "X" (though you can strip out the parentheses).  I would do an "if else" for string vs numeric type and make changes depending on the result.  This will apply to other indicator variables too.
 
