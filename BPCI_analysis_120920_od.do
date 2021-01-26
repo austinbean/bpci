@@ -173,35 +173,64 @@ label variable highsev "Severity risk: Major  of extreme loss of function"
 
 // FROM HERE // 
 
-*gen teaching facility indicator*
-gen teach="0"
-replace teach="1" if teaching=="A" | teaching=="X"
-destring teach, replace force
+*gen teaching facility indicator
+gen teach=0
+foreach v of varlist teaching {
+                capture confirm string variable `v'
+                if !_rc {
+                        replace teach=1 if inlist(teaching, "A", "X", "(A)", "(X)")
+                }
+                else {
+                        replace teach=1 if teaching==1 
+                }
+        }
 label variable teach "Indicates teaching hospital"
 
-*gen snf indicator*
-gen snf_="0"
-replace snf_="1" if snf=="X"
-destring snf_, replace force
+*gen snf indicator
+gen snf_=0
+foreach v of varlist snf {
+                capture confirm string variable `v'
+                if !_rc {
+                        replace snf_=1 if inlist(snf, "A", "X", "(A)", "(X)")
+                }
+                else {
+                        replace snf_=1 if snf==1 
+                }
+        }
 label variable snf_ "Indicates snf"
 
-*gen rehab indicator*
-gen rehab_="0"
-replace rehab_="1" if rehab=="X"
-destring rehab_, replace force
+*gen rehab indicator
+gen rehab_=0
+foreach v of varlist rehab {
+                capture confirm string variable `v'
+                if !_rc {
+                        replace rehab_=1 if inlist(rehab, "A", "X", "(A)", "(X)")
+                }
+                else {
+                        replace rehab_=1 if rehab==1 
+                }
+        }
 label variable rehab_ "Indicates rehab"
 
-*gen long term care indicator*
-gen ltc_="0"
-replace ltc_="1" if long_term_ac=="X" | other_ltc=="X"
-destring ltc_, replace force
+*gen long term care indicator
+gen ltc_=0
+foreach v of varlist long_term_ac {
+                capture confirm string variable `v'
+                if !_rc {
+                        replace ltc_=1 if inlist(long_term_ac, "A", "X", "(A)", "(X)")
+                }
+                else {
+                        replace ltc_=1 if long_term_ac==1 
+                }
+        }
 label variable ltc_ "Indicates long term care"
 
-*gen var indicating that patient spent most days in icu*
-gen icu="0"
-replace icu="1" if spec_unit_1=="I"
-destring icu, replace force
+*gen var indicating that patient spent most days in icu  
+gen icu=0
+replace icu=1 if spec_unit_1=="I"
 label variable icu "Indicates ICU was where patient spent most days during stay" 
+
+
 
 
 **-----------------------------------------
