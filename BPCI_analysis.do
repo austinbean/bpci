@@ -227,7 +227,7 @@ label variable ltc_ "Indicates long term care"
 
 *gen var indicating that patient spent most days in icu  
 gen icu=0
-replace icu=1 if spec_unit_1=="I"
+replace icu=1 if spec_unit=="I" | spec_unit_1=="I"
 label variable icu "Indicates ICU was where patient spent most days during stay" 
 
 
