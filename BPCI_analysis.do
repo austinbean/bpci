@@ -16,7 +16,7 @@ set trace on
 
 *set macros (REQUIRES ACTION)
 
-global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses"
+global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
 
 foreach nm of numlist 2010(1)2018{
          
@@ -111,6 +111,7 @@ label variable dual "Dual eligible"
 
 *generate age variables
 rename pat_age age
+destring age, replace force // sometimes a string.  
 gen age1 = inlist(age, 02, 03, 04, 05)
 label variable age1 "Age: 1-17 years old"
 gen age2 = inlist(age, 06, 07, 08, 09, 10, 11)
@@ -227,7 +228,8 @@ label variable ltc_ "Indicates long term care"
 
 *gen var indicating that patient spent most days in icu  
 gen icu=0
-replace icu=1 if spec_unit=="I" | spec_unit_1=="I"
+capture rename spec_unit_1 spec_unit  // prior solution gives an error if spec_unit_1 does not exist.  
+replace icu=1 if spec_unit=="I" 
 label variable icu "Indicates ICU was where patient spent most days during stay" 
 
 
@@ -239,6 +241,7 @@ label variable icu "Indicates ICU was where patient spent most days during stay"
 //*CREATE BPCI VARIABLE*// 
 
 *BPCI is a dummy variable that indicates (1) if discharge has an eligible DRG & hospital
+capture rename cms_drg ms_drg // 
 rename ms_drg drg
 gen bpci=0
 label variable bpci "Indicates episode covered by BPCI"
@@ -351,7 +354,7 @@ label variable bpci_drg "Indicates DRG of discharge would be eligible for bpci c
 //**CREATE ANALYSIS VARIABLES AND PREPARE FOR ANALYSIS*//
 
 *winsorize los and total charges 
-winsor2 los, cuts(0 99) by(year)
+winsor2 los, cuts(0 99) by(year) // need ssc install winsor2
 label variable los_w "Length of stay, days, winsorized"
 rename los los_r
 winsor2 total_charges, cuts(0 99) 
@@ -407,41 +410,41 @@ save "${datadir}DiRienz_data_`nm'_`qr'.dta", replace
 
 }
 
-use "${datadir}DiRienz_data_2010_1.dta"
-append using "${datadir}DiRienz_data_2010_2.dta"
-append using "${datadir}DiRienz_data_2010_3.dta"
-append using "${datadir}DiRienz_data_2010_4.dta"
-append using "${datadir}DiRienz_data_2011_1.dta"
-append using "${datadir}DiRienz_data_2011_2.dta"
-append using "${datadir}DiRienz_data_2011_3.dta"
-append using "${datadir}DiRienz_data_2011_4.dta"
-append using "${datadir}DiRienz_data_2012_1.dta"
-append using "${datadir}DiRienz_data_2012_2.dta"
-append using "${datadir}DiRienz_data_2012_3.dta"
-append using "${datadir}DiRienz_data_2012_4.dta"
-append using "${datadir}DiRienz_data_2013_1.dta"
-append using "${datadir}DiRienz_data_2013_2.dta"
-append using "${datadir}DiRienz_data_2013_3.dta"
-append using "${datadir}DiRienz_data_2013_4.dta"
-append using "${datadir}DiRienz_data_2014_1.dta"
-append using "${datadir}DiRienz_data_2014_2.dta"
-append using "${datadir}DiRienz_data_2014_3.dta"
-append using "${datadir}DiRienz_data_2014_4.dta"
-append using "${datadir}DiRienz_data_2015_1.dta"
-append using "${datadir}DiRienz_data_2015_2.dta"
-append using "${datadir}DiRienz_data_2015_3.dta"
-append using "${datadir}DiRienz_data_2015_4.dta"
-append using "${datadir}DiRienz_data_2016_1.dta"
-append using "${datadir}DiRienz_data_2016_2.dta"
-append using "${datadir}DiRienz_data_2016_3.dta"
-append using "${datadir}DiRienz_data_2016_4.dta"
-append using "${datadir}DiRienz_data_2017_1.dta"
-append using "${datadir}DiRienz_data_2017_2.dta"
-append using "${datadir}DiRienz_data_2017_3.dta"
-append using "${datadir}DiRienz_data_2017_4.dta"
-append using "${datadir}DiRienz_data_2018_1.dta"
-append using "${datadir}DiRienz_data_2018_2.dta"
-append using "${datadir}DiRienz_data_2018_3.dta"
-append using "${datadir}DiRienz_data_2018_4.dta"
+use "${datadir}DiRienz_data_2010_1.dta", clear 
+append using "${datadir}DiRienz_data_2010_2.dta", force
+append using "${datadir}DiRienz_data_2010_3.dta", force
+append using "${datadir}DiRienz_data_2010_4.dta", force
+append using "${datadir}DiRienz_data_2011_1.dta", force
+append using "${datadir}DiRienz_data_2011_2.dta", force
+append using "${datadir}DiRienz_data_2011_3.dta", force 
+append using "${datadir}DiRienz_data_2011_4.dta", force 
+append using "${datadir}DiRienz_data_2012_1.dta", force 
+append using "${datadir}DiRienz_data_2012_2.dta", force 
+append using "${datadir}DiRienz_data_2012_3.dta", force 
+append using "${datadir}DiRienz_data_2012_4.dta", force 
+append using "${datadir}DiRienz_data_2013_1.dta", force 
+append using "${datadir}DiRienz_data_2013_2.dta", force 
+append using "${datadir}DiRienz_data_2013_3.dta", force 
+append using "${datadir}DiRienz_data_2013_4.dta", force 
+append using "${datadir}DiRienz_data_2014_1.dta", force 
+append using "${datadir}DiRienz_data_2014_2.dta", force 
+append using "${datadir}DiRienz_data_2014_3.dta", force 
+append using "${datadir}DiRienz_data_2014_4.dta", force 
+append using "${datadir}DiRienz_data_2015_1.dta", force 
+append using "${datadir}DiRienz_data_2015_2.dta", force 
+append using "${datadir}DiRienz_data_2015_3.dta", force 
+append using "${datadir}DiRienz_data_2015_4.dta", force 
+append using "${datadir}DiRienz_data_2016_1.dta", force 
+append using "${datadir}DiRienz_data_2016_2.dta", force 
+append using "${datadir}DiRienz_data_2016_3.dta", force 
+append using "${datadir}DiRienz_data_2016_4.dta", force 
+append using "${datadir}DiRienz_data_2017_1.dta", force 
+append using "${datadir}DiRienz_data_2017_2.dta", force 
+append using "${datadir}DiRienz_data_2017_3.dta", force 
+append using "${datadir}DiRienz_data_2017_4.dta", force 
+append using "${datadir}DiRienz_data_2018_1.dta", force 
+append using "${datadir}DiRienz_data_2018_2.dta", force 
+append using "${datadir}DiRienz_data_2018_3.dta", force 
+append using "${datadir}DiRienz_data_2018_4.dta", force 
 
 save "${datadir}DiRienz_data_all.dta", replace
