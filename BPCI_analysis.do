@@ -18,6 +18,9 @@ set trace on
 
 global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
 
+log using "$datadir/BPCI_dataconstruction.smcl"
+
+
 foreach nm of numlist 2010(1)2018{
          
 foreach qr of numlist 1(1)4{                        
@@ -82,6 +85,9 @@ capture replace died=1 if pat_status==20 | pat_status==40 | pat_status==41 | pat
 label variable died "Died"
 
 *gen and consolidate payer type
+
+**MC: 14 is EPO, which should be private
+
 rename first_payment_src pay1
 rename secondary_payment_src pay2
 gen medicare=0
@@ -89,11 +95,11 @@ replace medicare=1 if inlist(pay1, "MA", "MB", "16")
 gen medicaid=0
 replace medicaid=1 if pay1=="MC" 
 gen private=0
-replace private=1 if inlist(pay1, "12", "13", "15", "BL", "CI", "HM")
+replace private=1 if inlist(pay1, "12", "13", "14", "15", "BL", "CI", "HM")
 gen selfpay=0
 replace selfpay=1 if inlist(pay1, "09", "ZZ")
 gen other=0
-replace other=1 if inlist(pay1, "10", "11", "14", "AM", "CH", "DS", "LI")
+replace other=1 if inlist(pay1, "10", "11",  "AM", "CH", "DS", "LI")
 replace other=1 if inlist(pay1, "LM", "OF", "TV", "VA", "WC")
 
 *gen dual eligible variable "dual" for discharges with both medicare and medicaid
@@ -109,6 +115,8 @@ label variable selfpay "Primary expected payer is Self-pay"
 label variable other "Primary expected payer is other"
 label variable dual "Dual eligible"
 
+**MC: likely irrelevant to your sample, but how are 22-26 categories (HIV, SUD) handled? 
+
 *generate age variables
 rename pat_age age
 destring age, replace force // sometimes a string.  
@@ -122,7 +130,7 @@ gen age4 = inlist(age, 16, 17, 18, 19)
 label variable age4 "Age: 65-84 years old"
 gen age5 = inlist(age, 20, 21)
 label variable age5 "Age: 85 years and older"
-drop if age==. | age==0 | age==1
+drop if age==. | age==0 | age==1 | age>21
 
 *gen age categorical var
 gen agecat=1 if age1==1
@@ -253,7 +261,7 @@ replace bpci=1 if inlist(drg, 280, 281, 282) & inlist(thcic_id, 114001, 653001, 
 *Coronary artery bypass graft
 replace bpci=1 if inlist(drg, 231, 232, 233, 234, 235, 236) & thcic_id==653001
 
-*Cardiac arrhythmia 
+*Cardiac arrhythmia 
 replace bpci=1 if inlist(drg, 308, 309, 310) ///
 & inlist(thcic_id, 212000, 214000) 
 
@@ -275,11 +283,11 @@ replace bpci=1 if inlist(drg, 291, 292, 293) ///
 replace bpci=1 if inlist(drg, 190, 191, 192, 202, 203) ///
 & inlist(thcic_id, 114001, 349001, 212000, 336001, 675000, 214000, 340000, 477000) 
 
-*Diabetes  
+*Diabetes  
 replace bpci=1 if inlist(drg, 637, 638, 639) ///
 & inlist(thcic_id, 212000, 349001)
 
-*Esophagitis, gastroenteritis and other digestive disorders  
+*Esophagitis, gastroenteritis and other digestive disorders  
 replace bpci=1 if inlist(drg, 391, 392) & thcic_id==675000
 
 *Gastrointestinal obstruction
@@ -347,6 +355,14 @@ replace bpci_drg=1 if inlist(drg, 682, 683, 684, 870, 871, 872, 177, 178, 179, 1
 replace bpci_drg=1 if inlist(drg, 61, 62, 63, 64, 65, 66, 312, 69, 689, 690)
 label variable bpci_drg "Indicates DRG of discharge would be eligible for bpci coverage, but does not indicate actual bpci contract"
 
+
+**MC: I'd add a couple of sums and tabs here to quality check
+
+tab drg
+tab bpci_drg 
+tab bpci
+tab drg bpci
+tab drg bpci_drg
 
 **-----------------------------------------
 
@@ -448,3 +464,5 @@ append using "${datadir}DiRienz_data_2018_3.dta", force
 append using "${datadir}DiRienz_data_2018_4.dta", force 
 
 save "${datadir}DiRienz_data_all.dta", replace
+
+log close
