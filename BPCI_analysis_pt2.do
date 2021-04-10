@@ -4,7 +4,7 @@
 
 *set macros (REQUIRES ACTION)
 
-global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
+global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/"
 
 log using "$datadir/BPCI_analysis.smcl"
 
