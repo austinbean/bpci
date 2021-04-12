@@ -68,6 +68,7 @@ rename length_of_stay los
 *gen year and qtr variables from "discharge_qtr"
 gen year = substr(discharge,1,4)
 label variable year "Discharge year"
+destring year, replace
 gen dqtr = substr(discharge,-1,1)
 label variable dqtr "Discharge quarter"
 drop discharge
@@ -418,6 +419,8 @@ label variable los_rlog "Log of length of stay"
 *Restrict sample 
 keep if medicare==1&age4==1 | medicaid==1&age3==1 | private==1&age3==1
 drop if bpci_drg==0
+
+
 
 save "${datadir}DiRienz_data_`nm'_`qr'.dta", replace
 
