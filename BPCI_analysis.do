@@ -18,7 +18,7 @@ set trace on
 
 global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
 
-log using "$datadir/BPCI_dataconstruction.smcl"
+log using "${datadir}BPCI_dataconstruction.smcl", replace
 
 
 foreach nm of numlist 2010(1)2018{
@@ -382,14 +382,14 @@ label variable total_charges "Total charges, raw"
 *gen winsorized and inflation adjusted total charges var
 *adjust for inflation to the 2018 dollar using the CPI for Hospital Services
 gen float adjtotchg_w = 0 
-replace adjtotchg_w = totchg_w * 1.427 if year=="2010"
-replace adjtotchg_w = totchg_w * 1.351 if year=="2011"
-replace adjtotchg_w = totchg_w * 1.290 if year=="2012"
-replace adjtotchg_w = totchg_w * 1.236 if year=="2013"
-replace adjtotchg_w = totchg_w * 1.181 if year=="2014"
-replace adjtotchg_w = totchg_w * 1.138 if year=="2015"
-replace adjtotchg_w = totchg_w * 1.090 if year=="2016"
-replace adjtotchg_w = totchg_w * 1.042 if year=="2017"
+replace adjtotchg_w = totchg_w * 1.427 if year==2010
+replace adjtotchg_w = totchg_w * 1.351 if year==2011
+replace adjtotchg_w = totchg_w * 1.290 if year==2012
+replace adjtotchg_w = totchg_w * 1.236 if year==2013
+replace adjtotchg_w = totchg_w * 1.181 if year==2014
+replace adjtotchg_w = totchg_w * 1.138 if year==2015
+replace adjtotchg_w = totchg_w * 1.090 if year==2016
+replace adjtotchg_w = totchg_w * 1.042 if year==2017
 label variable adjtotchg_w "Total charges, winsorized, inflation adjusted (2018)"
 rename totchg_w unadjtotchg_w
 rename adjtotchg_w totchg_w
@@ -397,14 +397,14 @@ rename adjtotchg_w totchg_w
 *gen non-winsorized inflation adjusted total charges var
 *adjust for inflation 
 gen float adjtotchg_r = 0 
-replace adjtotchg_r = total_charges * 1.427 if year=="2010"
-replace adjtotchg_r = total_charges * 1.351 if year=="2011"
-replace adjtotchg_r = total_charges * 1.290 if year=="2012"
-replace adjtotchg_r = total_charges * 1.236 if year=="2013"
-replace adjtotchg_r = total_charges * 1.181 if year=="2014"
-replace adjtotchg_r = total_charges * 1.138 if year=="2015"
-replace adjtotchg_r = total_charges * 1.090 if year=="2016"
-replace adjtotchg_r = total_charges * 1.042 if year=="2017"
+replace adjtotchg_r = total_charges * 1.427 if year==2010
+replace adjtotchg_r = total_charges * 1.351 if year==2011
+replace adjtotchg_r = total_charges * 1.290 if year==2012
+replace adjtotchg_r = total_charges * 1.236 if year==2013
+replace adjtotchg_r = total_charges * 1.181 if year==2014
+replace adjtotchg_r = total_charges * 1.138 if year==2015
+replace adjtotchg_r = total_charges * 1.090 if year==2016
+replace adjtotchg_r = total_charges * 1.042 if year==2017
 label variable adjtotchg_r "Total charges, non-winsorized, inflation adjusted (2018)"
 rename adjtotchg_r totchg_r
 
