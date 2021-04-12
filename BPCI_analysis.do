@@ -420,7 +420,8 @@ label variable los_rlog "Log of length of stay"
 keep if medicare==1&age4==1 | medicaid==1&age3==1 | private==1&age3==1
 drop if bpci_drg==0
 
-
+*Keep variables
+keep total_charges totchg_r totchg_w totchg_rlog los los_r los_w los_rlog bpci bpci_drg medicare medicaid private insurance female highsev dual icu ethnicity racecat illness_severity year dqtr thcic_id snf teach rehab ltc icu acute_care long_term_ac other_ltc beds drg postcare
 
 save "${datadir}DiRienz_data_`nm'_`qr'.dta", replace
 
