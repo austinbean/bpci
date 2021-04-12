@@ -6,6 +6,7 @@
 
 global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/"
 
+cap log close
 log using "$datadir/BPCI_analysis.smcl"
 
 use "${datadir}DiRienz_data_all.dta", replace
