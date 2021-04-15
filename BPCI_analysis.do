@@ -16,7 +16,7 @@ set trace on
 
 *set macros (REQUIRES ACTION)
 
-global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
+global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/"
 
 cap log close
 log using "${datadir}BPCI_dataconstruction.smcl", replace
