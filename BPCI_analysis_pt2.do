@@ -148,7 +148,7 @@ keep if bpci_drg==1
 gen did=post*bpci
 label variable did "Interaction variable that indicates 1 if under BPCI contract and occurred after implementation"
 
-save "${datadir}DiRienz_AIM2.dta"
+save "${datadir}DiRienz_AIM2.dta", replace
 clear
 
 **SAVE SUBSAMPLE FOR AIM1**
@@ -158,7 +158,7 @@ keep if bpci==1
 gen did=post*medicare
 label variable did "Interaction variable that indicates 1 if under BPCI contract and occurred after implementation"
 
-save "${datadir}DiRienz_AIM1.dta"
+save "${datadir}DiRienz_AIM1.dta", replace
 
 **-----------------------------------------
 
