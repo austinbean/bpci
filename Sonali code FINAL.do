@@ -5,7 +5,7 @@ set trace on
 
 *set macros 
 
-global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
+global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/"
 
 cap log close
 log using "${datadir}sonali_compilation.smcl"
