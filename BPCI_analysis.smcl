@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Apr 2021, 15:33:59
+ {txt}opened on:  {res}15 Apr 2021, 16:18:02
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
@@ -19,14 +19,4 @@ end of do-file
 
 {search r(111), local:r(111);}
 
-{com}. use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
-
-. 
-. log close
-      {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
-  {txt}log type:  {res}smcl
- {txt}closed on:  {res}15 Apr 2021, 15:36:10
-{txt}{.-}
-{smcl}
-{txt}{sf}{ul off}
+{com}. 
