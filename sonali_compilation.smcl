@@ -1,0 +1,1307 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/sonali_compilation.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Apr 2021, 16:22:54
+{txt}
+{com}. 
+. foreach nm of numlist 2010(1)2018{c -(}
+{txt}  2{com}.          
+. foreach qr of numlist 1(1)4{c -(}                        
+{txt}  3{com}. di "YEAR: `nm' QUARTER: `qr'"
+{txt}  4{com}. quietly use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/`nm'/CD`nm'Q`qr'/PUDF `qr' Q `nm'.dta", clear
+{txt}  5{com}. 
+. rename *, lower
+{txt}  6{com}. 
+. *gen year and qtr variables from "discharge_qtr"
+. gen year = substr(discharge,1,4)
+{txt}  7{com}. label variable year "Discharge year"
+{txt}  8{com}. destring year, replace
+{txt}  9{com}. gen dqtr = substr(discharge,-1,1)
+{txt} 10{com}. label variable dqtr "Discharge quarter"
+{txt} 11{com}. drop discharge
+{txt} 12{com}. 
+. *gen binary sex variable from "sex_code"
+. gen female = sex_code=="F"
+{txt} 13{com}. replace female=. if inlist(sex_code, "U", "", "*")
+{txt} 14{com}. drop sex_code
+{txt} 15{com}. 
+. *gen insurance type
+. rename first_payment_src pay1
+{txt} 16{com}. rename secondary_payment_src pay2
+{txt} 17{com}. gen medicare=0
+{txt} 18{com}. replace medicare=1 if inlist(pay1, "MA", "MB", "16")
+{txt} 19{com}. gen medicaid=0
+{txt} 20{com}. replace medicaid=1 if pay1=="MC" 
+{txt} 21{com}. gen private=0
+{txt} 22{com}. replace private=1 if inlist(pay1, "12", "13", "14", "15", "BL", "CI", "HM")
+{txt} 23{com}. gen selfpay=0
+{txt} 24{com}. replace selfpay=1 if inlist(pay1, "09", "ZZ")
+{txt} 25{com}. gen other=0
+{txt} 26{com}. replace other=1 if inlist(pay1, "10", "11",  "AM", "CH", "DS", "LI")
+{txt} 27{com}. replace other=1 if inlist(pay1, "LM", "OF", "TV", "VA", "WC")
+{txt} 28{com}. gen insurance=0
+{txt} 29{com}. replace insurance=1 if medicare==1
+{txt} 30{com}. replace insurance=2 if medicaid==1
+{txt} 31{com}. replace insurance=3 if private==1
+{txt} 32{com}. replace insurance=4 if selfpay==1
+{txt} 33{com}. replace insurance=5 if other==1
+{txt} 34{com}. replace insurance=. if insurance==0
+{txt} 35{com}. label variable insurance "Insurance categorical variable"
+{txt} 36{com}. 
+. *gen ethnicity (Race and ethnicity data aren't always collected)
+. capture replace ethnicity="." if inlist(ethnicity, "`", "*", "") // modified.
+{txt} 37{com}. label variable ethnicity "Indicates hispanic origin (1) or not of hispanic origin (2)"
+{txt} 38{com}. 
+. *gen race categorical var
+. capture replace race="." if inlist(race, "", "*", "`") // modified 
+{txt} 39{com}. destring race, replace force
+{txt} 40{com}. gen racecat=1 if race==4
+{txt} 41{com}. replace racecat=2 if race==3
+{txt} 42{com}. replace racecat=3 if ethnicity==1
+{txt} 43{com}. replace racecat=4 if inlist(race, 1, 2, 5)
+{txt} 44{com}. label variable racecat "Indicates race: white (1) black (2) Hispanic (3) or other (4)"
+{txt} 45{com}. 
+. 
+. 
+. ************************************************************************
+. **CLASSIFYING PATIENT DIAGNOSIS**
+. 
+. gen icd9 = real(princ_diag_code) if year<2016
+{txt} 46{com}. gen icd10 = substr(princ_diag_code, 1, 5) if year>2015
+{txt} 47{com}. 
+. *patients with major depression
+. gen major_depression = (icd9 == 2962 | icd9 == 29621 | icd9 == 29622 | icd9 == 29623 | icd9 == 29624 | icd9 == 29625 | icd9 == 29626 | icd9 == 2963 | icd9 == 29631 | icd9 == 29632 | icd9 == 29633 | icd9 == 29634 | icd9 == 29635 | icd9 == 29636)
+{txt} 48{com}. 
+. replace major_depression = 1 if (icd10== "F32" | icd10=="F321" | icd10=="F322" |icd10== "F323" |icd10== "F324" |icd10== "F325" | icd10== "F328" | icd10== "F329"| icd10== "F33" | icd10== "F331" | icd10== "F332" | icd10== "F333" | icd10== "F334" | icd10== "F338" | icd10== "F339" | icd10== "F3341" | icd10== "F3342" )
+{txt} 49{com}. 
+. *patients with bipolar disorder
+. gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602  | icd9==29603 | icd==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
+{txt} 50{com}. 
+. replace bipolar = 1 if (icd10== "F31" | icd10=="F311" | icd10=="F3111" |icd10== "F3112" |icd10== "F3113" |icd10== "F312" | icd10== "F313" | icd10== "F3131"| icd10== "F3132" | icd10== "F314" | icd10== "F315" | icd10== "F316" | icd10== "F3161" | icd10== "F3162" | icd10== "F3163" | icd10== "F3164" | icd10== "F317" | icd10== "F3171" | icd10=="F3172" | icd10=="F3173" |icd10== "F3174" |icd10== "F3175" |icd10== "F3176" | icd10== "F3177" | icd10== "F3178"| icd10== "F318" | icd10== "F3181" | icd10== "F3189" | icd10== "F319")
+{txt} 51{com}. 
+. *patients with schizophrenia
+. gen schizophrenia = icd9 == 295
+{txt} 52{com}. replace schizophrenia = 1 if (icd10== "F20" | icd10=="F201" | icd10=="F202" |icd10== "F203" |icd10== "F205" |icd10== "F208" | icd10== "F2081" | icd10== "F2089"| icd10== "F209")
+{txt} 53{com}. 
+. *drop everyone except SMI patients
+. keep if major_depression==1|bipolar==1|schizophrenia==1
+{txt} 54{com}. tab major_depression 
+{txt} 55{com}. tab bipolar 
+{txt} 56{com}. tab schizophrenia
+{txt} 57{com}. 
+. 
+. 
+. ************************************************************************
+. **CLASSIFYING PROVIDER TYPE**
+. 
+. 
+. *gen psych facility indicator
+. gen psychhosp=0
+{txt} 58{com}. replace psychhosp=1 if inlist(fac_psych_ind, "A", "X", "(A)", "(X)")
+{txt} 59{com}. replace psychhosp = 2 if strpos(provider_name, "Behavioral")
+{txt} 60{com}. replace psychhosp = 2 if strpos(provider_name, "Psychiatric")
+{txt} 61{com}. replace psychhosp =2 if provider_name=="Carrollton Springs" | provider_name=="Cedar Crest Hospital" | provider_name=="Clarity Child Guidance Center" | provider_name=="Devereux Texas Treatment Network" | provider_name=="Glen Oaks Hospital"  | provider_name=="Hickory Trail Hospital"  | provider_name=="Intracare North Hospital"  | provider_name=="Kingwood Pines Hospital"  | provider_name=="Laurel Ridge Treatment Center" | provider_name=="Millwood Hospital" | strpos(provider_name, "Montgomery County Mental Health")  | provider_name=="Red River Regional" | provider_name=="Hospital River Crest Hospital"  | provider_name=="Sunrise Canyon"  | provider_name=="Texas NeuroRehab Center" | provider_name=="Menninger Clinic" | provider_name=="West Oaks Hospital"
+{txt} 62{com}. 
+. label variable psychosp "0 if general, 1 if general with psych ward, 2 if psych hospital"
+{txt} 63{com}. 
+. tab psychhosp
+{txt} 64{com}. 
+. save "${c -(}datadir{c )-}sonali_data_`nm'_`qr'.dta", replace
+{txt} 65{com}. 
+. 
+. {c )-}
+{txt} 66{com}. 
+. {c )-}
+{txt}- foreach nm of numlist 2010(1)2018{c -(}
+- foreach qr of numlist 1(1)4{c -(}
+- di "YEAR: `nm' QUARTER: `qr'"
+= di "YEAR: 2010 QUARTER: 1"
+YEAR: 2010 QUARTER: 1
+- quietly use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/`nm'/CD`nm'Q`qr'/PUDF `qr' Q `nm'.dta", clear
+= quietly use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/2010/CD2010Q1/PUDF 1 Q 2010.dta", clear
+- rename *, lower
+  {hline 77} begin rename {hline}
+  - version 12
+  - mata: rename_cmd("`3'")
+  = mata: rename_cmd("")
+{res}{txt}    {hline 77} begin unab {hline}
+    - version 6
+    - gettoken user 0: 0, parse(" :")
+    - gettoken colon 0: 0, parse(" :")
+    - if `"`colon'"' != ":" {c -(} error 198 {c )-}
+    = if `":"' != ":" {c -(} error 198 {c )-}
+    - syntax [varlist(default=empty)] [, MIN(integer 1) MAX(integer 120000) NAME(string)]
+    - c_local `user' `varlist'
+    = c_local __000000 DISCHARGE_QTR THCIC_ID PROVIDER_NAME FAC_TEACHING_IND FAC_PSYCH_IND FAC_REHAB_IND FAC_ACUTE_CARE_IND FAC_SNF_IND FAC_LONG_TERM_AC_IND FAC_OTHER_LTC_IND FAC_PEDS_IND SPEC_UNIT ENCOUNTER_INDICATOR SEX_CODE TYPE_OF_ADMISSION SOURCE_OF_ADMISSION PAT_STATE PAT_ZIP PAT_COUNTRY COUNTY PUBLIC_HEALTH_REGION ADMIT_WEEKDAY LENGTH_OF_STAY PAT_AGE PATIENT_STATUS RACE ETHNICITY FIRST_PAYMENT_SRC SECONDARY_PAYMENT_SRC TYPE_OF_BILL PRIVATE_AMOUNT SEMI_PRIVATE_AMOUNT WARD_AMOUNT ICE_AMOUNT CCU_AMOUNT OTHER_AMOUNT PHARM_AMOUNT MEDSURG_AMOUNT DME_AMOUNT USED_DME_AMOUNT PT_AMOUNT OT_AMOUNT SPEECH_AMOUNT IT_AMOUNT BLOOD_AMOUNT BLOOD_ADM_AMOUNT OR_AMOUNT LITH_AMOUNT CARD_AMOUNT ANES_AMOUNT LAB_AMOUNT RAD_AMOUNT MRI_AMOUNT OP_AMOUNT ER_AMOUNT AMBULANCE_AMOUNT PRO_FEE_AMOUNT ORGAN_AMOUNT ESRD_AMOUNT CLINIC_AMOUNT TOTAL_CHARGES TOTAL_NON_COV_CHARGES TOTAL_CHARGES_ACCOMM TOTAL_NON_COV_CHARGES_ACCOMM TOTAL_CHARGES_ANCIL TOTAL_NON_COV_CHARGES_ANCIL ADMITTING_DIAGNOSIS PRINC_DIAG_CODE OTHER_DIAG_CODE_1 OTHER_DIAG_CODE_2 OTHER_DIAG_CODE_3 OTHER_DIAG_CODE_4 OTHER_DIAG_CODE_5 OTHER_DIAG_CODE_6 OTHER_DIAG_CODE_7 OTHER_DIAG_CODE_8 OTHER_DIAG_CODE_9 OTHER_DIAG_CODE_10 OTHER_DIAG_CODE_11 OTHER_DIAG_CODE_12 OTHER_DIAG_CODE_13 OTHER_DIAG_CODE_14 OTHER_DIAG_CODE_15 OTHER_DIAG_CODE_16 OTHER_DIAG_CODE_17 OTHER_DIAG_CODE_18 OTHER_DIAG_CODE_19 OTHER_DIAG_CODE_20 OTHER_DIAG_CODE_21 OTHER_DIAG_CODE_22 OTHER_DIAG_CODE_23 OTHER_DIAG_CODE_24 PRINC_SURG_PROC_CODE PRINC_SURG_PROC_DAY PRINC_ICD9_CODE OTHER_SURG_PROC_CODE_1 OTHER_SURG_PROC_DAY_1 OTHER_ICD9_CODE_1 OTHER_SURG_PROC_CODE_2 OTHER_SURG_PROC_DAY_2 OTHER_ICD9_CODE_2 OTHER_SURG_PROC_CODE_3 OTHER_SURG_PROC_DAY_3 OTHER_ICD9_CODE_3 OTHER_SURG_PROC_CODE_4 OTHER_SURG_PROC_DAY_4 OTHER_ICD9_CODE_4 OTHER_SURG_PROC_CODE_5 OTHER_SURG_PROC_DAY_5 OTHER_ICD9_CODE_5 OTHER_SURG_PROC_CODE_6 OTHER_SURG_PROC_DAY_6 OTHER_ICD9_CODE_6 OTHER_SURG_PROC_CODE_7 OTHER_SURG_PROC_DAY_7 OTHER_ICD9_CODE_7 OTHER_SURG_PROC_CODE_8 OTHER_SURG_PROC_DAY_8 OTHER_ICD9_CODE_8 OTHER_SURG_PROC_CODE_9 OTHER_SURG_PROC_DAY_9 OTHER_ICD9_CODE_9 OTHER_SURG_PROC_CODE_10 OTHER_SURG_PROC_DAY_10 OTHER_ICD9_CODE_10 OTHER_SURG_PROC_CODE_11 OTHER_SURG_PROC_DAY_11 OTHER_ICD9_CODE_11 OTHER_SURG_PROC_CODE_12 OTHER_SURG_PROC_DAY_12 OTHER_ICD9_CODE_12 OTHER_SURG_PROC_CODE_13 OTHER_SURG_PROC_DAY_13 OTHER_ICD9_CODE_13 OTHER_SURG_PROC_CODE_14 OTHER_SURG_PROC_DAY_14 OTHER_ICD9_CODE_14 OTHER_SURG_PROC_CODE_15 OTHER_SURG_PROC_DAY_15 OTHER_ICD9_CODE_15 OTHER_SURG_PROC_CODE_16 OTHER_SURG_PROC_DAY_16 OTHER_ICD9_CODE_16 OTHER_SURG_PROC_CODE_17 OTHER_SURG_PROC_DAY_17 OTHER_ICD9_CODE_17 OTHER_SURG_PROC_CODE_18 OTHER_SURG_PROC_DAY_18 OTHER_ICD9_CODE_18 OTHER_SURG_PROC_CODE_19 OTHER_SURG_PROC_DAY_19 OTHER_ICD9_CODE_19 OTHER_SURG_PROC_CODE_20 OTHER_SURG_PROC_DAY_20 OTHER_ICD9_CODE_20 OTHER_SURG_PROC_CODE_21 OTHER_SURG_PROC_DAY_21 OTHER_ICD9_CODE_21 OTHER_SURG_PROC_CODE_22 OTHER_SURG_PROC_DAY_22 OTHER_ICD9_CODE_22 OTHER_SURG_PROC_CODE_23 OTHER_SURG_PROC_DAY_23 OTHER_ICD9_CODE_23 OTHER_SURG_PROC_CODE_24 OTHER_SURG_PROC_DAY_24 OTHER_ICD9_CODE_24 E_CODE_1 E_CODE_2 E_CODE_3 E_CODE_4 E_CODE_5 E_CODE_6 E_CODE_7 E_CODE_8 E_CODE_9 E_CODE_10 CONDITION_CODE_1 CONDITION_CODE_2 CONDITION_CODE_3 CONDITION_CODE_4 CONDITION_CODE_5 CONDITION_CODE_6 CONDITION_CODE_7 CONDITION_CODE_8 OCCUR_CODE_1 OCCUR_DAY_1 OCCUR_CODE_2 OCCUR_DAY_2 OCCUR_CODE_3 OCCUR_DAY_3 OCCUR_CODE_4 OCCUR_DAY_4 OCCUR_CODE_5 OCCUR_DAY_5 OCCUR_CODE_6 OCCUR_DAY_6 OCCUR_CODE_7 OCCUR_DAY_7 OCCUR_CODE_8 OCCUR_DAY_8 OCCUR_CODE_9 OCCUR_DAY_9 OCCUR_CODE_10 OCCUR_DAY_10 OCCUR_CODE_11 OCCUR_DAY_11 OCCUR_CODE_12 OCCUR_DAY_12 OCCUR_SPAN_CODE_1 OCCUR_SPAN_FROM_1 OCCUR_SPAN_THRU_1 OCCUR_SPAN_CODE_2 OCCUR_SPAN_FROM_2 OCCUR_SPAN_THRU_2 OCCUR_SPAN_CODE_3 OCCUR_SPAN_FROM_3 OCCUR_SPAN_THRU_3 OCCUR_SPAN_CODE_4 OCCUR_SPAN_FROM_4 OCCUR_SPAN_THRU_4 VALUE_CODE_1 VALUE_AMOUNT_1 VALUE_CODE_2 VALUE_AMOUNT_2 VALUE_CODE_3 VALUE_AMOUNT_3 VALUE_CODE_4 VALUE_AMOUNT_4 VALUE_CODE_5 VALUE_AMOUNT_5 VALUE_CODE_6 VALUE_AMOUNT_6 VALUE_CODE_7 VALUE_AMOUNT_7 VALUE_CODE_8 VALUE_AMOUNT_8 VALUE_CODE_9 VALUE_AMOUNT_9 VALUE_CODE_10 VALUE_AMOUNT_10 VALUE_CODE_11 VALUE_AMOUNT_11 VALUE_CODE_12 VALUE_AMOUNT_12 CMS_MDC APR_MDC CMS_DRG APR_DRG RISK_MORTALITY ILLNESS_SEVERITY ATTENDING_PHYS_UNIF_ID OPERATING_PHYS_UNIF_ID CERT_STATUS RECORD_ID ADMN_NICU MAXDAY TOTAL_SERVICE_DA TOTAL_SERVICE_UN UNQ_REV_CODES ADMN_LEVEL1 ADMN_LEVEL2 ADMN_LEVEL3 ADMN_LEVEL4 MULTI_LEVEL HIGHEST_LEVEL DAYS_LEVEL_1 DAYS_LEVEL_2 DAYS_LEVEL_3 DAYS_LEVEL_4 INTENSIVE_DAYS
+    - local n : word count `varlist'
+    = local n : word count DISCHARGE_QTR THCIC_ID PROVIDER_NAME FAC_TEACHING_IND FAC_PSYCH_IND FAC_REHAB_IND FAC_ACUTE_CARE_IND FAC_SNF_IND FAC_LONG_TERM_AC_IND FAC_OTHER_LTC_IND FAC_PEDS_IND SPEC_UNIT ENCOUNTER_INDICATOR SEX_CODE TYPE_OF_ADMISSION SOURCE_OF_ADMISSION PAT_STATE PAT_ZIP PAT_COUNTRY COUNTY PUBLIC_HEALTH_REGION ADMIT_WEEKDAY LENGTH_OF_STAY PAT_AGE PATIENT_STATUS RACE ETHNICITY FIRST_PAYMENT_SRC SECONDARY_PAYMENT_SRC TYPE_OF_BILL PRIVATE_AMOUNT SEMI_PRIVATE_AMOUNT WARD_AMOUNT ICE_AMOUNT CCU_AMOUNT OTHER_AMOUNT PHARM_AMOUNT MEDSURG_AMOUNT DME_AMOUNT USED_DME_AMOUNT PT_AMOUNT OT_AMOUNT SPEECH_AMOUNT IT_AMOUNT BLOOD_AMOUNT BLOOD_ADM_AMOUNT OR_AMOUNT LITH_AMOUNT CARD_AMOUNT ANES_AMOUNT LAB_AMOUNT RAD_AMOUNT MRI_AMOUNT OP_AMOUNT ER_AMOUNT AMBULANCE_AMOUNT PRO_FEE_AMOUNT ORGAN_AMOUNT ESRD_AMOUNT CLINIC_AMOUNT TOTAL_CHARGES TOTAL_NON_COV_CHARGES TOTAL_CHARGES_ACCOMM TOTAL_NON_COV_CHARGES_ACCOMM TOTAL_CHARGES_ANCIL TOTAL_NON_COV_CHARGES_ANCIL ADMITTING_DIAGNOSIS PRINC_DIAG_CODE OTHER_DIAG_CODE_1 OTHER_DIAG_CODE_2 OTHER_DIAG_CODE_3 OTHER_DIAG_CODE_4 OTHER_DIAG_CODE_5 OTHER_DIAG_CODE_6 OTHER_DIAG_CODE_7 OTHER_DIAG_CODE_8 OTHER_DIAG_CODE_9 OTHER_DIAG_CODE_10 OTHER_DIAG_CODE_11 OTHER_DIAG_CODE_12 OTHER_DIAG_CODE_13 OTHER_DIAG_CODE_14 OTHER_DIAG_CODE_15 OTHER_DIAG_CODE_16 OTHER_DIAG_CODE_17 OTHER_DIAG_CODE_18 OTHER_DIAG_CODE_19 OTHER_DIAG_CODE_20 OTHER_DIAG_CODE_21 OTHER_DIAG_CODE_22 OTHER_DIAG_CODE_23 OTHER_DIAG_CODE_24 PRINC_SURG_PROC_CODE PRINC_SURG_PROC_DAY PRINC_ICD9_CODE OTHER_SURG_PROC_CODE_1 OTHER_SURG_PROC_DAY_1 OTHER_ICD9_CODE_1 OTHER_SURG_PROC_CODE_2 OTHER_SURG_PROC_DAY_2 OTHER_ICD9_CODE_2 OTHER_SURG_PROC_CODE_3 OTHER_SURG_PROC_DAY_3 OTHER_ICD9_CODE_3 OTHER_SURG_PROC_CODE_4 OTHER_SURG_PROC_DAY_4 OTHER_ICD9_CODE_4 OTHER_SURG_PROC_CODE_5 OTHER_SURG_PROC_DAY_5 OTHER_ICD9_CODE_5 OTHER_SURG_PROC_CODE_6 OTHER_SURG_PROC_DAY_6 OTHER_ICD9_CODE_6 OTHER_SURG_PROC_CODE_7 OTHER_SURG_PROC_DAY_7 OTHER_ICD9_CODE_7 OTHER_SURG_PROC_CODE_8 OTHER_SURG_PROC_DAY_8 OTHER_ICD9_CODE_8 OTHER_SURG_PROC_CODE_9 OTHER_SURG_PROC_DAY_9 OTHER_ICD9_CODE_9 OTHER_SURG_PROC_CODE_10 OTHER_SURG_PROC_DAY_10 OTHER_ICD9_CODE_10 OTHER_SURG_PROC_CODE_11 OTHER_SURG_PROC_DAY_11 OTHER_ICD9_CODE_11 OTHER_SURG_PROC_CODE_12 OTHER_SURG_PROC_DAY_12 OTHER_ICD9_CODE_12 OTHER_SURG_PROC_CODE_13 OTHER_SURG_PROC_DAY_13 OTHER_ICD9_CODE_13 OTHER_SURG_PROC_CODE_14 OTHER_SURG_PROC_DAY_14 OTHER_ICD9_CODE_14 OTHER_SURG_PROC_CODE_15 OTHER_SURG_PROC_DAY_15 OTHER_ICD9_CODE_15 OTHER_SURG_PROC_CODE_16 OTHER_SURG_PROC_DAY_16 OTHER_ICD9_CODE_16 OTHER_SURG_PROC_CODE_17 OTHER_SURG_PROC_DAY_17 OTHER_ICD9_CODE_17 OTHER_SURG_PROC_CODE_18 OTHER_SURG_PROC_DAY_18 OTHER_ICD9_CODE_18 OTHER_SURG_PROC_CODE_19 OTHER_SURG_PROC_DAY_19 OTHER_ICD9_CODE_19 OTHER_SURG_PROC_CODE_20 OTHER_SURG_PROC_DAY_20 OTHER_ICD9_CODE_20 OTHER_SURG_PROC_CODE_21 OTHER_SURG_PROC_DAY_21 OTHER_ICD9_CODE_21 OTHER_SURG_PROC_CODE_22 OTHER_SURG_PROC_DAY_22 OTHER_ICD9_CODE_22 OTHER_SURG_PROC_CODE_23 OTHER_SURG_PROC_DAY_23 OTHER_ICD9_CODE_23 OTHER_SURG_PROC_CODE_24 OTHER_SURG_PROC_DAY_24 OTHER_ICD9_CODE_24 E_CODE_1 E_CODE_2 E_CODE_3 E_CODE_4 E_CODE_5 E_CODE_6 E_CODE_7 E_CODE_8 E_CODE_9 E_CODE_10 CONDITION_CODE_1 CONDITION_CODE_2 CONDITION_CODE_3 CONDITION_CODE_4 CONDITION_CODE_5 CONDITION_CODE_6 CONDITION_CODE_7 CONDITION_CODE_8 OCCUR_CODE_1 OCCUR_DAY_1 OCCUR_CODE_2 OCCUR_DAY_2 OCCUR_CODE_3 OCCUR_DAY_3 OCCUR_CODE_4 OCCUR_DAY_4 OCCUR_CODE_5 OCCUR_DAY_5 OCCUR_CODE_6 OCCUR_DAY_6 OCCUR_CODE_7 OCCUR_DAY_7 OCCUR_CODE_8 OCCUR_DAY_8 OCCUR_CODE_9 OCCUR_DAY_9 OCCUR_CODE_10 OCCUR_DAY_10 OCCUR_CODE_11 OCCUR_DAY_11 OCCUR_CODE_12 OCCUR_DAY_12 OCCUR_SPAN_CODE_1 OCCUR_SPAN_FROM_1 OCCUR_SPAN_THRU_1 OCCUR_SPAN_CODE_2 OCCUR_SPAN_FROM_2 OCCUR_SPAN_THRU_2 OCCUR_SPAN_CODE_3 OCCUR_SPAN_FROM_3 OCCUR_SPAN_THRU_3 OCCUR_SPAN_CODE_4 OCCUR_SPAN_FROM_4 OCCUR_SPAN_THRU_4 VALUE_CODE_1 VALUE_AMOUNT_1 VALUE_CODE_2 VALUE_AMOUNT_2 VALUE_CODE_3 VALUE_AMOUNT_3 VALUE_CODE_4 VALUE_AMOUNT_4 VALUE_CODE_5 VALUE_AMOUNT_5 VALUE_CODE_6 VALUE_AMOUNT_6 VALUE_CODE_7 VALUE_AMOUNT_7 VALUE_CODE_8 VALUE_AMOUNT_8 VALUE_CODE_9 VALUE_AMOUNT_9 VALUE_CODE_10 VALUE_AMOUNT_10 VALUE_CODE_11 VALUE_AMOUNT_11 VALUE_CODE_12 VALUE_AMOUNT_12 CMS_MDC APR_MDC CMS_DRG APR_DRG RISK_MORTALITY ILLNESS_SEVERITY ATTENDING_PHYS_UNIF_ID OPERATING_PHYS_UNIF_ID CERT_STATUS RECORD_ID ADMN_NICU MAXDAY TOTAL_SERVICE_DA TOTAL_SERVICE_UN UNQ_REV_CODES ADMN_LEVEL1 ADMN_LEVEL2 ADMN_LEVEL3 ADMN_LEVEL4 MULTI_LEVEL HIGHEST_LEVEL DAYS_LEVEL_1 DAYS_LEVEL_2 DAYS_LEVEL_3 DAYS_LEVEL_4 INTENSIVE_DAYS
+    - if `n'>=`min' & `n'<=`max' {c -(} exit {c )-}
+    = if 271>=1 & 271<=120000 {c -(} exit {c )-}
+    {hline 79} end unab {hline}
+  {hline 79} end rename {hline}
+- gen year = substr(discharge,1,4)
+- label variable year "Discharge year"
+  {hline 78} begin label {hline}
+  - version 10.0
+  - local vv : display "version " string(_caller()) ", missing:"
+  - gettoken val : 0
+  - if (strpos("`val'", "val") > 0 ) {c -(}
+  = if (strpos("variable", "val") > 0 ) {c -(}
+    gettoken val 0 : 0
+    syntax anything [, nofix]
+    if "`fix'" != "" {c -(}
+    local fix ", nofix"
+    {c )-}
+    gettoken var rest : anything
+    while `"`rest'"' != "" {c -(}
+    gettoken lab rest : rest
+    local label "`lab'"
+    {c )-}
+    local vlist : list anything - lab
+    if "`lab'" == "." {c -(}
+    local lab ""
+    {c )-}
+    foreach var of varlist `vlist' {c -(}
+    `vv' _label `val' `var' `lab' `fix'
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - `vv' _label `macval(0)'
+  = version 16.1, missing: _label variable year "Discharge year"
+  - {c )-}
+  {hline 80} end label {hline}
+- destring year, replace
+  {hline 75} begin destring {hline}
+  - version 14
+  - local cmdargs = `"`0'"'
+  = local cmdargs = `"year, replace"'
+  - local verpre : display "version " %4.1f _caller() ":"
+  - syntax [varlist], [Generate(string) replace] [force] [float] [Ignore(string asis)] [percent] [dpcomma]
+  - if _caller() >= 14 {c -(}
+  - if ustrpos(`"`ignore'"',",") & !ustrpos(`"`ignore'"',`"""') {c -(}
+  = if ustrpos(`""',",") & !ustrpos(`""',`"""') {c -(}
+    display as error `"ignore string must be enclosed with quotes to ignore commas or use options"'
+    exit 198
+    {c )-}
+  - {c )-}
+  - `verpre' _parse_ignore `ignore'
+  = version 16.1: _parse_ignore 
+    {hline 68} begin _parse_ignore {hline}
+    - version 14
+    - sreturn clear
+    - if _caller() < 14 {c -(}
+      capture syntax [anything] , [ASChars] [ASBytes] [illegal]
+      if !_rc {c -(}
+      if "`aschars'`asbytes'`illegal'"!="" {c -(}
+      display as error "may not specify options in the ignore option for Stata version less than 14"
+      exit 198
+      {c )-}
+      {c )-}
+      sreturn local aschars 0
+      sreturn local illegal 0
+      {c )-}
+    - else {c -(}
+    - syntax [anything] , [ASChars] [ASBytes] [illegal]
+    - if "`asbytes'"!="" {c -(}
+    = if ""!="" {c -(}
+      if "`aschars'"!="" {c -(}
+      display as error "may specify only one of the ignore options aschars and asbytes"
+      exit 198
+      {c )-}
+      if "`illegal'"!="" {c -(}
+      display as error "may not specify the ignore option illegal when specifying asbytes"
+      exit 198
+      {c )-}
+      {c )-}
+    - if "`asbytes'"=="" {c -(}
+    = if ""=="" {c -(}
+    - if ustrinvalidcnt(`"`anything'"') {c -(}
+    = if ustrinvalidcnt(`""') {c -(}
+      display as error "invalid Unicode characters may not be ignored when removing aschars"
+      exit 198
+      {c )-}
+    - {c )-}
+    - sreturn local aschars = "`asbytes'"==""
+    = sreturn local aschars = ""==""
+    - sreturn local illegal = "`illegal'"!=""
+    = sreturn local illegal = ""!=""
+    - capture sreturn local ignore `anything'
+    = capture sreturn local ignore 
+    - if _rc {c -(}
+      sreturn local ignore `"`anything'"'
+      {c )-}
+    - {c )-}
+    {hline 70} end _parse_ignore {hline}
+  - if _caller() < 14 {c -(}
+    local aschars 0
+    syntax [varlist], [Generate(string) replace] [force] [float] [Ignore(string)] [percent] [dpcomma]
+    {c )-}
+  - else {c -(}
+  - if `"`s(ignore)'"'!="" {c -(}
+  = if `""'!="" {c -(}
+    local ignore `"`s(ignore)'"'
+    {c )-}
+  - local aschars `s(aschars)'
+  = local aschars 1
+  - if `s(illegal)' {c -(}
+  = if 0 {c -(}
+    local illegal = ustrunescape("\ufffd")
+    {c )-}
+  - {c )-}
+  - if "`percent'" == "percent" {c -(}
+  = if "" == "percent" {c -(}
+    if !ustrpos(`"`ignore'"', "%") {c -(}
+    local ignore `"`ignore'%"'
+    {c )-}
+    {c )-}
+  - if "`illegal'"!="" {c -(}
+  = if ""!="" {c -(}
+    local ignore `"`ignore'`illegal'"'
+    {c )-}
+  - if `"`float'"'!="" {c -(}
+  = if `""'!="" {c -(}
+    local gtype "float"
+    {c )-}
+  - else {c -(}
+  - local gtype "double"
+  - {c )-}
+  - if "`generate'" != "" & "`replace'" != "" {c -(}
+  = if "" != "" & "replace" != "" {c -(}
+    di as err "options generate and replace are mutually exclusive"
+    exit 198
+    {c )-}
+  - if "`generate'" == "" & "`replace'" == "" {c -(}
+  = if "" == "" & "replace" == "" {c -(}
+    di as err "must specify either generate or replace option"
+    exit 198
+    {c )-}
+  - if "`generate'" != "" {c -(}
+  = if "" != "" {c -(}
+    local ct1: word count `varlist'
+    local save "`varlist'"
+    local 0 "`generate'"
+    capture syntax newvarlist
+    if _rc {c -(}
+    di as err "generate() contains existing variable(s) and/or illegal variable name(s)"
+    exit _rc
+    {c )-}
+    local generate "`varlist'"
+    local varlist "`save'"
+    local ct2: word count `generate'
+    if `ct1' != `ct2' {c -(}
+    di as err "number of variables in varlist must equal"
+    di as err "number of variables in generate(newvarlist)"
+    exit 198
+    {c )-}
+    {c )-}
+  - local m 1
+  - if `"`ignore'"' == "" {c -(}
+  = if `""' == "" {c -(}
+  - local ignore ""
+  - {c )-}
+  - if `aschars' {c -(}
+  = if 1 {c -(}
+  - local l = ustrlen(`"`ignore'"')
+  = local l = ustrlen(`""')
+  - {c )-}
+  - else {c -(}
+    local l = length(`"`ignore'"')
+    {c )-}
+  - while `m' <= `l' {c -(}
+  = while 1 <= 0 {c -(}
+    if `aschars' {c -(}
+    local char`m' = usubstr(`"`ignore'"', `m', 1)
+    {c )-}
+    else {c -(}
+    local char`m' = substr(`"`ignore'"', `m', 1)
+    {c )-}
+    local m = `m' + 1
+    {c )-}
+  - if `aschars' {c -(}
+  = if 1 {c -(}
+  - local aswhat "character"
+  - {c )-}
+  - else {c -(}
+    local aswhat "byte"
+    {c )-}
+  - if "`generate'"!="" {c -(}
+  = if ""!="" {c -(}
+    local genrep "generate"
+    {c )-}
+  - else {c -(}
+  - local genrep "replace"
+  - {c )-}
+  - local tvars OLDVAR NEWVAR ismissing found topct
+  - tempvar `tvars'
+  = tempvar OLDVAR NEWVAR ismissing found topct
+  - local varno 0
+  - foreach var of varlist `varlist' {c -(}
+  = foreach var of varlist year {c -(}
+  - local varno = `varno' + 1
+  = local varno = 0 + 1
+  - if "`generate'"!="" {c -(}
+  = if ""!="" {c -(}
+    local finalvarname : word `varno' of `generate'
+    local finalprint "`finalvarname' "
+    {c )-}
+  - else {c -(}
+  - local finalvarname "`var'"
+  = local finalvarname "year"
+  - local finalprint ""
+  - {c )-}
+  - capture confirm string variable `var'
+  = capture confirm string variable year
+  - if _rc != 0 {c -(}
+    di as txt "`var' already numeric; no " as res "`genrep'"
+    {c )-}
+  - else {c -(}
+  - qui gen `OLDVAR' = `var'
+  = qui gen __000000 = year
+  - local jj 1
+  - local b
+  - local bcnt = 0
+  - local c
+  - local makepct
+  - while `"`char`jj''"' != "" {c -(}
+  = while `""' != "" {c -(}
+    capture drop `found'
+    capture drop `topct'
+    local t `"`char`jj''"'
+    if `aschars' {c -(}
+    qui gen byte `found' = ustrpos(`OLDVAR', `"`t'"') != 0
+    {c )-}
+    else {c -(}
+    qui gen byte `found' = strpos(`OLDVAR', `"`t'"') != 0
+    {c )-}
+    qui summarize `found', meanonly
+    if r(sum) > 0 {c -(}
+    if `"`t'"'=="`illegal'" {c -(}
+    local b `"`b' illegal Unicode"'
+    {c )-}
+    else if `"`t'"' == " " {c -(}
+    local b `"`b' space"'
+    {c )-}
+    else {c -(}
+    local b `"`b' `t'"'
+    {c )-}
+    local ++bcnt
+    {c )-}
+    if `aschars' {c -(}
+    if `"`t'"'=="%" {c -(}
+    if "`percent'"!="" {c -(}
+    if `"`makepct'"'=="" {c -(}
+    qui count if ustrpos(`OLDVAR', `"`t'"')
+    local makepct = r(N)
+    {c )-}
+    {c )-}
+    {c )-}
+    qui replace `OLDVAR' = usubinstr(`OLDVAR', `"`t'"', "", .)
+    {c )-}
+    else {c -(}
+    if `"`t'"'=="%" {c -(}
+    if "`percent'"!="" {c -(}
+    if `"`makepct'"'=="" {c -(}
+    qui count if strpos(`OLDVAR', `"`t'"')
+    local makepct = r(N)
+    {c )-}
+    {c )-}
+    {c )-}
+    qui replace `OLDVAR' = subinstr(`OLDVAR', `"`t'"', "", .)
+    {c )-}
+    local jj = `jj' + 1
+    {c )-}
+  - if _caller() >= 14 {c -(}
+  - qui replace `OLDVAR' = ustrtrim(`OLDVAR')
+  = qui replace __000000 = ustrtrim(__000000)
+  - {c )-}
+  - else {c -(}
+    qui replace `OLDVAR' = strtrim(`OLDVAR')
+    {c )-}
+  - quietly gen byte `ismissing' = `OLDVAR'=="" | `OLDVAR'=="." | (strlen(`OLDVAR')==2 & inrange(`OLDVAR',".a",".z"))
+  = quietly gen byte __000002 = __000000=="" | __000000=="." | (strlen(__000000)==2 & inrange(__000000,".a",".z"))
+  - if ("`dpcomma'" != "") {c -(}
+  = if ("" != "") {c -(}
+    qui replace `OLDVAR' = subinstr(`OLDVAR',".","X",.) if !`ismissing'
+    qui replace `OLDVAR' = subinstr(`OLDVAR', ",", ".", 1) if !ustrregexm(`OLDVAR',"(,[a-z])|(^,$)")
+    {c )-}
+  - if _caller() >= 14 {c -(}
+  - qui replace `OLDVAR' = ustrregexrf(`OLDVAR',"^0+","0")
+  = qui replace __000000 = ustrregexrf(__000000,"^0+","0")
+  - {c )-}
+  - else {c -(}
+    qui replace `OLDVAR' = regexr(`OLDVAR',"^0+","0")
+    {c )-}
+  - qui gen `gtype' `NEWVAR' = real(`OLDVAR')
+  = qui gen double __000001 = real(__000000)
+  - qui summarize `ismissing', meanonly
+  = qui summarize __000002, meanonly
+  - local oldmiss = r(sum)
+  - qui count if missing(`NEWVAR')
+  = qui count if missing(__000001)
+  - local newmiss = r(N)
+  - local flag = `oldmiss'!=`newmiss'
+  = local flag = 0!=0
+  - if `flag' & ("`force'" == "") {c -(}
+  = if 0 & ("" == "") {c -(}
+    if `"`ignore'"' != "" {c -(}
+    di as txt "`var': contains " "`aswhat's not specified in " as res "ignore()" as txt "; no " as res "`genrep'"
+    {c )-}
+    else {c -(}
+    di as txt "`var': contains " "nonnumeric `aswhat's; no " as res "`genrep'"
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - order `NEWVAR', after(`var')
+  = order __000001, after(year)
+    {hline 76} begin order {hline}
+    - version 11
+    - if (_caller()<11) {c -(}
+      _order `macval(0)'
+      exit
+      {c )-}
+    - syntax varlist[, Before(varname) After(varname) first last SEQuential ALPHAbetic]
+    - if (`"`before'"' == "" & `"`after'"' == "" & "`first'" == "" & "`last'" == "" & "`alphabetic'" == "" & "`sequential'" == "") {c -(}
+    = if (`""' == "" & `"year"' == "" & "" == "" & "" == "" & "" == "" & "" == "") {c -(}
+      _order `macval(0)'
+      exit
+      {c )-}
+    - if (`"`before'"' != "" & `"`after'"' != "") {c -(}
+    = if (`""' != "" & `"year"' != "") {c -(}
+      dis as error "before() may not be combined with after()"
+      exit 198
+      {c )-}
+    - if (`"`before'"' != "" & `"`first'"' != "") {c -(}
+    = if (`""' != "" & `""' != "") {c -(}
+      dis as error "before() may not be combined with first()"
+      exit 198
+      {c )-}
+    - if (`"`before'"' != "" & `"`last'"' != "") {c -(}
+    = if (`""' != "" & `""' != "") {c -(}
+      dis as error "before() may not be combined with last()"
+      exit 198
+      {c )-}
+    - if (`"`after'"' != "" & `"`before'"' != "") {c -(}
+    = if (`"year"' != "" & `""' != "") {c -(}
+      dis as error "after() may not be combined with before()"
+      exit 198
+      {c )-}
+    - if (`"`after'"' != "" & `"`first'"' != "") {c -(}
+    = if (`"year"' != "" & `""' != "") {c -(}
+      dis as error "after() may not be combined with first()"
+      exit 198
+      {c )-}
+    - if (`"`after'"' != "" & `"`last'"' != "") {c -(}
+    = if (`"year"' != "" & `""' != "") {c -(}
+      dis as error "after() may not be combined with last()"
+      exit 198
+      {c )-}
+    - if ("`first'" != "" & "`last'" != "") {c -(}
+    = if ("" != "" & "" != "") {c -(}
+      dis as error "first may not be combined with last"
+      exit 198
+      {c )-}
+    - if ("`sequential'" != "" & "`alphabetic'" != "") {c -(}
+    = if ("" != "" & "" != "") {c -(}
+      dis as error "sequential may not be combined with alphabetic"
+      exit 198
+      {c )-}
+    - if ("`first'" != "") {c -(}
+    = if ("" != "") {c -(}
+      if "`alphabetic'" != "" {c -(}
+      local varlist : list sort varlist
+      {c )-}
+      if "`sequential'" != "" {c -(}
+      aorder `varlist'
+      {c )-}
+      else {c -(}
+      _order `varlist'
+      {c )-}
+      {c )-}
+    - if ("`last'" != "") {c -(}
+    = if ("" != "") {c -(}
+      unab vlist : _all
+      local list : list vlist - varlist
+      if "`alphabetic'" != "" {c -(}
+      local varlist : list sort varlist
+      {c )-}
+      if "`sequential'" != "" {c -(}
+      preserve
+      keep `varlist'
+      aorder `varlist'
+      unab varlist : _all
+      restore
+      {c )-}
+      _order `list' `varlist'
+      {c )-}
+    - if (`"`before'"' != "") {c -(}
+    = if (`""' != "") {c -(}
+      local test : list before in varlist
+      if `test' {c -(}
+      dis as err "varname specified in before() may not" " be in varlist"
+      exit 198
+      {c )-}
+      if "`alphabetic'" != "" {c -(}
+      local varlist : list sort varlist
+      {c )-}
+      if "`sequential'" != "" {c -(}
+      preserve
+      keep `varlist'
+      aorder `varlist'
+      unab varlist : _all
+      restore
+      {c )-}
+      unab vlist : _all
+      local vlist : list vlist - varlist
+      local var_num : list posof "`before'" in vlist
+      local var_num = `var_num' - 1
+      local fvar : word 1 of `vlist'
+      capture local lvar : word `var_num' of `vlist'
+      if _rc {c -(}
+      _order `varlist'
+      exit
+      {c )-}
+      unab nlist : `fvar'-`lvar'
+      local nlist : list nlist - varlist
+      _order `nlist' `varlist'
+      {c )-}
+    - if (`"`after'"' != "") {c -(}
+    = if (`"year"' != "") {c -(}
+    - local test : list after in varlist
+    - if `test' {c -(}
+    = if 0 {c -(}
+      dis as err "varname specified in after() may not" " be in varlist"
+      exit 198
+      {c )-}
+    - if "`alphabetic'" != "" {c -(}
+    = if "" != "" {c -(}
+      local varlist : list sort varlist
+      {c )-}
+    - if "`sequential'" != "" {c -(}
+    = if "" != "" {c -(}
+      preserve
+      keep `varlist'
+      aorder `varlist'
+      unab varlist : _all
+      restore
+      {c )-}
+    - unab vlist : _all
+      {hline 75} begin unab {hline}
+      - version 6
+      - gettoken user 0: 0, parse(" :")
+      - gettoken colon 0: 0, parse(" :")
+      - if `"`colon'"' != ":" {c -(} error 198 {c )-}
+      = if `":"' != ":" {c -(} error 198 {c )-}
+      - syntax [varlist(default=empty)] [, MIN(integer 1) MAX(integer 120000) NAME(string)]
+      - c_local `user' `varlist'
+      = c_local vlist discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year __000000 __000002 __000001
+      - local n : word count `varlist'
+      = local n : word count discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year __000000 __000002 __000001
+      - if `n'>=`min' & `n'<=`max' {c -(} exit {c )-}
+      = if 275>=1 & 275<=120000 {c -(} exit {c )-}
+      {hline 77} end unab {hline}
+    - local vlist : list vlist - varlist
+    - local var_num : list posof "`after'" in vlist
+    = local var_num : list posof "year" in vlist
+    - local fvar : word 1 of `vlist'
+    = local fvar : word 1 of discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year __000000 __000002
+    - local lvar : word `var_num' of `vlist'
+    = local lvar : word 272 of discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year __000000 __000002
+    - unab nlist : `fvar'-`lvar'
+    = unab nlist : discharge_qtr-year
+      {hline 75} begin unab {hline}
+      - version 6
+      - gettoken user 0: 0, parse(" :")
+      - gettoken colon 0: 0, parse(" :")
+      - if `"`colon'"' != ":" {c -(} error 198 {c )-}
+      = if `":"' != ":" {c -(} error 198 {c )-}
+      - syntax [varlist(default=empty)] [, MIN(integer 1) MAX(integer 120000) NAME(string)]
+      - c_local `user' `varlist'
+      = c_local nlist discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year
+      - local n : word count `varlist'
+      = local n : word count discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year
+      - if `n'>=`min' & `n'<=`max' {c -(} exit {c )-}
+      = if 272>=1 & 272<=120000 {c -(} exit {c )-}
+      {hline 77} end unab {hline}
+    - local nlist : list nlist - varlist
+    - _order `nlist' `varlist'
+    = _order discharge_qtr thcic_id provider_name fac_teaching_ind fac_psych_ind fac_rehab_ind fac_acute_care_ind fac_snf_ind fac_long_term_ac_ind fac_other_ltc_ind fac_peds_ind spec_unit encounter_indicator sex_code type_of_admission source_of_admission pat_state pat_zip pat_country county public_health_region admit_weekday length_of_stay pat_age patient_status race ethnicity first_payment_src secondary_payment_src type_of_bill private_amount semi_private_amount ward_amount ice_amount ccu_amount other_amount pharm_amount medsurg_amount dme_amount used_dme_amount pt_amount ot_amount speech_amount it_amount blood_amount blood_adm_amount or_amount lith_amount card_amount anes_amount lab_amount rad_amount mri_amount op_amount er_amount ambulance_amount pro_fee_amount organ_amount esrd_amount clinic_amount total_charges total_non_cov_charges total_charges_accomm total_non_cov_charges_accomm total_charges_ancil total_non_cov_charges_ancil admitting_diagnosis princ_diag_code other_diag_code_1 other_diag_code_2 other_diag_code_3 other_diag_code_4 other_diag_code_5 other_diag_code_6 other_diag_code_7 other_diag_code_8 other_diag_code_9 other_diag_code_10 other_diag_code_11 other_diag_code_12 other_diag_code_13 other_diag_code_14 other_diag_code_15 other_diag_code_16 other_diag_code_17 other_diag_code_18 other_diag_code_19 other_diag_code_20 other_diag_code_21 other_diag_code_22 other_diag_code_23 other_diag_code_24 princ_surg_proc_code princ_surg_proc_day princ_icd9_code other_surg_proc_code_1 other_surg_proc_day_1 other_icd9_code_1 other_surg_proc_code_2 other_surg_proc_day_2 other_icd9_code_2 other_surg_proc_code_3 other_surg_proc_day_3 other_icd9_code_3 other_surg_proc_code_4 other_surg_proc_day_4 other_icd9_code_4 other_surg_proc_code_5 other_surg_proc_day_5 other_icd9_code_5 other_surg_proc_code_6 other_surg_proc_day_6 other_icd9_code_6 other_surg_proc_code_7 other_surg_proc_day_7 other_icd9_code_7 other_surg_proc_code_8 other_surg_proc_day_8 other_icd9_code_8 other_surg_proc_code_9 other_surg_proc_day_9 other_icd9_code_9 other_surg_proc_code_10 other_surg_proc_day_10 other_icd9_code_10 other_surg_proc_code_11 other_surg_proc_day_11 other_icd9_code_11 other_surg_proc_code_12 other_surg_proc_day_12 other_icd9_code_12 other_surg_proc_code_13 other_surg_proc_day_13 other_icd9_code_13 other_surg_proc_code_14 other_surg_proc_day_14 other_icd9_code_14 other_surg_proc_code_15 other_surg_proc_day_15 other_icd9_code_15 other_surg_proc_code_16 other_surg_proc_day_16 other_icd9_code_16 other_surg_proc_code_17 other_surg_proc_day_17 other_icd9_code_17 other_surg_proc_code_18 other_surg_proc_day_18 other_icd9_code_18 other_surg_proc_code_19 other_surg_proc_day_19 other_icd9_code_19 other_surg_proc_code_20 other_surg_proc_day_20 other_icd9_code_20 other_surg_proc_code_21 other_surg_proc_day_21 other_icd9_code_21 other_surg_proc_code_22 other_surg_proc_day_22 other_icd9_code_22 other_surg_proc_code_23 other_surg_proc_day_23 other_icd9_code_23 other_surg_proc_code_24 other_surg_proc_day_24 other_icd9_code_24 e_code_1 e_code_2 e_code_3 e_code_4 e_code_5 e_code_6 e_code_7 e_code_8 e_code_9 e_code_10 condition_code_1 condition_code_2 condition_code_3 condition_code_4 condition_code_5 condition_code_6 condition_code_7 condition_code_8 occur_code_1 occur_day_1 occur_code_2 occur_day_2 occur_code_3 occur_day_3 occur_code_4 occur_day_4 occur_code_5 occur_day_5 occur_code_6 occur_day_6 occur_code_7 occur_day_7 occur_code_8 occur_day_8 occur_code_9 occur_day_9 occur_code_10 occur_day_10 occur_code_11 occur_day_11 occur_code_12 occur_day_12 occur_span_code_1 occur_span_from_1 occur_span_thru_1 occur_span_code_2 occur_span_from_2 occur_span_thru_2 occur_span_code_3 occur_span_from_3 occur_span_thru_3 occur_span_code_4 occur_span_from_4 occur_span_thru_4 value_code_1 value_amount_1 value_code_2 value_amount_2 value_code_3 value_amount_3 value_code_4 value_amount_4 value_code_5 value_amount_5 value_code_6 value_amount_6 value_code_7 value_amount_7 value_code_8 value_amount_8 value_code_9 value_amount_9 value_code_10 value_amount_10 value_code_11 value_amount_11 value_code_12 value_amount_12 cms_mdc apr_mdc cms_drg apr_drg risk_mortality illness_severity attending_phys_unif_id operating_phys_unif_id cert_status record_id admn_nicu maxday total_service_da total_service_un unq_rev_codes admn_level1 admn_level2 admn_level3 admn_level4 multi_level highest_level days_level_1 days_level_2 days_level_3 days_level_4 intensive_days year __000001
+    - {c )-}
+    - if ("`alphabetic'" != "" & `"`before'"' == "" & `"`after'"' == "" & "`first'" == "" & "`last'" == "") {c -(}
+    = if ("" != "" & `""' == "" & `"year"' == "" & "" == "" & "" == "") {c -(}
+      local vlist : list sort varlist
+      _order `vlist'
+      {c )-}
+    - if ("`sequential'" != "" & `"`before'"' == "" & `"`after'"' == "" & "`first'" == "" & "`last'" == "") {c -(}
+    = if ("" != "" & `""' == "" & `"year"' == "" & "" == "" & "" == "") {c -(}
+      aorder `varlist'
+      {c )-}
+    {hline 78} end order {hline}
+  - if `aschars' {c -(}
+  = if 1 {c -(}
+  - local dispb `"`b'"'
+  = local dispb `""'
+  - {c )-}
+  - else {c -(}
+    local dispb = printablebytes(`"`b'"')
+    {c )-}
+  - local c = plural(`bcnt',strproper("`aswhat'")) + " removed " + plural(`bcnt',"was","were") + `":`dispb'"'
+  = local c = plural(0,strproper("character")) + " removed " + plural(0,"was","were") + `":"'
+  - if "`makepct'" != "" {c -(}
+  = if "" != "" {c -(}
+    if `makepct' {c -(}
+    qui replace `NEWVAR' = `NEWVAR'/100
+    {c )-}
+    {c )-}
+  - qui compress `NEWVAR'
+  = qui compress __000001
+  - local type : type `NEWVAR'
+  = local type : type __000001
+  - if `flag' {c -(}
+  = if 0 {c -(}
+    di as txt "`var': contains nonnumeric `aswhat's" _continue
+    if `"`ignore'"'!="" {c -(}
+    display " not specified in " as result "ignore()" _continue
+    {c )-}
+    if `"`b'"'=="" {c -(}
+    display "; `finalprint'" as res "`genrep'd " as txt "as " as res "`type'" _continue
+    {c )-}
+    display
+    {c )-}
+  - if `"`b'"' != "" {c -(}
+  = if `""' != "" {c -(}
+    di as txt "`var': " plural(`bcnt',"`aswhat'") as res `"`dispb'"' as txt " removed; `finalprint'" as res "`genrep'd " as txt "as " as res "`type'"
+    {c )-}
+  - else if `"`b'"' == "" & !`flag' {c -(}
+  = else if `""' == "" & !0 {c -(}
+  - di as txt "`var': all characters numeric; " "`finalprint'" as res "`genrep'd " as txt "as " as res "`type'"
+  = di as txt "year: all characters numeric; " "" as res "replaced " as txt "as " as res "int"
+year: all characters numeric; {res}replaced {txt}as {res}int
+  {txt}- {c )-}
+  - if `newmiss' != 0 {c -(}
+  = if 0 != 0 {c -(}
+    di as txt "(`newmiss' missing " plural(`newmiss',"value") " generated)"
+    {c )-}
+  - label variable `NEWVAR' `"`: variable label `var''"'
+  = label variable __000001 `"Discharge year"'
+    {hline 76} begin label {hline}
+    - version 10.0
+    - local vv : display "version " string(_caller()) ", missing:"
+    - gettoken val : 0
+    - if (strpos("`val'", "val") > 0 ) {c -(}
+    = if (strpos("variable", "val") > 0 ) {c -(}
+      gettoken val 0 : 0
+      syntax anything [, nofix]
+      if "`fix'" != "" {c -(}
+      local fix ", nofix"
+      {c )-}
+      gettoken var rest : anything
+      while `"`rest'"' != "" {c -(}
+      gettoken lab rest : rest
+      local label "`lab'"
+      {c )-}
+      local vlist : list anything - lab
+      if "`lab'" == "." {c -(}
+      local lab ""
+      {c )-}
+      foreach var of varlist `vlist' {c -(}
+      `vv' _label `val' `var' `lab' `fix'
+      {c )-}
+      {c )-}
+    - else {c -(}
+    - `vv' _label `macval(0)'
+    = version 14, missing: _label variable __000001 `"Discharge year"'
+    - {c )-}
+    {hline 78} end label {hline}
+  - char `NEWVAR'[destring] `c'
+  = char __000001[destring] Characters removed were:
+  - char `NEWVAR'[destring_cmd] `"destring `cmdargs'"'
+  = char __000001[destring_cmd] `"destring year, replace"'
+  - char `var'[destring]
+  = char year[destring]
+  - char `var'[destring_cmd]
+  = char year[destring_cmd]
+  - if "`genrep'"=="generate" {c -(}
+  = if "replace"=="generate" {c -(}
+    Charcopy `var' `NEWVAR'
+    rename `NEWVAR' `: word `varno' of `generate''
+    {c )-}
+  - else {c -(}
+  - char rename `var' `NEWVAR'
+  = char rename year __000001
+  - drop `var'
+  = drop year
+  - rename `NEWVAR' `var'
+  = rename __000001 year
+    {hline 75} begin rename {hline}
+    - version 12
+    - mata: rename_cmd("`3'")
+    = mata: rename_cmd("")
+{res}{txt}    {hline 77} end rename {hline}
+  - {c )-}
+  - {c )-}
+  - foreach varmac of local tvars {c -(}
+  - capture drop ``varmac''
+  = capture drop __000000
+  - {c )-}
+  - capture drop ``varmac''
+  = capture drop __000001
+  - {c )-}
+  - capture drop ``varmac''
+  = capture drop __000002
+  - {c )-}
+  - capture drop ``varmac''
+  = capture drop __000003
+  - {c )-}
+  - capture drop ``varmac''
+  = capture drop __000004
+  - {c )-}
+  - {c )-}
+  - {c )-}
+  {hline 77} end destring {hline}
+- gen dqtr = substr(discharge,-1,1)
+- label variable dqtr "Discharge quarter"
+  {hline 78} begin label {hline}
+  - version 10.0
+  - local vv : display "version " string(_caller()) ", missing:"
+  - gettoken val : 0
+  - if (strpos("`val'", "val") > 0 ) {c -(}
+  = if (strpos("variable", "val") > 0 ) {c -(}
+    gettoken val 0 : 0
+    syntax anything [, nofix]
+    if "`fix'" != "" {c -(}
+    local fix ", nofix"
+    {c )-}
+    gettoken var rest : anything
+    while `"`rest'"' != "" {c -(}
+    gettoken lab rest : rest
+    local label "`lab'"
+    {c )-}
+    local vlist : list anything - lab
+    if "`lab'" == "." {c -(}
+    local lab ""
+    {c )-}
+    foreach var of varlist `vlist' {c -(}
+    `vv' _label `val' `var' `lab' `fix'
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - `vv' _label `macval(0)'
+  = version 16.1, missing: _label variable dqtr "Discharge quarter"
+  - {c )-}
+  {hline 80} end label {hline}
+- drop discharge
+- gen female = sex_code=="F"
+- replace female=. if inlist(sex_code, "U", "", "*")
+(48,535 real changes made, 48,535 to missing)
+- drop sex_code
+- rename first_payment_src pay1
+  {hline 77} begin rename {hline}
+  - version 12
+  - mata: rename_cmd("`3'")
+  = mata: rename_cmd("")
+{res}{txt}  {hline 79} end rename {hline}
+- rename secondary_payment_src pay2
+  {hline 77} begin rename {hline}
+  - version 12
+  - mata: rename_cmd("`3'")
+  = mata: rename_cmd("")
+{res}{txt}  {hline 79} end rename {hline}
+- gen medicare=0
+- replace medicare=1 if inlist(pay1, "MA", "MB", "16")
+(259,712 real changes made)
+- gen medicaid=0
+- replace medicaid=1 if pay1=="MC"
+(172,246 real changes made)
+- gen private=0
+- replace private=1 if inlist(pay1, "12", "13", "14", "15", "BL", "CI", "HM")
+(245,585 real changes made)
+- gen selfpay=0
+- replace selfpay=1 if inlist(pay1, "09", "ZZ")
+(70,881 real changes made)
+- gen other=0
+- replace other=1 if inlist(pay1, "10", "11", "AM", "CH", "DS", "LI")
+(17,705 real changes made)
+- replace other=1 if inlist(pay1, "LM", "OF", "TV", "VA", "WC")
+(6,529 real changes made)
+- gen insurance=0
+- replace insurance=1 if medicare==1
+(259,712 real changes made)
+- replace insurance=2 if medicaid==1
+(172,246 real changes made)
+- replace insurance=3 if private==1
+(245,585 real changes made)
+- replace insurance=4 if selfpay==1
+(70,881 real changes made)
+- replace insurance=5 if other==1
+(24,234 real changes made)
+- replace insurance=. if insurance==0
+(436 real changes made, 436 to missing)
+- label variable insurance "Insurance categorical variable"
+  {hline 78} begin label {hline}
+  - version 10.0
+  - local vv : display "version " string(_caller()) ", missing:"
+  - gettoken val : 0
+  - if (strpos("`val'", "val") > 0 ) {c -(}
+  = if (strpos("variable", "val") > 0 ) {c -(}
+    gettoken val 0 : 0
+    syntax anything [, nofix]
+    if "`fix'" != "" {c -(}
+    local fix ", nofix"
+    {c )-}
+    gettoken var rest : anything
+    while `"`rest'"' != "" {c -(}
+    gettoken lab rest : rest
+    local label "`lab'"
+    {c )-}
+    local vlist : list anything - lab
+    if "`lab'" == "." {c -(}
+    local lab ""
+    {c )-}
+    foreach var of varlist `vlist' {c -(}
+    `vv' _label `val' `var' `lab' `fix'
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - `vv' _label `macval(0)'
+  = version 16.1, missing: _label variable insurance "Insurance categorical variable"
+  - {c )-}
+  {hline 80} end label {hline}
+- capture replace ethnicity="." if inlist(ethnicity, "`", "*", "")
+- label variable ethnicity "Indicates hispanic origin (1) or not of hispanic origin (2)"
+  {hline 78} begin label {hline}
+  - version 10.0
+  - local vv : display "version " string(_caller()) ", missing:"
+  - gettoken val : 0
+  - if (strpos("`val'", "val") > 0 ) {c -(}
+  = if (strpos("variable", "val") > 0 ) {c -(}
+    gettoken val 0 : 0
+    syntax anything [, nofix]
+    if "`fix'" != "" {c -(}
+    local fix ", nofix"
+    {c )-}
+    gettoken var rest : anything
+    while `"`rest'"' != "" {c -(}
+    gettoken lab rest : rest
+    local label "`lab'"
+    {c )-}
+    local vlist : list anything - lab
+    if "`lab'" == "." {c -(}
+    local lab ""
+    {c )-}
+    foreach var of varlist `vlist' {c -(}
+    `vv' _label `val' `var' `lab' `fix'
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - `vv' _label `macval(0)'
+  = version 16.1, missing: _label variable ethnicity "Indicates hispanic origin (1) or not of hispanic origin (2)"
+  - {c )-}
+  {hline 80} end label {hline}
+- capture replace race="." if inlist(race, "", "*", "`")
+- destring race, replace force
+  {hline 75} begin destring {hline}
+  - version 14
+  - local cmdargs = `"`0'"'
+  = local cmdargs = `"race, replace force"'
+  - local verpre : display "version " %4.1f _caller() ":"
+  - syntax [varlist], [Generate(string) replace] [force] [float] [Ignore(string asis)] [percent] [dpcomma]
+  - if _caller() >= 14 {c -(}
+  - if ustrpos(`"`ignore'"',",") & !ustrpos(`"`ignore'"',`"""') {c -(}
+  = if ustrpos(`""',",") & !ustrpos(`""',`"""') {c -(}
+    display as error `"ignore string must be enclosed with quotes to ignore commas or use options"'
+    exit 198
+    {c )-}
+  - {c )-}
+  - `verpre' _parse_ignore `ignore'
+  = version 16.1: _parse_ignore 
+    {hline 68} begin _parse_ignore {hline}
+    - version 14
+    - sreturn clear
+    - if _caller() < 14 {c -(}
+      capture syntax [anything] , [ASChars] [ASBytes] [illegal]
+      if !_rc {c -(}
+      if "`aschars'`asbytes'`illegal'"!="" {c -(}
+      display as error "may not specify options in the ignore option for Stata version less than 14"
+      exit 198
+      {c )-}
+      {c )-}
+      sreturn local aschars 0
+      sreturn local illegal 0
+      {c )-}
+    - else {c -(}
+    - syntax [anything] , [ASChars] [ASBytes] [illegal]
+    - if "`asbytes'"!="" {c -(}
+    = if ""!="" {c -(}
+      if "`aschars'"!="" {c -(}
+      display as error "may specify only one of the ignore options aschars and asbytes"
+      exit 198
+      {c )-}
+      if "`illegal'"!="" {c -(}
+      display as error "may not specify the ignore option illegal when specifying asbytes"
+      exit 198
+      {c )-}
+      {c )-}
+    - if "`asbytes'"=="" {c -(}
+    = if ""=="" {c -(}
+    - if ustrinvalidcnt(`"`anything'"') {c -(}
+    = if ustrinvalidcnt(`""') {c -(}
+      display as error "invalid Unicode characters may not be ignored when removing aschars"
+      exit 198
+      {c )-}
+    - {c )-}
+    - sreturn local aschars = "`asbytes'"==""
+    = sreturn local aschars = ""==""
+    - sreturn local illegal = "`illegal'"!=""
+    = sreturn local illegal = ""!=""
+    - capture sreturn local ignore `anything'
+    = capture sreturn local ignore 
+    - if _rc {c -(}
+      sreturn local ignore `"`anything'"'
+      {c )-}
+    - {c )-}
+    {hline 70} end _parse_ignore {hline}
+  - if _caller() < 14 {c -(}
+    local aschars 0
+    syntax [varlist], [Generate(string) replace] [force] [float] [Ignore(string)] [percent] [dpcomma]
+    {c )-}
+  - else {c -(}
+  - if `"`s(ignore)'"'!="" {c -(}
+  = if `""'!="" {c -(}
+    local ignore `"`s(ignore)'"'
+    {c )-}
+  - local aschars `s(aschars)'
+  = local aschars 1
+  - if `s(illegal)' {c -(}
+  = if 0 {c -(}
+    local illegal = ustrunescape("\ufffd")
+    {c )-}
+  - {c )-}
+  - if "`percent'" == "percent" {c -(}
+  = if "" == "percent" {c -(}
+    if !ustrpos(`"`ignore'"', "%") {c -(}
+    local ignore `"`ignore'%"'
+    {c )-}
+    {c )-}
+  - if "`illegal'"!="" {c -(}
+  = if ""!="" {c -(}
+    local ignore `"`ignore'`illegal'"'
+    {c )-}
+  - if `"`float'"'!="" {c -(}
+  = if `""'!="" {c -(}
+    local gtype "float"
+    {c )-}
+  - else {c -(}
+  - local gtype "double"
+  - {c )-}
+  - if "`generate'" != "" & "`replace'" != "" {c -(}
+  = if "" != "" & "replace" != "" {c -(}
+    di as err "options generate and replace are mutually exclusive"
+    exit 198
+    {c )-}
+  - if "`generate'" == "" & "`replace'" == "" {c -(}
+  = if "" == "" & "replace" == "" {c -(}
+    di as err "must specify either generate or replace option"
+    exit 198
+    {c )-}
+  - if "`generate'" != "" {c -(}
+  = if "" != "" {c -(}
+    local ct1: word count `varlist'
+    local save "`varlist'"
+    local 0 "`generate'"
+    capture syntax newvarlist
+    if _rc {c -(}
+    di as err "generate() contains existing variable(s) and/or illegal variable name(s)"
+    exit _rc
+    {c )-}
+    local generate "`varlist'"
+    local varlist "`save'"
+    local ct2: word count `generate'
+    if `ct1' != `ct2' {c -(}
+    di as err "number of variables in varlist must equal"
+    di as err "number of variables in generate(newvarlist)"
+    exit 198
+    {c )-}
+    {c )-}
+  - local m 1
+  - if `"`ignore'"' == "" {c -(}
+  = if `""' == "" {c -(}
+  - local ignore ""
+  - {c )-}
+  - if `aschars' {c -(}
+  = if 1 {c -(}
+  - local l = ustrlen(`"`ignore'"')
+  = local l = ustrlen(`""')
+  - {c )-}
+  - else {c -(}
+    local l = length(`"`ignore'"')
+    {c )-}
+  - while `m' <= `l' {c -(}
+  = while 1 <= 0 {c -(}
+    if `aschars' {c -(}
+    local char`m' = usubstr(`"`ignore'"', `m', 1)
+    {c )-}
+    else {c -(}
+    local char`m' = substr(`"`ignore'"', `m', 1)
+    {c )-}
+    local m = `m' + 1
+    {c )-}
+  - if `aschars' {c -(}
+  = if 1 {c -(}
+  - local aswhat "character"
+  - {c )-}
+  - else {c -(}
+    local aswhat "byte"
+    {c )-}
+  - if "`generate'"!="" {c -(}
+  = if ""!="" {c -(}
+    local genrep "generate"
+    {c )-}
+  - else {c -(}
+  - local genrep "replace"
+  - {c )-}
+  - local tvars OLDVAR NEWVAR ismissing found topct
+  - tempvar `tvars'
+  = tempvar OLDVAR NEWVAR ismissing found topct
+  - local varno 0
+  - foreach var of varlist `varlist' {c -(}
+  = foreach var of varlist race {c -(}
+  - local varno = `varno' + 1
+  = local varno = 0 + 1
+  - if "`generate'"!="" {c -(}
+  = if ""!="" {c -(}
+    local finalvarname : word `varno' of `generate'
+    local finalprint "`finalvarname' "
+    {c )-}
+  - else {c -(}
+  - local finalvarname "`var'"
+  = local finalvarname "race"
+  - local finalprint ""
+  - {c )-}
+  - capture confirm string variable `var'
+  = capture confirm string variable race
+  - if _rc != 0 {c -(}
+  - di as txt "`var' already numeric; no " as res "`genrep'"
+  = di as txt "race already numeric; no " as res "replace"
+race already numeric; no {res}replace
+  {txt}- {c )-}
+  - else {c -(}
+    qui gen `OLDVAR' = `var'
+    local jj 1
+    local b
+    local bcnt = 0
+    local c
+    local makepct
+    while `"`char`jj''"' != "" {c -(}
+    capture drop `found'
+    capture drop `topct'
+    local t `"`char`jj''"'
+    if `aschars' {c -(}
+    qui gen byte `found' = ustrpos(`OLDVAR', `"`t'"') != 0
+    {c )-}
+    else {c -(}
+    qui gen byte `found' = strpos(`OLDVAR', `"`t'"') != 0
+    {c )-}
+    qui summarize `found', meanonly
+    if r(sum) > 0 {c -(}
+    if `"`t'"'=="`illegal'" {c -(}
+    local b `"`b' illegal Unicode"'
+    {c )-}
+    else if `"`t'"' == " " {c -(}
+    local b `"`b' space"'
+    {c )-}
+    else {c -(}
+    local b `"`b' `t'"'
+    {c )-}
+    local ++bcnt
+    {c )-}
+    if `aschars' {c -(}
+    if `"`t'"'=="%" {c -(}
+    if "`percent'"!="" {c -(}
+    if `"`makepct'"'=="" {c -(}
+    qui count if ustrpos(`OLDVAR', `"`t'"')
+    local makepct = r(N)
+    {c )-}
+    {c )-}
+    {c )-}
+    qui replace `OLDVAR' = usubinstr(`OLDVAR', `"`t'"', "", .)
+    {c )-}
+    else {c -(}
+    if `"`t'"'=="%" {c -(}
+    if "`percent'"!="" {c -(}
+    if `"`makepct'"'=="" {c -(}
+    qui count if strpos(`OLDVAR', `"`t'"')
+    local makepct = r(N)
+    {c )-}
+    {c )-}
+    {c )-}
+    qui replace `OLDVAR' = subinstr(`OLDVAR', `"`t'"', "", .)
+    {c )-}
+    local jj = `jj' + 1
+    {c )-}
+    if _caller() >= 14 {c -(}
+    qui replace `OLDVAR' = ustrtrim(`OLDVAR')
+    {c )-}
+    else {c -(}
+    qui replace `OLDVAR' = strtrim(`OLDVAR')
+    {c )-}
+    quietly gen byte `ismissing' = `OLDVAR'=="" | `OLDVAR'=="." | (strlen(`OLDVAR')==2 & inrange(`OLDVAR',".a",".z"))
+    if ("`dpcomma'" != "") {c -(}
+    qui replace `OLDVAR' = subinstr(`OLDVAR',".","X",.) if !`ismissing'
+    qui replace `OLDVAR' = subinstr(`OLDVAR', ",", ".", 1) if !ustrregexm(`OLDVAR',"(,[a-z])|(^,$)")
+    {c )-}
+    if _caller() >= 14 {c -(}
+    qui replace `OLDVAR' = ustrregexrf(`OLDVAR',"^0+","0")
+    {c )-}
+    else {c -(}
+    qui replace `OLDVAR' = regexr(`OLDVAR',"^0+","0")
+    {c )-}
+    qui gen `gtype' `NEWVAR' = real(`OLDVAR')
+    qui summarize `ismissing', meanonly
+    local oldmiss = r(sum)
+    qui count if missing(`NEWVAR')
+    local newmiss = r(N)
+    local flag = `oldmiss'!=`newmiss'
+    if `flag' & ("`force'" == "") {c -(}
+    if `"`ignore'"' != "" {c -(}
+    di as txt "`var': contains " "`aswhat's not specified in " as res "ignore()" as txt "; no " as res "`genrep'"
+    {c )-}
+    else {c -(}
+    di as txt "`var': contains " "nonnumeric `aswhat's; no " as res "`genrep'"
+    {c )-}
+    {c )-}
+    else {c -(}
+    order `NEWVAR', after(`var')
+    if `aschars' {c -(}
+    local dispb `"`b'"'
+    {c )-}
+    else {c -(}
+    local dispb = printablebytes(`"`b'"')
+    {c )-}
+    local c = plural(`bcnt',strproper("`aswhat'")) + " removed " + plural(`bcnt',"was","were") + `":`dispb'"'
+    if "`makepct'" != "" {c -(}
+    if `makepct' {c -(}
+    qui replace `NEWVAR' = `NEWVAR'/100
+    {c )-}
+    {c )-}
+    qui compress `NEWVAR'
+    local type : type `NEWVAR'
+    if `flag' {c -(}
+    di as txt "`var': contains nonnumeric `aswhat's" _continue
+    if `"`ignore'"'!="" {c -(}
+    display " not specified in " as result "ignore()" _continue
+    {c )-}
+    if `"`b'"'=="" {c -(}
+    display "; `finalprint'" as res "`genrep'd " as txt "as " as res "`type'" _continue
+    {c )-}
+    display
+    {c )-}
+    if `"`b'"' != "" {c -(}
+    di as txt "`var': " plural(`bcnt',"`aswhat'") as res `"`dispb'"' as txt " removed; `finalprint'" as res "`genrep'd " as txt "as " as res "`type'"
+    {c )-}
+    else if `"`b'"' == "" & !`flag' {c -(}
+    di as txt "`var': all characters numeric; " "`finalprint'" as res "`genrep'd " as txt "as " as res "`type'"
+    {c )-}
+    if `newmiss' != 0 {c -(}
+    di as txt "(`newmiss' missing " plural(`newmiss',"value") " generated)"
+    {c )-}
+    label variable `NEWVAR' `"`: variable label `var''"'
+    char `NEWVAR'[destring] `c'
+    char `NEWVAR'[destring_cmd] `"destring `cmdargs'"'
+    char `var'[destring]
+    char `var'[destring_cmd]
+    if "`genrep'"=="generate" {c -(}
+    Charcopy `var' `NEWVAR'
+    rename `NEWVAR' `: word `varno' of `generate''
+    {c )-}
+    else {c -(}
+    char rename `var' `NEWVAR'
+    drop `var'
+    rename `NEWVAR' `var'
+    {c )-}
+    {c )-}
+    foreach varmac of local tvars {c -(}
+    capture drop ``varmac''
+    {c )-}
+    {c )-}
+  - {c )-}
+  {hline 77} end destring {hline}
+- gen racecat=1 if race==4
+(293,847 missing values generated)
+- replace racecat=2 if race==3
+(101,153 real changes made)
+- replace racecat=3 if ethnicity==1
+(221,758 real changes made)
+- replace racecat=4 if inlist(race, 1, 2, 5)
+(188,306 real changes made)
+- label variable racecat "Indicates race: white (1) black (2) Hispanic (3) or other (4)"
+  {hline 78} begin label {hline}
+  - version 10.0
+  - local vv : display "version " string(_caller()) ", missing:"
+  - gettoken val : 0
+  - if (strpos("`val'", "val") > 0 ) {c -(}
+  = if (strpos("variable", "val") > 0 ) {c -(}
+    gettoken val 0 : 0
+    syntax anything [, nofix]
+    if "`fix'" != "" {c -(}
+    local fix ", nofix"
+    {c )-}
+    gettoken var rest : anything
+    while `"`rest'"' != "" {c -(}
+    gettoken lab rest : rest
+    local label "`lab'"
+    {c )-}
+    local vlist : list anything - lab
+    if "`lab'" == "." {c -(}
+    local lab ""
+    {c )-}
+    foreach var of varlist `vlist' {c -(}
+    `vv' _label `val' `var' `lab' `fix'
+    {c )-}
+    {c )-}
+  - else {c -(}
+  - `vv' _label `macval(0)'
+  = version 16.1, missing: _label variable racecat "Indicates race: white (1) black (2) Hispanic (3) or other (4)"
+  - {c )-}
+  {hline 80} end label {hline}
+- gen icd9 = real(princ_diag_code) if year<2016
+(119,662 missing values generated)
+- gen icd10 = substr(princ_diag_code, 1, 5) if year>2015
+(773,094 missing values generated)
+- gen major_depression = (icd9 == 2962 | icd9 == 29621 | icd9 == 29622 | icd9 == 29623 | icd9 == 29624 | icd9 == 29625 | icd9 == 29626 | icd9 == 2963 | icd9 == 29631 | icd9 == 29632 | icd9 == 29633 | icd9 == 29634 | icd9 == 29635 | icd9 == 29636)
+- replace major_depression = 1 if (icd10== "F32" | icd10=="F321" | icd10=="F322" |icd10== "F323" |icd10== "F324" |icd10== "F325" | icd10== "F328" | icd10== "F329"| icd10== "F33" | icd10== "F331" | icd10== "F332" | icd10== "F333" | icd10== "F334" | icd10== "F338" | icd10== "F339" | icd10== "F3341" | icd10== "F3342" )
+(0 real changes made)
+- gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602 | icd9==29603 | icd==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
+{err}icd ambiguous abbreviation
+ {txt} replace bipolar = 1 if (icd10== "F31" | icd10=="F311" | icd10=="F3111" |icd10== "F3112" |icd10== "F3113" |icd10== "F312" | icd10== "F313" | icd10== "F3131"| icd10== "F3132" | icd10== "F314" | icd10== "F315" | icd10== "F316" | icd10== "F3161" | icd10== "F3162" | icd10== "F3163" | icd10== "F3164" | icd10== "F317" | icd10== "F3171" | icd10=="F3172" | icd10=="F3173" |icd10== "F3174" |icd10== "F3175" |icd10== "F3176" | icd10== "F3177" | icd10== "F3178"| icd10== "F318" | icd10== "F3181" | icd10== "F3189" | icd10== "F319")
+  gen schizophrenia = icd9 == 295
+  replace schizophrenia = 1 if (icd10== "F20" | icd10=="F201" | icd10=="F202" |icd10== "F203" |icd10== "F205" |icd10== "F208" | icd10== "F2081" | icd10== "F2089"| icd10== "F209")
+  keep if major_depression==1|bipolar==1|schizophrenia==1
+  tab major_depression
+  tab bipolar
+  tab schizophrenia
+  gen psychhosp=0
+  replace psychhosp=1 if inlist(fac_psych_ind, "A", "X", "(A)", "(X)")
+  replace psychhosp = 2 if strpos(provider_name, "Behavioral")
+  replace psychhosp = 2 if strpos(provider_name, "Psychiatric")
+  replace psychhosp =2 if provider_name=="Carrollton Springs" | provider_name=="Cedar Crest Hospital" | provider_name=="Clarity Child Guidance Center" | provider_name=="Devereux Texas Treatment Network" | provider_name=="Glen Oaks Hospital" | provider_name=="Hickory Trail Hospital" | provider_name=="Intracare North Hospital" | provider_name=="Kingwood Pines Hospital" | provider_name=="Laurel Ridge Treatment Center" | provider_name=="Millwood Hospital" | strpos(provider_name, "Montgomery County Mental Health") | provider_name=="Red River Regional" | provider_name=="Hospital River Crest Hospital" | provider_name=="Sunrise Canyon" | provider_name=="Texas NeuroRehab Center" | provider_name=="Menninger Clinic" | provider_name=="West Oaks Hospital"
+  label variable psychosp "0 if general, 1 if general with psych ward, 2 if psych hospital"
+  tab psychhosp
+  save "${c -(}datadir{c )-}sonali_data_`nm'_`qr'.dta", replace
+  {c )-}
+  {c )-}
+{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/sonali_compilation.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}15 Apr 2021, 16:28:36
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
