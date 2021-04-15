@@ -19,4 +19,20 @@ end of do-file
 
 {search r(111), local:r(111);}
 
+{com}. do "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/Sonali code FINAL.do"
+{txt}
 {com}. 
+. set more off 
+{txt}
+{com}. set trace on 
+{txt}
+{com}. 
+. 
+. *set macros 
+. 
+. global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
+{txt}
+{com}. 
+. cap log close
+{smcl}
+{com}{sf}{ul off}
