@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}12 Apr 2021, 11:10:48
+ {txt}opened on:  {res}15 Apr 2021, 15:33:59
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
@@ -19,44 +19,14 @@ end of do-file
 
 {search r(111), local:r(111);}
 
-{com}. do "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.do"
-{txt}
-{com}. ///****EVALUATION OF MEDICARE'S BPCI IN TEXAS****///
-> 
-. set more off 
-{txt}
-{com}. set trace on 
-{txt}
-{com}. //**AIM 1**//
-. //SAMPLE = BPCI Hospitals 
-. //TREATMENT GROUP = Medicare patients, 65-84 (medicare=1)
-. //CONTROL GROUP = private and/or Medicaid patients, 45-64
-. 
-. 
-. //**AIM 2**//
-. //SAMPLE = All hospitals, Medicare patients with BPCI-eligible DRGs only (bpci_drg==1)
-. //TREATMENT GROUP = BPCI hospital (bpci=1)
-. //CONTROL GROUP = non-BPCI hospital 
-. 
-. 
-. *set macros (REQUIRES ACTION)
-. 
-. global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
-{txt}
-{com}. 
-. log using "${c -(}datadir{c )-}BPCI_dataconstruction.smcl"
-{err}log file already open
-{txt}{search r(604), local:r(604);}
+{com}. use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
 
-end of do-file
-
-{search r(604), local:r(604);}
-
-{com}. log close
+. 
+. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}12 Apr 2021, 11:20:32
+ {txt}closed on:  {res}15 Apr 2021, 15:36:10
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
