@@ -1,9 +1,9 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/sonali_compilation.smcl
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_compilation.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Apr 2021, 16:22:54
+ {txt}opened on:  {res}15 Apr 2021, 20:15:03
 {txt}
 {com}. 
 . foreach nm of numlist 2010(1)2018{c -(}
@@ -77,7 +77,7 @@
 . replace major_depression = 1 if (icd10== "F32" | icd10=="F321" | icd10=="F322" |icd10== "F323" |icd10== "F324" |icd10== "F325" | icd10== "F328" | icd10== "F329"| icd10== "F33" | icd10== "F331" | icd10== "F332" | icd10== "F333" | icd10== "F334" | icd10== "F338" | icd10== "F339" | icd10== "F3341" | icd10== "F3342" )
 {txt} 49{com}. 
 . *patients with bipolar disorder
-. gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602  | icd9==29603 | icd==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
+. gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602  | icd9==29603 | icd9==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
 {txt} 50{com}. 
 . replace bipolar = 1 if (icd10== "F31" | icd10=="F311" | icd10=="F3111" |icd10== "F3112" |icd10== "F3113" |icd10== "F312" | icd10== "F313" | icd10== "F3131"| icd10== "F3132" | icd10== "F314" | icd10== "F315" | icd10== "F316" | icd10== "F3161" | icd10== "F3162" | icd10== "F3163" | icd10== "F3164" | icd10== "F317" | icd10== "F3171" | icd10=="F3172" | icd10=="F3173" |icd10== "F3174" |icd10== "F3175" |icd10== "F3176" | icd10== "F3177" | icd10== "F3178"| icd10== "F318" | icd10== "F3181" | icd10== "F3189" | icd10== "F319")
 {txt} 51{com}. 
@@ -122,6 +122,540 @@ YEAR: 2010 QUARTER: 1
 - quietly use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/`nm'/CD`nm'Q`qr'/PUDF `qr' Q `nm'.dta", clear
 = quietly use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/2010/CD2010Q1/PUDF 1 Q 2010.dta", clear
 - rename *, lower
+  =struct rename_peldf {c -(}
+  =        string scalar        element
+  =        real scalar  elementtype
+  =        real scalar            arg
+  =        real scalar            match
+  =struct rename_patterndf {c -(}
+  =        real scalar  patterntype
+  =        string scalar            original
+  =        struct rename_peldf rowvector          ellist
+  =        real rowvector            n_of
+  =        string rowvector            varnames
+  =        string matrix            pieces
+  =struct rename_optiondf {c -(}
+  =        real scalar       isrecase
+  =        real scalar       isrecase_upper, isrecase_lower, isrecase_proper
+  =        real scalar       isdryrun
+  =        real scalar       isrenumber, isaddnumber
+  =        real scalar            from
+  =        real scalar       issort
+  =        real scalar       isdebug
+  =        real scalar       istest
+  =        real scalar       isr
+  =void rename_optiondf_init(struct rename_optiondf scalar option)
+  =        option.isrecase = option.isdryrun = 0
+  =                                option.isrecase_proper = 0
+  =        option.isrenumber = option.isaddnumber = 0
+  =        option.issort     = 0
+  =        option.isdebug    = 0
+  =        option.istest     = 0
+  =        option.isr        = 0
+  =struct rename_renamedf {c -(}
+  =        struct rename_patterndf rowvector      oldplist
+  =        struct rename_patterndf rowvector      newplist
+  =        struct rename_optiondf scalar       option
+  =void rename_cmd(string scalar thirdarg)
+  =        string scalar    input
+  =real scalar can_do_fast(string scalar input)
+  =        string rowvector    token
+  =        real scalar    rc
+  =        if (length(token)!=2) return(0)
+  =        if (!st_isname(token[1])) return(0)
+  =        if (!st_isname(token[2])) return(0)
+  =        if (token[1] == token[2]) return(0)
+  =        return(1)
+  =void rename_cmd_u(string scalar input)
+  =        struct rename_renamedf scalar       ren
+  =                dump_pattern(ren.oldplist, "old after parsing", 0)
+  =                dump_pattern(ren.newplist, "new after parsing", 0)
+  =void xeq_old_to_new(struct rename_renamedf scalar ren)
+  =                dump_pattern(ren.oldplist, "old after linkage", 0)
+  =                dump_pattern(ren.newplist, "new after linkage", 0)
+  =                dump_pattern(ren.oldplist, "old final", 1)
+  =                dump_pattern(ren.newplist, "new final", 1)
+  =void xeq_recase(struct rename_renamedf scalar ren)
+  =        fillin_old_varnames(ren.oldplist, ren.newplist, 0)
+  =                dump_pattern(ren.oldplist, "old final", 1)
+  =                dump_pattern(ren.newplist, "new final", 1)
+  =void parse_cmd(struct rename_renamedf scalar ren, string scalar input)
+  =        real scalar            c
+  =        string scalar            lhs, ops
+  =        string scalar            oldnames, newnames
+  =        parse_cmd_pat_els(ren.oldplist, oldnames, 0)
+  =                parse_cmd_pat_els(ren.newplist, newnames, 1)
+  =real scalar parse_cmd_commaloc(string scalar s)
+  =        real scalar    i, L
+  =        real scalar    nestlev
+  =        string scalar    c
+  =void getarg(string scalar input, string scalar arg, string scalar rest)
+  =        real scalar    L, npar, i
+  =        string scalar    c
+  =void parse_cmd_options(struct rename_optiondf scalar option, string scalar ops)
+  =        string scalar            token
+  =        transmorphic      t
+  =        rename_optiondf_init(option)
+  =void confirm_options_consistent(struct rename_optiondf scalar option)
+  =        string rowvector    list
+  =void parse_cmd_options_u(struct rename_optiondf scalar option, string scalar token, transmorphic t)
+  =real scalar parse_cmd_options_u_std(struct rename_optiondf scalar option, string scalar source)
+  =        real scalar    l
+  =                option.isdebug = 1
+  =                option.isdryrun = 1
+  =                option.isrecase = option.isrecase_lower = 1
+  =                option.isrecase = option.isrecase_proper= 1
+  =                option.isr = 1
+  =                option.issort = 1
+  =                option.istest = 1
+  =                option.isrecase = option.isrecase_upper = 1
+  =        else    return(0)
+  =        return(1)
+  =real scalar parse_cmd_options_u_number(struct rename_optiondf scalar option, string scalar source,
+  =                                                                transmorphic t)
+  =        string scalar            token
+  =        real scalar            from
+  =        real scalar            l
+  =        string scalar            op
+  =        if (option.isrenumber | option.isaddnumber)  return(0)
+  =                option.isrenumber = 1
+  =                option.isaddnumber = 1
+  =                return(1)
+  =        return(1)
+  =void parse_cmd_pat_els(struct rename_patterndf rowvector pat, string scalar toparse, real pattype)
+  =        string scalar            token, curlist
+  =        transmorphic      t
+  =        real scalar       first
+  =        first   = 1
+  =                                first    = 1
+  =                                first   = 0
+  =void parse_cmd_pat_el(struct rename_patterndf rowvector pat, string scalar token, real pattype)
+  =        string scalar            mytoken
+  =        struct rename_patterndf scalar      mypat
+  =        real scalar            i, j
+  =        real matrix            found
+  =        mypat.n_of        = J(1, (8), 0)
+  =        confirm_not_empty(mytoken, pattype==0 ?
+  =                if (i=strpos(mytoken, "*")) found = (found \ (i, (3)))
+  =                if (i=strpos(mytoken, "?")) found = (found \ (i, (4) ))
+  =                if (i=strpos(mytoken, "#")) found = (found \ (i, (5)))
+  =                if (i=strpos(mytoken, "(")) found = (found \ (i, (6)))
+  =                if (i=strpos(mytoken, "=")) found = (found \ (i, (7)))
+  =                if (i=strpos(mytoken, ".")) found = (found \ (i, (8)))
+  =                        if (i==(3)) {c -(}
+  =                        else if (i==(4)) {c -(}
+  =                        else if (i==(5)) {c -(}
+  =                        else if (i==(6)) {c -(}
+  =                        else if (i==(7)) {c -(}
+  =                        else if (i==(8)) {c -(}
+  =string scalar set_subscript(struct rename_patterndf scalar pat, string scalar token, real pt)
+  =        real scalar    i
+  =        string scalar    c
+  =        if (pt != 1) {c -(}
+  =        if (pt != 1)              return(token)
+  =void set_pat_ETstrlist(struct rename_patterndf scalar pat, string scalar token)
+  =        struct rename_peldf scalar          el
+  =        el.elementtype = (1)
+  =        pat.n_of[(1)] = pat.n_of[(1)] + 1
+  =string scalar set_pat_str(struct rename_patterndf scalar pat, string scalar token)
+  =        struct rename_peldf scalar          el
+  =        el.elementtype = (2)
+  =string scalar set_pat_ETstar(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar          el
+  =        if (pat.patterntype == 0 && length(pat.ellist)) {c -(}
+  =                if (pat.ellist[length(pat.ellist)].elementtype == (3)) {c -(}
+  =        el.elementtype = (3)
+  =string scalar set_pat_ETnum_v(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar          el
+  =        if (pat.patterntype == 0 && length(pat.ellist)) {c -(}
+  =                if (pat.ellist[length(pat.ellist)].elementtype == (5)) {c -(}
+  =        el.elementtype = (5)
+  =string scalar set_pat_ETeq(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar  el
+  =        if (pat.patterntype == 0) {c -(}
+  =        el.elementtype = (7)
+  =string scalar set_pat_ETodot(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar  el
+  =        if (pat.patterntype == 0) {c -(}
+  =        el.elementtype = (8)
+  =string scalar set_pat_ETqm(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar  el
+  =        el.elementtype = (4)
+  =string scalar set_pat_ETnum_f(struct rename_patterndf scalar pat, string scalar token, real scalar loc)
+  =        struct rename_peldf scalar          el
+  =        real scalar            j
+  =        el.elementtype = (6)
+  =        if (el.arg > 10) {c -(}
+  =void make_patternlist_lengths_equal(struct rename_renamedf scalar ren)
+  =void build_recase_newpattern(struct rename_renamedf scalar ren)
+  =        real scalar    i
+  =        ren.newplist = rename_patterndf(length(ren.oldplist))
+  =                ren.newplist[i].n_of        = J(1, (8), 0)
+  =void link_patterns(struct rename_renamedf scalar ren)
+  =        real scalar    i, jn
+  =real scalar check_and_fix_ETnum(struct rename_patterndf scalar newp, struct rename_optiondf scalar option)
+  =        real scalar            n, j, jn
+  =        real scalar  tt
+  =                if (tt==(5) | tt==(6)) {c -(}
+  =                                (tt==(5) ? (9) : (10))
+  =struct rename_linklocdf {c -(}
+  =        real scalar    j_old, last_sequential_j_old
+  =        real scalar    j_new
+  =        real scalar    jn
+  =        real rowvector    mapsub
+  =void rename_linklocdf_init(struct rename_linklocdf scalar ll, real scalar jn)
+  =void rename_linklocdf_next(struct rename_linklocdf scalar ll, struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+  =        real scalar subscr
+  =real scalar map_subscript(real scalar subscr, real rowvector mapsub, struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+  =void link_patterns_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar jn)
+  =        struct rename_linklocdf scalar      ll
+  =        rename_linklocdf_init(ll, jn)
+  =        rename_linklocdf_next(ll, oldp, newp)
+  =                rename_linklocdf_next(ll, oldp, newp)
+  =real rowvector pelidx_of_wcidx(struct rename_patterndf scalar oldp)
+  =        real rowvector            toret
+  =        real scalar            i
+  =        real scalar  tt
+  =                if (tt!=(1) & tt!=(2)) toret = (toret, i)
+  =void confirm_wildcards_link(struct rename_patterndf scalar oldp, real scalar j_old,
+  =                            struct rename_patterndf scalar newp, real scalar j_new)
+  =        real scalar  tt_old, tt_new
+  =        if (tt_new == (3)) return
+  =        if (tt_new == (8))  return
+  =        if (tt_new == (4)) {c -(}
+  =                if (tt_old == (4)) return
+  =        if (tt_new==(5) | tt_new==(6)) {c -(}
+  =                if (tt_old==(5) | tt_old==(6)) return
+  =string scalar printable_wildcard(struct rename_peldf scalar el)
+  =        real scalar  tt
+  =        if (tt == (3))  return("*")
+  =        if (tt == (4))    return("?")
+  =        if (tt == (8))  return(".")
+  =        if (tt == (5)) return("#")
+  =        if (tt == (6)) return("(" + el.arg*"*" + ")")
+  =real scalar count_wildcards(struct rename_patterndf scalar pat)
+  =        return(pat.n_of[(3)]  +
+  =               pat.n_of[(4)]    +
+  =               pat.n_of[(5)] +
+  =               pat.n_of[(6)] +
+  =               pat.n_of[(8)])
+  =real scalar is_wildcard(real scalar tt)
+  =        return( tt == (3)  |
+  =                tt == (4)    |
+  =                tt == (5) |
+  =                tt == (6) |
+  =                tt == (9) |
+  =                tt == (10) |
+  =                tt == (8)  )
+  =real scalar find_next_wildcard(struct rename_peldf rowvector d, real scalar j0)
+  =        real scalar    j
+  =void fillin_old_varnames(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist,
+  =                                                        real scalar issort)
+  =        real scalar    i
+  =        string scalar    tmpname
+  =void fillin_old_varnames_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp,
+  =                                        real scalar issort, string scalar tmpname)
+  =        string rowvector            varnames, piece
+  =        real scalar            i, n, nvars, nels
+  =        string matrix            pieces
+  =        real scalar  tt
+  =        real scalar       filter_varlist, fillin_pieces
+  =        filter_varlist = (oldp.n_of[(5)] + oldp.n_of[(6)] != 0)
+  =        fillin_pieces  = (newp.n_of[(5)] + newp.n_of[(6)] +
+  =                          newp.n_of[(3)]  + newp.n_of[(4)]    != 0)
+  =        if (issort) fillin_pieces = 1
+  =                        if (tt==(3) | tt==(4)) {c -(}
+  =string scalar varlistpattern(struct rename_peldf rowvector ellist)
+  =        real scalar    j
+  =        string scalar    result
+  =        if (ellist[1].elementtype == (1)) return(ellist[1].element)
+  =string scalar varlist_el(struct rename_peldf scalar el)
+  =        if (el.elementtype == (2))    return(el.element)
+  =        if (el.elementtype == (3))   return("*")
+  =        if (el.elementtype == (4))     return("?")
+  =        if (el.elementtype == (5))  return("?*")
+  =        if (el.elementtype == (6))  return(el.arg*"?")
+  =struct rename_matchdf {c -(}
+  =        real scalar    j0, j1
+  =        real scalar    i0, i1
+  =        string scalar    name
+  =        string rowvector    pieces
+  =real scalar matchvarname(string rowvector pieces, struct rename_peldf rowvector ellist, string scalar name)
+  =        struct rename_matchdf scalar        m
+  =                if (ellist[1].elementtype==(1)) {c -(}
+  =                        return(1)
+  =        if (!match_step(m, ellist)) return(0)
+  =        return(1)
+  =void match_setup(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, string scalar name)
+  =real scalar match_step(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        real scalar            lefttomatch
+  =        real scalar      mr
+  =        real scalar     r
+  =                if ((r=match_query_done(m))!=(-1)) return(r)
+  =                if (match_simplification(m, ellist)==-1) return(0)
+  =                if ((r=match_query_done(m))!=(-1)) return(r)
+  =                        if (match_step_1(m, ellist)==-1) return(0)
+  =                        if ((r=match_query_done(m))!=(-1)) return(r)
+  =                        return(0)
+  =                        if (mr==-1 | mr==0) return(0)
+  =                        if (mr==-1 | mr==0) return(0)
+  =real scalar match_step_1(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        if (ellist[m.j0].elementtype==(5)) {c -(}
+  =                return(match_ETnum_v(m, ellist, 1))
+  =        if (ellist[m.j0].elementtype==(3)) {c -(}
+  =        return(-1)
+  =real scalar match_step_2(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        if (ellist[m.j0].elementtype==(5)) {c -(}
+  =                return(match_ETnum_v(m, ellist, 1))
+  =        if (ellist[m.j0+1].elementtype==(5)) {c -(}
+  =                return(match_ETnum_v(m, ellist, 0))
+  =        return(-1)
+  =real scalar match_step_3p(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        real scalar    j
+  =        if (ellist[m.j0].elementtype==(3)) {c -(}
+  =                if (ellist[j].elementtype==(3)) {c -(}
+  =                if (ellist[j].elementtype==(5)) {c -(}
+  =                        return(match_ETnum_v(m, ellist, 0))
+  =        if (ellist[m.j0].elementtype==(5)) {c -(}
+  =                return(match_ETnum_v(m, ellist, 1))
+  =        return(-1)
+  =real scalar match_query_done(struct rename_matchdf scalar m)
+  =                if (m.i0 < m.i1) return(0)
+  =                return(1)
+  =        return((-1))
+  =real scalar match_simplification(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        real scalar      mr
+  =        while ((m.i1 >m.i0 & m.j1> m.j0)) {c -(}
+  =                mr = match_fixed(m, ellist, 1)
+  =                if (mr==-1) return(-1)
+  =                if (mr==0)   break
+  =        while ((m.i1 >m.i0 & m.j1> m.j0)) {c -(}
+  =                mr = match_fixed(m, ellist, 0)
+  =                if (mr==-1) return(-1)
+  =                if (mr==0)   break
+  =real scalar match_fixed(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+  =        real scalar    j
+  =        j = (s==1 ? m.j0 : m.j1-1)
+  =        if (ellist[j].elementtype==(2))   return(match_ETstr(m, ellist, s))
+  =        if (ellist[j].elementtype==(6)) return(match_ETnum_f(m, ellist, s))
+  =        if (ellist[j].elementtype==(4))    return(match_ETqm(m, ellist, s))
+  =        return(0)
+  =real scalar match_ETstr(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+  =        real scalar    j, len
+  =        j = (s==1 ? m.j0 : m.j1-1)
+  =        if (ellist[j].elementtype != (2)) return(0)
+  =        if ((s==1 ?  usubstr(m.name, m.i0, len) :
+  =                return(-1)
+  =        return(1)
+  =real scalar match_ETnum_f(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+  =        real scalar    j, i, len
+  =        string scalar    str, c
+  =        j = (s==1 ? m.j0 : m.j1-1)
+  =        if (ellist[j].elementtype != (6)) return(0)
+  =        str = (s==1 ?  usubstr(m.name, m.i0, len) : usubstr(m.name, -len, .))
+  =        if (ustrlen(str)!=len) return(-1)
+  =                if (c<"0" | c>"9") return(-1)
+  =        return(1)
+  =real scalar match_ETqm(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+  =        if (ellist[s==1 ? m.j0 : m.j1-1].elementtype != (4)) {c -(}
+  =                return(0)
+  =        if (m.i0==m.i1) return(-1)
+  =        return(1)
+  =real scalar match_ETnum_v(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, real scalar s)
+  =        real scalar            j, i0, i1, len
+  =        string scalar            c
+  =        string scalar            c1
+  =        struct rename_matchdf scalar        hold
+  =        j = (s==1 ? m.j0 : m.j1-1)
+  =        if (ellist[j].elementtype != (5)) return(0)
+  =        if (s==1) {c -(}
+  =                if (match_step(m, ellist)==1) return(1)
+  =        return(-1)
+  =real scalar match_ETstar_left(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist)
+  =        real scalar            len, newlen
+  =        struct rename_matchdf scalar        hold
+  =        real scalar       next_is_ETnum_v
+  =        if (ellist[m.j0].elementtype != (3)) return(0)
+  =                post_match_piece(m, 1, len)
+  =                return(1)
+  =        next_is_ETnum_v = (ellist[m.j0+1].elementtype==(5))
+  =                post_match_piece(m, 1, len)
+  =                if (match_step(m, ellist)==1) {c -(}
+  =                                        post_match_piece(m, 1, newlen)
+  =                        return(1)
+  =        return(-1)
+  =real scalar mstargiveback(string scalar s)
+  =        real scalar    l
+  =        string scalar    c
+  =        string scalar    c1
+  =void post_match_piece(struct rename_matchdf scalar m, real scalar s, real scalar len)
+  =        if (s==1) {c -(}
+  =void sort_old_varnames(struct rename_renamedf scalar ren)
+  =        real scalar i
+  =void sort_appropriate_field(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+  =        real scalar            i
+  =        real scalar            j
+  =real scalar j_of_renumber(struct rename_patterndf scalar plist)
+  =        real scalar            j
+  =        real scalar  tt
+  =                if (tt==(9) | tt==(10)) return(j)
+  =real scalar j_of_number(struct rename_patterndf scalar plist)
+  =        real scalar            j, jtoret
+  =        real scalar  tt
+  =                if (tt==(3) | tt==(4) | tt==(5) | tt==(6)) {c -(}
+  =void sort_on_field(struct rename_patterndf scalar plist, real scalar j)
+  =        real scalar  tt
+  =        real colvector            o
+  =        string colvector            vc
+  =                if (tt==(5) | tt==(6)) {c -(}
+  =void fillin_new_varnames_recase(struct rename_renamedf scalar ren)
+  =        real scalar    i
+  =void fillin_new_varnames(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist, real scalar from)
+  =        real scalar    i
+  =void fillin_new_varnames_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar from)
+  =        real scalar    i
+  =        if (newp.ellist[1].elementtype==(1)) {c -(}
+  =void fillin_new_varnames_u_u(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar from, real scalar i)
+  =        real scalar            j
+  =        string scalar            name
+  =        real scalar  tt
+  =                if (tt==(2)) {c -(}
+  =                else if (tt==(3)) {c -(}
+  =                else if (tt==(4)) {c -(}
+  =                else if (tt==(5)) {c -(}
+  =                else if (tt==(6)) {c -(}
+  =                else if (tt==(7)) {c -(}
+  =                else if (tt==(9)) {c -(}
+  =                else if (tt==(10)) {c -(}
+  =                else if (tt != (8)) {c -(}
+  =string scalar fmt_ETnum_f(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar i, real scalar j)
+  =        real scalar    n, len
+  =        string scalar    res, orig
+  =string scalar fmt_ETnum_f_r(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar j, real scalar from)
+  =        real scalar    n, len
+  =        string scalar res
+  =string matrix build_toren(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+  =        string matrix    toren
+  =        real scalar    i, N, n, k, k2
+  =        real colvector    toselect
+  =        string rowvector    lastrow, newrow
+  =        real scalar hasomissions
+  =                                hasomissions = 1
+  =void perform_renames(string matrix toren, struct rename_optiondf scalar option)
+  =        real scalar       use_intermediary
+  =        string matrix            toren_nonulls
+  =                        perform_dryrun(toren, toren_nonulls, 0)
+  =void confirm_newnames_new(string matrix toren)
+  =        real scalar    i
+  =        real rowvector    varnum
+  =        string rowvector    tocheck, badvar
+  =void perform_set_r(string matrix toren)
+  =void perform_test(string matrix toren, real scalar use_intermediary)
+  =        real scalar    i
+  =void perform_rename_straight(string matrix toren)
+  =        real scalar    i
+  =        real scalar    breakstatus
+  =void perform_rename_intermediary(string matrix toren)
+  =        real scalar    i
+  =        real scalar    breakstatus
+  =        string rowvector    tmpname
+  =void perform_dryrun(string matrix toren, string matrix toren_nonulls, real scalar use_intermediary)
+  =        real scalar    i
+  =        real scalar    maxlen
+  =        string scalar    sfmt, sfmtit
+  =void dryrun_note1(string matrix toren, string matrix toren_nonulls)
+  =        real scalar    i
+  =        real scalar    nulls
+  =void dryrun_note2(string matrix toren, real scalar use_intermediary)
+  =        string colvector    dupnames, newname, oldname
+  =real scalar names_not_jointly_unique(string matrix toren)
+  =        real scalar    n0, n1
+  =        string colvector    fulllist
+  =void confirm_names_unique(string matrix toren)
+  =void confirm_names_unique_1(string matrix toren, real scalar j)
+  =        string colvector    names, corresponding
+  =        string scalar    s
+  =        real scalar    n
+  =string colvector corresponding_names(string matrix toren, string scalar name, real scalar js, real scalar jd)
+  =        real scalar    i
+  =        string colvector    dups
+  =void confirm_new_varnames_valid(string matrix toren)
+  =        real scalar    i, n
+  =        real colvector    bad
+  =void confirm_not_empty(string scalar str, string scalar expected)
+  =void errprint_bf_list(string vector list , |real scalar USER_MAXEL)
+  =        real scalar            MAXEL
+  =        real scalar            i, top
+  =        real scalar       chopped
+  =                        chopped = 1
+  =                        chopped = 0
+  =void errprint_bf_string(string scalar user_s, |real scalar USER_MAXLEN)
+  =        real scalar            MAXLEN
+  =        real scalar            len_last, target_last
+  =        real scalar            len_remaining
+  =        real scalar            i
+  =        string rowvector            els
+  =        string scalar            s, first, last
+  =        real scalar       cont
+  =        cont = 1
+  =                else            cont   = 0
+  =        string scalar    indent
+  =void error_preceding_dash( pattype)
+  =                        (pattype==0 ? "oldname" : "newname" ) )
+  =void error_following_dash( pattype, string scalar what)
+  =                        (pattype==0 ? "oldname" : "newname" ) )
+  =void option_not_allowed(string scalar option)
+  =void option_number_misspecified(string scalar op)
+  =void error_ETnum_f_too_long(real scalar n_digits)
+  =        errprintf("the {c -(}bf:(###...#){c )-} pattern is %g.\n", 10)
+  =void error_patternlengths_unequal(struct rename_patterndf rowvector oldplist, struct rename_patterndf rowvector newplist)
+  =        string scalar    s_old, s_new
+  =void error_too_many_renumbers(string scalar op, struct rename_patterndf scalar newp)
+  =void error_strlist_length(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+  =        real scalar    n_old, n_new
+  =        string scalar    s_old, s_new
+  =void error_missing_ETnum(string scalar opname, struct rename_patterndf scalar newp)
+  =void error_too_many_wildcards(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp,
+  =                                                        real scalar isaddnumber)
+  =void error_wildcardmatch_qm(struct rename_patterndf scalar oldp, real scalar j_old,
+  =                            struct rename_patterndf scalar newp, real scalar j_new)
+  =void error_wildcardmatch_hash(struct rename_patterndf scalar oldp, real scalar j_old,
+  =                              struct rename_patterndf scalar newp, real scalar j_new)
+  =void error_no_right_bracket(string scalar original)
+  =void error_inside_brackets(string scalar original)
+  =void error_newnumber_subscripted(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp)
+  =void error_subscript_invalid(struct rename_patterndf scalar oldp, struct rename_patterndf scalar newp, real scalar subscr)
+  =void error_subscripts_in_old(struct rename_patterndf scalar pat)
+  =void dump_pattern(struct rename_patterndf rowvector pat, string scalar typ, real scalar incl_names)
+  =        real scalar    i, j, n
+  =        real scalar    nv, k, m
+  =                        pat[i].n_of[(2)],
+  =                        pat[i].n_of[(3)],
+  =                        pat[i].n_of[(4)],
+  =                        pat[i].n_of[(5)],
+  =                        pat[i].n_of[(6)],
+  =                        pat[i].n_of[(7)],
+  =                        pat[i].n_of[(8)])
+  =string scalar dump_xlate_tt(real scalar t)
+  =        if (t==(1))     return("ETstrlist")
+  =        if (t==(2))         return("ETstr")
+  =        if (t==(3))        return("ETstar")
+  =        if (t==(4))          return("ETqm")
+  =        if (t==(5))       return("ETnum_v")
+  =        if (t==(6))       return("ETnum_f")
+  =        if (t==(7))          return("ETeq")
+  =        if (t==(8))        return("ETodot")
+  =        if (t==(9))     return("ETnum_v_r")
+  =        if (t==(10))     return("ETnum_f_r")
+  =void dump_options(struct rename_renamedf scalar ren)
+  =void match_debug(struct rename_matchdf scalar m, struct rename_peldf rowvector ellist, string scalar msg)
+  =string rowvector list_subtract(string rowvector a, string rowvector b)
+  =        string rowvector result
+  =string rowvector expand_varlist(string scalar pattern, string scalar tmpname)
+  =        real scalar    rc
+  =        string rowvector    result
+  =string scalar ordinal_suffix(real scalar i)
+  =        real scalar    lastdigit
   {hline 77} begin rename {hline}
   - version 12
   - mata: rename_cmd("`3'")
@@ -1272,18 +1806,43 @@ race already numeric; no {res}replace
 - gen major_depression = (icd9 == 2962 | icd9 == 29621 | icd9 == 29622 | icd9 == 29623 | icd9 == 29624 | icd9 == 29625 | icd9 == 29626 | icd9 == 2963 | icd9 == 29631 | icd9 == 29632 | icd9 == 29633 | icd9 == 29634 | icd9 == 29635 | icd9 == 29636)
 - replace major_depression = 1 if (icd10== "F32" | icd10=="F321" | icd10=="F322" |icd10== "F323" |icd10== "F324" |icd10== "F325" | icd10== "F328" | icd10== "F329"| icd10== "F33" | icd10== "F331" | icd10== "F332" | icd10== "F333" | icd10== "F334" | icd10== "F338" | icd10== "F339" | icd10== "F3341" | icd10== "F3342" )
 (0 real changes made)
-- gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602 | icd9==29603 | icd==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
-{err}icd ambiguous abbreviation
- {txt} replace bipolar = 1 if (icd10== "F31" | icd10=="F311" | icd10=="F3111" |icd10== "F3112" |icd10== "F3113" |icd10== "F312" | icd10== "F313" | icd10== "F3131"| icd10== "F3132" | icd10== "F314" | icd10== "F315" | icd10== "F316" | icd10== "F3161" | icd10== "F3162" | icd10== "F3163" | icd10== "F3164" | icd10== "F317" | icd10== "F3171" | icd10=="F3172" | icd10=="F3173" |icd10== "F3174" |icd10== "F3175" |icd10== "F3176" | icd10== "F3177" | icd10== "F3178"| icd10== "F318" | icd10== "F3181" | icd10== "F3189" | icd10== "F319")
-  gen schizophrenia = icd9 == 295
-  replace schizophrenia = 1 if (icd10== "F20" | icd10=="F201" | icd10=="F202" |icd10== "F203" |icd10== "F205" |icd10== "F208" | icd10== "F2081" | icd10== "F2089"| icd10== "F209")
-  keep if major_depression==1|bipolar==1|schizophrenia==1
-  tab major_depression
-  tab bipolar
-  tab schizophrenia
-  gen psychhosp=0
-  replace psychhosp=1 if inlist(fac_psych_ind, "A", "X", "(A)", "(X)")
-  replace psychhosp = 2 if strpos(provider_name, "Behavioral")
+- gen bipolar = (icd9 == 296 | icd9== 29601 | icd9==29602 | icd9==29603 | icd9==29604 | icd9==29605 | icd9==29606 | icd9==2964 | icd9==29641 | icd9==29642 | icd9==29643 | icd9==29644 | icd9==29645 | icd9==29646 | icd9==2965 | icd9==29651 | icd9==29652 | icd9==29653 | icd9==29654 | icd9==29655 | icd9==29656 | icd9==2966 | icd9==29661 | icd9==29662 | icd9==29663 | icd9==29664 | icd9==29665 | icd9==29666 | icd9==2967 | icd9==2968)
+- replace bipolar = 1 if (icd10== "F31" | icd10=="F311" | icd10=="F3111" |icd10== "F3112" |icd10== "F3113" |icd10== "F312" | icd10== "F313" | icd10== "F3131"| icd10== "F3132" | icd10== "F314" | icd10== "F315" | icd10== "F316" | icd10== "F3161" | icd10== "F3162" | icd10== "F3163" | icd10== "F3164" | icd10== "F317" | icd10== "F3171" | icd10=="F3172" | icd10=="F3173" |icd10== "F3174" |icd10== "F3175" |icd10== "F3176" | icd10== "F3177" | icd10== "F3178"| icd10== "F318" | icd10== "F3181" | icd10== "F3189" | icd10== "F319")
+(0 real changes made)
+- gen schizophrenia = icd9 == 295
+- replace schizophrenia = 1 if (icd10== "F20" | icd10=="F201" | icd10=="F202" |icd10== "F203" |icd10== "F205" |icd10== "F208" | icd10== "F2081" | icd10== "F2089"| icd10== "F209")
+(0 real changes made)
+- keep if major_depression==1|bipolar==1|schizophrenia==1
+(760,262 observations deleted)
+- tab major_depression
+
+major_depre {c |}
+      ssion {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      5,059       39.42       39.42
+{txt}          1 {c |}{res}      7,773       60.58      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     12,832      100.00
+{txt}- tab bipolar
+
+    bipolar {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      7,773       60.58       60.58
+{txt}          1 {c |}{res}      5,059       39.42      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     12,832      100.00
+{txt}- tab schizophrenia
+
+schizophren {c |}
+         ia {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}     12,832      100.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     12,832      100.00
+{txt}- gen psychhosp=0
+- replace psychhosp=1 if inlist(fac_psych_ind, "A", "X", "(A)", "(X)")
+{err}type mismatch
+ {txt} replace psychhosp = 2 if strpos(provider_name, "Behavioral")
   replace psychhosp = 2 if strpos(provider_name, "Psychiatric")
   replace psychhosp =2 if provider_name=="Carrollton Springs" | provider_name=="Cedar Crest Hospital" | provider_name=="Clarity Child Guidance Center" | provider_name=="Devereux Texas Treatment Network" | provider_name=="Glen Oaks Hospital" | provider_name=="Hickory Trail Hospital" | provider_name=="Intracare North Hospital" | provider_name=="Kingwood Pines Hospital" | provider_name=="Laurel Ridge Treatment Center" | provider_name=="Millwood Hospital" | strpos(provider_name, "Montgomery County Mental Health") | provider_name=="Red River Regional" | provider_name=="Hospital River Crest Hospital" | provider_name=="Sunrise Canyon" | provider_name=="Texas NeuroRehab Center" | provider_name=="Menninger Clinic" | provider_name=="West Oaks Hospital"
   label variable psychosp "0 if general, 1 if general with psych ward, 2 if psych hospital"
@@ -1291,17 +1850,43 @@ race already numeric; no {res}replace
   save "${c -(}datadir{c )-}sonali_data_`nm'_`qr'.dta", replace
   {c )-}
   {c )-}
-{search r(111), local:r(111);}
+{search r(109), local:r(109);}
 
 end of do-file
 
-{search r(111), local:r(111);}
+{search r(109), local:r(109);}
 
-{com}. log close
-      {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/sonali_compilation.smcl
-  {txt}log type:  {res}smcl
- {txt}closed on:  {res}15 Apr 2021, 16:28:36
-{txt}{.-}
-{smcl}
-{txt}{sf}{ul off}
+{com}. tab psychhosp
+
+  {txt}psychhosp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}     12,832      100.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     12,832      100.00
+
+{com}. tab fac_psych_ind
+
+{txt}FAC_PSYCH_I {c |}
+         ND {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      3,277       25.54       25.54
+{txt}          1 {c |}{res}      9,555       74.46      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     12,832      100.00
+
+{com}. use "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/2015/CD2015Q3/PUDF 3 Q 2015.dta", clear
+
+. tab fac_psych_ind
+{err}variable {bf}fac_psych_ind{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. tab FAC_PSYCH_IND
+
+{txt}FAC_PSYCH_I {c |}
+         ND {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          X {c |}{res}    155,513      100.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    155,513      100.00
+
+{com}. 
