@@ -1889,4 +1889,6 @@ end of do-file
 {txt}{hline 12}{c +}{hline 35}
       Total {c |}{res}    155,513      100.00
 
-{com}. 
+{com}. clear
+
+. exit
