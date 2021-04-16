@@ -8,7 +8,7 @@ set trace on
 global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/"
 
 cap log close
-log using "${datadir}sonali_compilation.smcl"
+log using "${datadir}sonali_compilation.smcl", replace
 
 foreach nm of numlist 2010(1)2018{
          
