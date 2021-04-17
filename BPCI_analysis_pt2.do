@@ -16,7 +16,6 @@ use "${datadir}DiRienz_data_all.dta", clear
 rename county fips
 merge m:1 fips using "${datadir}DiRienz_ahrf.dta"
 drop _merge
-save "${datadir}DiRienz_data_all.dta", replace
 
 *gen urban variable
 destring percenturban, generate(percenturban_x)
@@ -32,7 +31,7 @@ xtile income = median_householdincome, nq(4)
 label variable median_householdincome "Median household income based on county"
 replace median_householdincome = median_householdincome/1000
 
-save "${datadir}DiRienz_data_all.dta", replace
+save "${datadir}DiRienz_data_merged.dta", replace
 
 
 **-----------------------------------------
@@ -63,7 +62,7 @@ replace hcontrl=2 if control=="gov"
 replace hcontrl=. if control==""
 label variable hcontrl "Categorical variable for hospital control"
 
-save "${datadir}DiRienz_data_all.dta", replace
+save "${datadir}DiRienz_data_merged.dta", replace
 
 
 
@@ -123,9 +122,6 @@ replace group4 = 1 if thcic_id==477000 & ///
  inlist(471, 472, 473, 459, 460)
 label variable group4 "BPCI enacted 10/1/2015"
 
-save "${datadir}DiRienz_data_all.dta", replace
-
-
 **-----------------------------------------
 
 
@@ -137,7 +133,7 @@ replace post=1 if group2==1 & time>21
 replace post=1 if group3==1 & time>22
 replace post=1 if group4==1 & time>23
 
-save "${datadir}DiRienz_data_all.dta", replace
+save "${datadir}DiRienz_data_merged.dta", replace
 
 **-----------------------------------------
 
@@ -152,7 +148,7 @@ save "${datadir}DiRienz_AIM2.dta", replace
 clear
 
 **SAVE SUBSAMPLE FOR AIM1**
-use "${datadir}DiRienz_data_all.dta"
+use "${datadir}DiRienz_data_merged.dta"
 keep if bpci==1
 *interaction var
 gen did=post*medicare
