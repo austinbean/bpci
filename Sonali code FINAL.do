@@ -102,14 +102,16 @@ tab schizophrenia
 
 
 *gen psych facility indicator
-tostring fac_psych_ind if year==2010, replace
+if `nm' == 2010 {
+	tostring fac_psych_ind , replace
+}
 gen psychhosp=0
 replace psychhosp=1 if inlist(fac_psych_ind, "A", "X", "(A)", "(X)", "1")
 replace psychhosp = 2 if strpos(provider_name, "Behavioral")
 replace psychhosp = 2 if strpos(provider_name, "Psychiatric")
 replace psychhosp =2 if provider_name=="Carrollton Springs" | provider_name=="Cedar Crest Hospital" | provider_name=="Clarity Child Guidance Center" | provider_name=="Devereux Texas Treatment Network" | provider_name=="Glen Oaks Hospital"  | provider_name=="Hickory Trail Hospital"  | provider_name=="Intracare North Hospital"  | provider_name=="Kingwood Pines Hospital"  | provider_name=="Laurel Ridge Treatment Center" | provider_name=="Millwood Hospital" | strpos(provider_name, "Montgomery County Mental Health")  | provider_name=="Red River Regional" | provider_name=="Hospital River Crest Hospital"  | provider_name=="Sunrise Canyon"  | provider_name=="Texas NeuroRehab Center" | provider_name=="Menninger Clinic" | provider_name=="West Oaks Hospital"
 
-label variable psychosp "0 if general, 1 if general with psych ward, 2 if psych hospital"
+label variable psychhosp "0 if general, 1 if general with psych ward, 2 if psych hospital"
 
 tab psychhosp
 
