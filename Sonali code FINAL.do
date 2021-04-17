@@ -56,6 +56,7 @@ label variable insurance "Insurance categorical variable"
 
 *gen ethnicity (Race and ethnicity data aren't always collected)
 capture replace ethnicity="." if inlist(ethnicity, "`", "*", "") // modified.
+destring ethnicity, replace
 label variable ethnicity "Indicates hispanic origin (1) or not of hispanic origin (2)"
 
 *gen race categorical var
