@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Apr 2021, 16:18:02
+ {txt}opened on:  {res}17 Apr 2021, 13:51:45
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
@@ -12,27 +12,365 @@
 . 
 . *merge with Area Resource File data
 . rename county fips
-{res}{err}variable {bf}county{sf} not found
+{res}{txt}
+{com}. merge m:1 fips using "${c -(}datadir{c )-}DiRienz_ahrf.dta"
+{res}
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}         138,033
+{txt}{col 9}from master{col 30}{res}         138,033{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}       4,138,429{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. *gen urban variable
+. destring percenturban, generate(percenturban_x)
+{txt}percenturban: all characters numeric; percenturban_x {res}generated {txt}as {res}double
+{txt}(138033 missing values generated)
+{res}{txt}
+{com}. drop percenturban
+{txt}
+{com}. rename percenturban_x percenturban
+{res}{txt}
+{com}. xtile urban = percenturban, nq(4)
+{txt}
+{com}. label variable percenturban "Percentage of patient's county that is urban"
+{txt}
+{com}. replace urban=. if percenturban==.
+{txt}(0 real changes made)
+
+{com}. 
+. *gen median household income variable
+. destring median_householdincome, replace force
+{txt}median_householdincome: all characters numeric; {res}replaced {txt}as {res}long
+{txt}(138033 missing values generated)
+{res}{txt}
+{com}. xtile income = median_householdincome, nq(4)
+{txt}
+{com}. label variable median_householdincome "Median household income based on county"
+{txt}
+{com}. replace median_householdincome = median_householdincome/1000
+{txt}variable {bf}median_householdincome{sf} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
+{txt}(4,138,429 real changes made)
+
+{com}. 
+. save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
+{txt}(note: file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta not found)
+file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+
+{com}. 
+. 
+. **-----------------------------------------
+. 
+. 
+. //**MERGE WITH ADDTL HOSPITAL DATA**//
+. 
+. *Merge to get discharges, number of beds, and govt control variables
+. merge m:1 thcic_id using "${c -(}datadir{c )-}DiRienz_hosp.dta"
+{res}
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}       3,919,723
+{txt}{col 9}from master{col 30}{res}       3,919,723{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}         356,739{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. *gen bedsize var
+. label variable beds "Number of hospital beds"
+{txt}
+{com}. gen bedsize=0
+{txt}
+{com}. replace bedsize=1 if inrange(beds, 1, 100)
+{txt}(0 real changes made)
+
+{com}. replace bedsize=2 if inrange(beds, 101, 200)
+{txt}(151,220 real changes made)
+
+{com}. replace bedsize=3 if beds>200
+{txt}(4,125,242 real changes made)
+
+{com}. label variable bedsize "Categorical var for number of beds"
+{txt}
+{com}. 
+. *rename total discharges (annual)
+. label variable totaldisc "Total annual discharges"
+{txt}
+{com}. 
+. *gen hospital control  categorical var
+. label variable control "Indicates control of hospital: profit, govt"
+{txt}
+{com}. gen hcontrl=0
+{txt}
+{com}. replace hcontrl=1 if control=="profit"
+{txt}(351,817 real changes made)
+
+{com}. replace hcontrl=2 if control=="gov"
+{txt}(4,922 real changes made)
+
+{com}. replace hcontrl=. if control==""
+{txt}(3,919,723 real changes made, 3,919,723 to missing)
+
+{com}. label variable hcontrl "Categorical variable for hospital control"
+{txt}
+{com}. 
+. save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
+{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+
+{com}. 
+. 
+. 
+. **-----------------------------------------
+. 
+. 
+. //**CREATE IMPLEMENTATION GROUPS FOR did**//
+. 
+. *gen group of indicator variables to indicate policy start date
+. *group1 = policy start date 10/1/2013 (just one instance)
+. gen group1 = 0
+{txt}
+{com}. replace group1 = 1 if thcic_id==114001 & inlist(drg, 469, 470) 
+{txt}(1,289 real changes made)
+
+{com}. label variable group1 "BPCI enacted 10/1/2013"
+{txt}
+{com}. 
+. *group2 = policy start date 4/1/2015
+. gen group2 = 0
+{txt}
+{com}. replace group2 = 1 if thcic_id==114001 & ///
+>  inlist(drg, 177, 178, 179, 193, 194, 195, 280, 281, 282, 190, 191, 192, 202, 203)
+{txt}(4,840 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==349001 & ///
+>  inlist(drg, 190, 191, 192, 202, 203, 480, 481, 482, 870, 871, 872, 537, 538, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 177, 178, 179, 193, 194, 195, 689, 690, 291, 292, 293, 246, 247, 248, 249, 250, 251, 273, 274, 602, 603)
+{txt}(9,808 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==212000 & ///
+>  inlist(drg, 190, 191, 192, 202, 203, 480, 481, 482, 870, 871, 872, 469, 470, 537, 538, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 177, 178, 179, 193, 194, 195, 186, 187, 188, 189, 204, 205, 206, 207, 208, 689, 690, 637, 638, 639, 291, 292, 293, 246, 247, 248, 249, 250, 251, 273, 274, 602, 603)
+{txt}(22,098 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==336001 & ///
+>  inlist(drg, 190, 191, 192, 202, 203, 870, 871, 872, 469, 470, 177, 178, 179, 193, 194, 195, 689, 690, 291, 292, 293)
+{txt}(10,295 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==675000 & ///
+>  inlist(drg, 61, 62, 63, 64, 65, 66, 329, 330, 331, 190, 191, 192, 202, 203, 870, 871, 872, 537, 538, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 177, 178, 179, 193, 194, 195, 689, 690, 682, 683, 684, 291, 292, 293, 602, 603)
+{txt}(20,727 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==214000 & ///
+>  inlist(drg, 61, 62, 63, 64, 65, 66, 190, 191, 192, 202, 203, 870, 871, 872, 469, 470, 537, 538, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 177, 178, 179, 193, 194, 195, 689, 690, 69, 291, 292, 293, 246, 247, 248, 249, 250, 251, 273, 274, 602, 603)
+{txt}(16,383 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==340000 & ///
+>  inlist(drg, 61, 62, 63, 64, 65, 66, 190, 191, 192, 202, 203, 469, 470, 177, 178, 179, 193, 194, 195, 291, 292, 293, 246, 247, 248, 249, 250, 251, 273, 274)
+{txt}(11,231 real changes made)
+
+{com}. replace group2 = 1 if thcic_id==477000 & ///
+>  inlist(drg, 61, 62, 63, 64, 65, 66, 190, 191, 192, 202, 203, 870, 871, 872, 469, 470, 177, 178, 179, 193, 194, 195, 689, 690, 682, 683, 684, 291, 292, 293, 602, 603)
+{txt}(16,101 real changes made)
+
+{com}. label variable group2 "BPCI enacted 4/1/2015"
+{txt}
+{com}. 
+. *group3 = policy start date 7/1/2015
+. gen group3 = 0
+{txt}
+{com}. replace group3 = 1 if thcic_id==653001 & ///
+>  inlist(drg, 280, 281, 282, 231, 232, 233, 234, 235, 236)
+{txt}(4 real changes made)
+
+{com}. replace group3 = 1 if thcic_id==124000 & inlist(drg, 469, 470)
+{txt}(10,794 real changes made)
+
+{com}. label variable group3 "BPCI enacted 7/1/2015"
+{txt}
+{com}. 
+. *group4 = policy start date 10/1/2015
+. gen group4 = 0
+{txt}
+{com}. replace group4 = 1 if thcic_id==349001 & ///
+>  inlist(drg, 280, 281, 282, 637, 638, 639)
+{txt}(1,010 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==212000 & ///
+>  inlist(drg, 280, 281, 282, 308, 309, 310)
+{txt}(3,208 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==336001 & ///
+>  inlist(drg, 313, 61, 62, 63, 64, 65, 66)
+{txt}(1,463 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==675000 & ///
+>  inlist(drg, 280, 281, 282, 391, 392, 312) 
+{txt}(3,330 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==214000 & ///
+>  inlist(308, 309, 310, 388, 389, 390, 312)
+{txt}(0 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==340000 & ///
+>  inlist(drg, 689, 690)
+{txt}(921 real changes made)
+
+{com}. replace group4 = 1 if thcic_id==477000 & ///
+>  inlist(471, 472, 473, 459, 460)
+{txt}(0 real changes made)
+
+{com}. label variable group4 "BPCI enacted 10/1/2015"
+{txt}
+{com}. 
+. **-----------------------------------------
+. 
+. 
+. //**CREATE VARIABLES FOR EVENT STUDY & did**//
+. 
+. egen time = group(year dqtr)
+{txt}
+{com}. gen post=1 if group1==1 & time>15
+{txt}(4,275,827 missing values generated)
+
+{com}. replace post=1 if group2==1 & time>21
+{txt}(52,258 real changes made)
+
+{com}. replace post=1 if group3==1 & time>22
+{txt}(4,567 real changes made)
+
+{com}. replace post=1 if group4==1 & time>23
+{txt}(4,013 real changes made)
+
+{com}. 
+. save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
+{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+
+{com}. 
+. **-----------------------------------------
+. 
+. **SAVE SUBSAMPLE FOR AIM2**
+. keep if medicare==1
+{txt}(1,359,357 observations deleted)
+
+{com}. keep if bpci_drg==1
+{txt}(0 observations deleted)
+
+{com}. *interaction var
+. gen did=post*bpci
+{txt}(2,873,446 missing values generated)
+
+{com}. label variable did "Interaction variable that indicates 1 if under BPCI contract and occurred after implementation"
+{txt}note: label truncated to 80 characters
+
+{com}. 
+. save "${c -(}datadir{c )-}DiRienz_AIM2.dta", replace
+{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM2.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. **SAVE SUBSAMPLE FOR AIM1**
+. use "${c -(}datadir{c )-}DiRienz_data_merged.dta"
+{txt}
+{com}. keep if bpci==1
+{txt}(4,137,389 observations deleted)
+
+{com}. *interaction var
+. gen did=post*medicare
+{txt}(77,600 missing values generated)
+
+{com}. label variable did "Interaction variable that indicates 1 if under BPCI contract and occurred after implementation"
+{txt}note: label truncated to 80 characters
+
+{com}. 
+. save "${c -(}datadir{c )-}DiRienz_AIM1.dta", replace
+{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM1.dta saved
+
+{com}. 
+. **-----------------------------------------
+. 
+. 
+. //**AIM 1 RESULTS**//
+. //SAMPLE = BPCI HOSPITALS (treatment = MEDICARE)
+. 
+. **TABLES** (assorted, won't be using all but good info to have)
+. 
+. table year medicare, c(mean totchg_w)
+
+{txt}{hline 10}{c TT}{hline 19}
+          {c |}  Primary expected 
+Discharge {c |} payer is medicare 
+year      {c |}        0         1
+{hline 10}{c +}{hline 19}
+     2009 {c |}        {res}0         0
+     {txt}2010 {c |} {res}90983.85  88694.14
+     {txt}2011 {c |} {res}89084.16  91289.73
+     {txt}2012 {c |} {res}91972.25  91811.15
+     {txt}2013 {c |} {res}92215.11  96280.64
+     {txt}2014 {c |} {res}89305.37  95377.27
+     {txt}2015 {c |} {res}93274.05  98366.65
+     {txt}2016 {c |} {res}96496.21    102203
+     {txt}2017 {c |} {res}97491.91  105416.5
+     {txt}2018 {c |}        {res}0         0
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. table year medicare, c(mean los_w)
+
+{txt}{hline 10}{c TT}{hline 19}
+          {c |}  Primary expected 
+Discharge {c |} payer is medicare 
+year      {c |}        0         1
+{hline 10}{c +}{hline 19}
+     2009 {c |}  {res}4.22449  4.875342
+     {txt}2010 {c |} {res}4.110231  5.114144
+     {txt}2011 {c |} {res}3.963438  5.152964
+     {txt}2012 {c |} {res}3.923805  5.069235
+     {txt}2013 {c |} {res}3.990609  5.222955
+     {txt}2014 {c |} {res}4.226103  5.417676
+     {txt}2015 {c |} {res}4.250502  5.579911
+     {txt}2016 {c |} {res}4.286715  5.609796
+     {txt}2017 {c |} {res}4.140355  5.386944
+     {txt}2018 {c |} {res}4.212677  5.274829
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. table year medicare, c(mean postcare)
+
+{txt}{hline 10}{c TT}{hline 19}
+          {c |}  Primary expected 
+Discharge {c |} payer is medicare 
+year      {c |}        0         1
+{hline 10}{c +}{hline 19}
+     2009 {c |} {res}.4234694  .5246575
+     {txt}2010 {c |} {res}.3001067  .5134023
+     {txt}2011 {c |} {res}.2810265  .5178553
+     {txt}2012 {c |} {res}.2712559  .4862749
+     {txt}2013 {c |} {res}.2572305  .4837058
+     {txt}2014 {c |} {res}.2016185  .4448658
+     {txt}2015 {c |} {res}.1809781  .4188394
+     {txt}2016 {c |} {res}.1997029  .4481858
+     {txt}2017 {c |} {res}.2030964  .4882577
+     {txt}2018 {c |} {res}.2379066  .5088456
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. table year medicare, c(sum age3)
+{err}variable {bf}age3{sf} not found
 {txt}{search r(111), local:r(111);}
 
 end of do-file
 
 {search r(111), local:r(111);}
 
-{com}. do "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/Sonali code FINAL.do"
-{txt}
-{com}. 
-. set more off 
-{txt}
-{com}. set trace on 
-{txt}
-{com}. 
-. 
-. *set macros 
-. 
-. global datadir "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/"
-{txt}
-{com}. 
-. cap log close
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}17 Apr 2021, 13:53:20
+{txt}{.-}
 {smcl}
-{com}{sf}{ul off}
+{txt}{sf}{ul off}
