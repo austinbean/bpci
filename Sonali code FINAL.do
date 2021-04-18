@@ -168,29 +168,29 @@ append using "${datadir}sonali_data_2018_4.dta", force
 **************************************************************************
 ** KEY FINDINGS: CONFIDENCE INTERVALS OF DIAGNOSES BASED ON RACE AND FACILITY TYPE**
 
-table nrace, c(m schizophrenia sem schizophrenia) 
-table nrace, c(m bipolar sem bipolar)
-table nrace, c(m major_depression sem major_depression)
+table racecat, c(m schizophrenia sem schizophrenia) 
+table racecat, c(m bipolar sem bipolar)
+table racecat, c(m major_depression sem major_depression)
 
-table nrace psychhosp, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp, c(m bipolar sem bipolar)
-table nrace psychhosp, c(m major_depression sem major_depression)
+table racecat psychhosp, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp, c(m bipolar sem bipolar)
+table racecat psychhosp, c(m major_depression sem major_depression)
 
 
 **************************************************************************
 ** STRATIFY BY GENDER **
 
-table nrace female, c(m schizophrenia sem schizophrenia) 
-table nrace female, c(m bipolar sem bipolar)
-table nrace female, c(m major_depression sem major_depression)
+table racecat female, c(m schizophrenia sem schizophrenia) 
+table racecat female, c(m bipolar sem bipolar)
+table racecat female, c(m major_depression sem major_depression)
 
-table nrace psychhosp if female==1, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if female==1, c(m bipolar sem bipolar)
-table nrace psychhosp if female==1, c(m major_depression sem major_depression)
+table racecat psychhosp if female==1, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if female==1, c(m bipolar sem bipolar)
+table racecat psychhosp if female==1, c(m major_depression sem major_depression)
 
-table nrace psychhosp if female==0, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if female==0, c(m bipolar sem bipolar)
-table nrace psychhosp if female==0, c(m major_depression sem major_depression)
+table racecat psychhosp if female==0, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if female==0, c(m bipolar sem bipolar)
+table racecat psychhosp if female==0, c(m major_depression sem major_depression)
 
 
 
@@ -198,48 +198,48 @@ table nrace psychhosp if female==0, c(m major_depression sem major_depression)
 ** STRATIFY BY INSURANCE TYPE *
 
 
-table nrace insurance, c(m schizophrenia sem schizophrenia) 
-table nrace insurance, c(m bipolar sem bipolar)
-table nrace insurance, c(m major_depression sem major_depression)
+table racecat insurance, c(m schizophrenia sem schizophrenia) 
+table racecat insurance, c(m bipolar sem bipolar)
+table racecat insurance, c(m major_depression sem major_depression)
 
-table nrace if medicaid==1, c(m schizophrenia sem schizophrenia) 
-table nrace if medicaid==1, c(m bipolar sem bipolar)
-table nrace if medicaid==1, c(m major_depression sem major_depression)
+table racecat if medicaid==1, c(m schizophrenia sem schizophrenia) 
+table racecat if medicaid==1, c(m bipolar sem bipolar)
+table racecat if medicaid==1, c(m major_depression sem major_depression)
 
-table nrace psychhosp if medicaid==1, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if medicaid==1, c(m bipolar sem bipolar)
-table nrace psychhosp if medicaid==1, c(m major_depression sem major_depression)
+table racecat psychhosp if medicaid==1, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if medicaid==1, c(m bipolar sem bipolar)
+table racecat psychhosp if medicaid==1, c(m major_depression sem major_depression)
 
-table nrace if private==1, c(m schizophrenia sem schizophrenia) 
-table nrace if private==1, c(m bipolar sem bipolar)
-table nrace if private==1, c(m major_depression sem major_depression)
+table racecat if private==1, c(m schizophrenia sem schizophrenia) 
+table racecat if private==1, c(m bipolar sem bipolar)
+table racecat if private==1, c(m major_depression sem major_depression)
 
-table nrace psychhosp if private==1, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if private==1, c(m bipolar sem bipolar)
-table nrace psychhosp if private==1, c(m major_depression sem major_depression)
+table racecat psychhosp if private==1, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if private==1, c(m bipolar sem bipolar)
+table racecat psychhosp if private==1, c(m major_depression sem major_depression)
 
-table nrace if medicare==1, c(m schizophrenia sem schizophrenia) 
-table nrace if medicare==1, c(m bipolar sem bipolar)
-table nrace if medicare==1, c(m major_depression sem major_depression)
+table racecat if medicare==1, c(m schizophrenia sem schizophrenia) 
+table racecat if medicare==1, c(m bipolar sem bipolar)
+table racecat if medicare==1, c(m major_depression sem major_depression)
 
-table nrace psychhosp if medicare==1, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if medicare==1, c(m bipolar sem bipolar)
-table nrace psychhosp if medicare==1, c(m major_depression sem major_depression)
+table racecat psychhosp if medicare==1, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if medicare==1, c(m bipolar sem bipolar)
+table racecat psychhosp if medicare==1, c(m major_depression sem major_depression)
 
-table nrace if selfpay==1, c(m schizophrenia sem schizophrenia) 
-table nrace if selfpay==1, c(m bipolar sem bipolar)
-table nrace if selfpay==1, c(m major_depression sem major_depression)
+table racecat if selfpay==1, c(m schizophrenia sem schizophrenia) 
+table racecat if selfpay==1, c(m bipolar sem bipolar)
+table racecat if selfpay==1, c(m major_depression sem major_depression)
 
-table nrace psychhosp if selfpay==1, c(m schizophrenia sem schizophrenia) 
-table nrace psychhosp if selfpay==1, c(m bipolar sem bipolar)
-table nrace psychhosp if selfpay==1, c(m major_depression sem major_depression)
+table racecat psychhosp if selfpay==1, c(m schizophrenia sem schizophrenia) 
+table racecat psychhosp if selfpay==1, c(m bipolar sem bipolar)
+table racecat psychhosp if selfpay==1, c(m major_depression sem major_depression)
 
 
 **************************************************************************
 ** SENSITIVITY CHECK: ACUITY? **
 
-table nrace psychhosp if schizophrenia==1, c(m total_charges m illness_severity m length_of_stay)
-table nrace psychhosp if bipolar==1, c(m total_charges m illness_severity m length_of_stay)
-table nrace psychhosp if major_depression==1, c(m total_charges m illness_severity m length_of_stay)
+table racecat psychhosp if schizophrenia==1, c(m total_charges m illness_severity m length_of_stay)
+table racecat psychhosp if bipolar==1, c(m total_charges m illness_severity m length_of_stay)
+table racecat psychhosp if major_depression==1, c(m total_charges m illness_severity m length_of_stay)
 
 log close
