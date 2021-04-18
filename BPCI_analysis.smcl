@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 Apr 2021, 13:51:45
+ {txt}opened on:  {res}17 Apr 2021, 20:01:04
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
@@ -59,8 +59,7 @@
 
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
-{txt}(note: file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta not found)
-file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
 
 {com}. 
 . 
@@ -358,8 +357,183 @@ year      {c |}        0         1
      {txt}2018 {c |} {res}.2379066  .5088456
 {txt}{hline 10}{c BT}{hline 19}
 
-{com}. table year medicare, c(sum age3)
-{err}variable {bf}age3{sf} not found
+{com}. *table year medicare, c(sum age3)
+. tabstat totchg_r totchg_w totchg_rlog, by(year) stat(mean sem)
+
+{txt}Summary statistics: mean, se(mean)
+  by categories of: year (Discharge year)
+
+{ralign 8:year} {...}
+{c |}{...}
+  totchg_r  totchg_w  totchg~g
+{hline 9}{c +}{hline 30}
+{ralign 8:2009} {...}
+{c |}{...}
+ {res}        0         0         .
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        0         0         .
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2010} {...}
+{c |}{...}
+ {res} 90675.43  89507.37  11.16825
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 617.4505   552.032   .006251
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2011} {...}
+{c |}{...}
+ {res} 91995.98  90562.89  11.17283
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 636.5427  551.6133  .0060155
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2012} {...}
+{c |}{...}
+ {res} 93159.96  91860.19  11.18139
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 611.2826  543.7505  .0059537
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2013} {...}
+{c |}{...}
+ {res} 97305.63  95067.71   11.2167
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 753.6105  578.5674  .0059118
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2014} {...}
+{c |}{...}
+ {res} 95980.85  93585.75  11.20122
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 736.0933  599.1732  .0059433
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2015} {...}
+{c |}{...}
+ {res}  99072.5  96874.94  11.23793
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 717.9684  611.7908  .0057667
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2016} {...}
+{c |}{...}
+ {res} 102921.4  100503.1  11.27639
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 750.1433  615.6509  .0057015
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2017} {...}
+{c |}{...}
+ {res} 105062.4  103087.6  11.28571
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 699.1895  612.9083  .0060776
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2018} {...}
+{c |}{...}
+ {res}        0         0         .
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        0         0         .
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res} 84513.73  82856.62  11.21986
+{txt}{space 8} {...}
+{c |}{...}
+ {res} 231.9149  200.3407  .0021097
+{txt}{hline 9}{c BT}{hline 30}
+
+{com}. tabstat los_r los_w los_rlog, by(year) stat(mean sem)
+
+{txt}Summary statistics: mean, se(mean)
+  by categories of: year (Discharge year)
+
+{ralign 8:year} {...}
+{c |}{...}
+     los_r     los_w  los_rlog
+{hline 9}{c +}{hline 30}
+{ralign 8:2009} {...}
+{c |}{...}
+ {res}  4.66692  4.584977  1.276649
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .1400966  .1034543  .0192369
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2010} {...}
+{c |}{...}
+ {res} 4.769628  4.758011  1.303938
+{txt}{space 8} {...}
+{c |}{...}
+ {res}  .035365  .0344217   .006191
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2011} {...}
+{c |}{...}
+ {res} 4.773007  4.760958  1.289532
+{txt}{space 8} {...}
+{c |}{...}
+ {res}   .03444  .0332757  .0061086
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2012} {...}
+{c |}{...}
+ {res} 4.727297  4.720548  1.279778
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0328548  .0322337  .0059388
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2013} {...}
+{c |}{...}
+ {res} 4.885327  4.855291  1.295758
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0406175  .0342663  .0060139
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2014} {...}
+{c |}{...}
+ {res} 5.089356  5.066102  1.318081
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0387591  .0369503  .0064078
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2015} {...}
+{c |}{...}
+ {res} 5.218037  5.190504  1.324305
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0399704  .0378374  .0065194
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2016} {...}
+{c |}{...}
+ {res} 5.254251   5.21569  1.309867
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0445228  .0377232  .0066542
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2017} {...}
+{c |}{...}
+ {res}  5.03999  5.020594  1.269479
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0368601  .0355783  .0064691
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2018} {...}
+{c |}{...}
+ {res} 4.990206  4.974276  1.274119
+{txt}{space 8} {...}
+{c |}{...}
+ {res}   .03505  .0339143  .0063213
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res} 4.974851  4.953514  1.295269
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0126035  .0117056  .0020962
+{txt}{hline 9}{c BT}{hline 30}
+
+{com}. tabstat teach snf_ rehab_ ltc_, by(year) stat(count mean sem)
+{err}variable {bf}snf_{sf} not found
 {txt}{search r(111), local:r(111);}
 
 end of do-file
@@ -370,7 +544,7 @@ end of do-file
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}17 Apr 2021, 13:53:20
+ {txt}closed on:  {res}17 Apr 2021, 20:03:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
