@@ -1,129 +1,15 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz//sonali_analysis.smcl
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 Apr 2021, 20:15:11
+ {txt}opened on:  {res}19 Apr 2021, 14:44:38
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}sonali_data_2010_1.dta", clear 
 {txt}
 {com}. append using "${c -(}datadir{c )-}sonali_data_2010_2.dta", force
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 pat_age was str2 in the using data, but will be
 byte now)
@@ -188,138 +74,9 @@ str4, now str5 to accommodate using data's values)
 value_amount_9 was 
 byte, now int to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2010_3.dta", force
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -349,138 +106,9 @@ str1, now str5 to accommodate using data's values)
 e_code_10 was 
 str1, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2010_4.dta", force
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2010_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 pat_age was str2 in the using data, but will be
 byte now)
@@ -515,138 +143,9 @@ str2 now)
 other_icd9_code_2 was 
 str4, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2011_1.dta", force
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -716,138 +215,9 @@ str5, now str6 to accommodate using data's values)
 cms_mdc was 
 byte, now float to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2011_2.dta", force
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -922,138 +292,9 @@ byte now)
 other_icd9_code_1 was 
 str4, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2011_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 pat_zip was str5 in the using data, but will be
 long now)
@@ -1123,138 +364,9 @@ byte now)
 value_amount_5 was 
 float, now double to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2011_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2011_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -1339,138 +451,9 @@ str4, now str5 to accommodate using data's values)
 other_icd9_code_5 was 
 str4, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2012_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -1565,138 +548,9 @@ float, now double to accommodate using data's values)
 value_amount_8 was 
 int, now long to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2012_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -1896,138 +750,9 @@ str4, now str5 to accommodate using data's values)
 other_icd9_code_10 was 
 str4, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2012_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -2172,138 +897,9 @@ str4, now str5 to accommodate using data's values)
 other_icd9_code_20 was 
 str4, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2012_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2012_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -2413,138 +1009,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2013_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -2649,138 +1116,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2013_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -2990,138 +1328,9 @@ byte now)
 ward_amount was 
 float, now double to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2013_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -3366,138 +1575,9 @@ int, now long to accommodate using data's values)
 oth_surg_proc_code_20 was 
 int, now long to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2013_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2013_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -3697,138 +1777,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2014_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -4073,138 +2024,9 @@ int, now long to accommodate using data's values)
 oth_surg_proc_code_24 was 
 int, now long to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2014_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -4434,138 +2256,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2014_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -4815,138 +2508,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2014_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2014_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -5196,138 +2760,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2015_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -5577,138 +3012,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2015_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -5943,138 +3249,9 @@ byte now)
 value_amount_6 was 
 long, now double to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2015_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 pat_zip was str5 in the using data, but will be
 long now)
@@ -6354,138 +3531,9 @@ str6, now str7 to accommodate using data's values)
 oth_surg_proc_code_4 was 
 str5, now str7 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2015_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2015_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -6945,138 +3993,9 @@ str5, now str7 to accommodate using data's values)
 value_amount_7 was 
 long, now double to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2016_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -7346,138 +4265,9 @@ int, now float to accommodate using data's values)
 icd10 was 
 str1, now str5 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2016_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -7752,138 +4542,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2016_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -8128,138 +4789,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2016_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2016_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 pat_zip was str5 in the using data, but will be
 long now)
@@ -8514,138 +5046,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2017_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -8915,138 +5318,9 @@ byte now)
 e_code_9 was 
 str5, now str7 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2017_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -9286,138 +5560,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2017_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 type_of_admission was str1 in the using data, but will be
 byte now)
@@ -9672,138 +5817,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2017_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2017_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -10023,138 +6039,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2018_1.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_1.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_1.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_1.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_1.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -10389,138 +6276,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2018_2.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_2.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_2.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_2.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_2.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -10760,138 +6518,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2018_3.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_3.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_3.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_3.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_3.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -11116,138 +6745,9 @@ byte now)
 fac_peds_ind was str1 in the using data, but will be
 byte now)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. append using "${c -(}datadir{c )-}sonali_data_2018_4.dta", force 
-{txt}  {hline 77} begin append {hline}
-  - version 11
-  - if (_caller() < 11) {c -(}
-    local version : di "version " string(_caller()) ":"
-    `version' _append `0'
-    exit
-    {c )-}
-  - syntax [anything(everything)] [, GENerate(name) * ]
-  - gettoken using filenames : anything
-  - if (`"`using'"' != "using") {c -(}
-  = if (`"using"' != "using") {c -(}
-    di as err "using required"
-    exit 100
-    {c )-}
-  - if (`"`filenames'"' == "") {c -(}
-  = if (`" "/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_4.dta""' == "") {c -(}
-    di as err "invalid file specification"
-    exit 198
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture quietly describe using `"`filename'"'
-  = capture quietly describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_4.dta"'
-    {hline 73} begin describe {hline}
-    - version 9
-    - local version : di "version " string(_caller()) ":"
-    - syntax [anything] [using] [, SImple REPLACE *]
-    - if ("`replace'"!="") {c -(}
-    = if (""!="") {c -(}
-      describe_mk `0'
-      return add
-      exit
-      {c )-}
-    - local varlist `"`anything'"'
-    = local varlist `""'
-    - if ("`simple'" == "") {c -(}
-    = if ("" == "") {c -(}
-    - `version' _describe `0'
-    = version 11: _describe using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_4.dta"'
-    - return add
-    - {c )-}
-    - else {c -(}
-      if (`"`options'"' != "") {c -(}
-      di as err "simple may not be combined with other options"
-      exit 198
-      {c )-}
-      if (`"`using'"' != "") {c -(}
-      qui `version' describe `varlist' `using', varlist
-      if "`varlist'" == "" {c -(}
-      local vars "`r(varlist)'"
-      {c )-}
-      else {c -(}
-      local vars "`varlist'"
-      {c )-}
-      local wid = 2
-      local n : list sizeof vars
-      if `n'==0 {c -(}
-      exit
-      {c )-}
-      if "`c(hasicu)'" == "1" {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', udstrlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      else {c -(}
-      foreach x of local vars {c -(}
-      local wid = max(`wid', strlen(`"`x'"'))
-      {c )-}
-      {c )-}
-      local wid = `wid' + 2
-      local cols = int((`c(linesize)'+1)/`wid')
-      if `cols' < 2 {c -(}
-      foreach x of local `vars' {c -(}
-      di as txt `col' `"`x'"'
-      {c )-}
-      exit
-      {c )-}
-      local lines = `n'/`cols'
-      local lines = int(cond(`lines'>int(`lines'), `lines'+1, `lines'))
-      forvalues i=1(1)`lines' {c -(}
-      local top = min((`cols')*`lines'+`i', `n')
-      local col = 1
-      forvalues j=`i'(`lines')`top' {c -(}
-      local x : word `j' of `vars'
-      di as txt _column(`col') "`x'" _c
-      local col = `col' + `wid'
-      {c )-}
-      di as txt
-      {c )-}
-      qui `version' describe `varlist' `using', short
-      return add
-      {c )-}
-      else {c -(}
-      ds `varlist'
-      qui `version' _describe `varlist', short
-      return add
-      {c )-}
-      {c )-}
-    {hline 75} end describe {hline}
-  - if (_rc) {c -(}
-    di as err `"file `filename' not found"'
-    exit 601
-    {c )-}
-  - {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    confirm new var `generate'
-    local filenum 0
-    gen byte `generate' = `filenum'
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - foreach filename of local filenames {c -(}
-  - capture noisily _append using `"`filename'"', `options'
-  = capture noisily _append using `"/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_data_2018_4.dta"', force
-{p 0 7 2}
+{txt}{p 0 7 2}
 (note: variable
 spec_unit_4 was byte in the using data, but will be
 str1 now)
@@ -11482,44 +6982,1033 @@ byte now)
 e_code_10 was 
 str6, now str7 to accommodate using data's values)
 {p_end}
-  - if _rc {c -(}
-    if ("`generate'" != "") {c -(}
-    capture quietly drop if `generate' > 0
-    capture quietly drop `generate'
-    {c )-}
-    exit _rc
-    {c )-}
-  - if ("`generate'" != "") {c -(}
-  = if ("" != "") {c -(}
-    quietly replace `generate' = `filenum' in `filenumpos'/L
-    local ++filenum
-    local filenumpos = _N + 1
-    {c )-}
-  - {c )-}
-  {hline 79} end append {hline}
 
 {com}. 
 . 
 . **************************************************************************
 . ** KEY FINDINGS: CONFIDENCE INTERVALS OF DIAGNOSES BASED ON RACE AND FACILITY TYPE**
 . 
-. table nrace, c(m schizophrenia sem schizophrenia) 
-{txt}  {hline 78} begin table {hline}
-  - version 7.0, missing
-  - syntax varlist(max=3) [if] [in] [fw aw pw iw] [, BY(varlist) COLumn CW Format(string) Name(string) REPLACE ROW SColumn markdown Contents(string) CELLwidth(string) *]
-{err}variable {bf}nrace{sf} not found
-{txt}  {hline 80} end table {hline}
-{search r(111), local:r(111);}
+. table racecat, c(m schizophrenia sem schizophrenia) 
 
-end of do-file
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(schizo~a)   sem(schizo~a)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.0271658        .0002661
+        {txt}2 {c |}       {res}.1126587        .0010045
+        {txt}3 {c |}       {res}.0582531        .0008768
+        {txt}4 {c |}       {res}.0379145        .0005193
+{txt}{hline 10}{c BT}{hline 31}
 
-{search r(111), local:r(111);}
+{com}. table racecat, c(m bipolar sem bipolar)
 
-{com}. log close
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(bipolar)   sem(bipolar)
+{hline 10}{c +}{hline 29}
+        1 {c |}      {res}.3531799       .0007823
+        {txt}2 {c |}      {res}.3960415       .0015538
+        {txt}3 {c |}      {res}.2849175       .0016897
+        {txt}4 {c |}      {res}.2956874       .0012408
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(major_~n)   sem(major_~n)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.6196542        .0007946
+        {txt}2 {c |}       {res}.4912998        .0015882
+        {txt}3 {c |}       {res}.6568294        .0017773
+        {txt}4 {c |}       {res}.6663981        .0012819
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. 
+. table racecat psychhosp, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0227048  .0253089  .0310329
+          {txt}{c |} {res}.0005952  .0003914  .0004484
+          {txt}{c |} 
+        2 {c |} {res}.1043988  .1208439  .1090843
+          {txt}{c |} {res}.0026183  .0017287  .0013957
+          {txt}{c |} 
+        3 {c |} {res}.0735602   .056759  .0359708
+          {txt}{c |} {res}.0016413  .0013196  .0015046
+          {txt}{c |} 
+        4 {c |} {res}.0352425   .042624  .0350063
+          {txt}{c |} {res}.0013324  .0008941  .0007205
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.3443078  .3515865  .3586103
+          {txt}{c |} {res}.0018986  .0011898    .00124
+          {txt}{c |} 
+        2 {c |} {res}.3890029  .3720675  .4150497
+          {txt}{c |} {res}.0041745  .0025636  .0022061
+          {txt}{c |} 
+        3 {c |} {res}.2822246  .2946266  .2698786
+          {txt}{c |} {res}.0028298     .0026  .0035867
+          {txt}{c |} 
+        4 {c |} {res}.3310186  .2802883  .2973692
+          {txt}{c |} {res}.0034004  .0019879  .0017919
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.6329874  .6231046  .6103568
+          {txt}{c |}  {res}.001926  .0012076  .0012609
+          {txt}{c |} 
+        2 {c |} {res}.5065982  .5070886  .4758659
+          {txt}{c |}  {res}.004281  .0026516   .002236
+          {txt}{c |} 
+        3 {c |} {res}.6442152  .6486143  .6941507
+          {txt}{c |}   {res}.00301  .0027228   .003723
+          {txt}{c |} 
+        4 {c |} {res}.6337388  .6770876  .6676245
+          {txt}{c |} {res}.0034813  .0020695  .0018466
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. 
+. **************************************************************************
+. ** STRATIFY BY GENDER **
+. 
+. table racecat female, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 19}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}       female      
+other (4) {c |}        0         1
+{hline 10}{c +}{hline 19}
+        1 {c |} {res}.0538676  .0157227
+          {txt}{c |} {res}.0007532  .0003253
+          {txt}{c |} 
+        2 {c |} {res}.1931473  .0656052
+          {txt}{c |} {res}.0023733  .0013155
+          {txt}{c |} 
+        3 {c |} {res}.1070981  .0334946
+          {txt}{c |} {res}.0022341   .001054
+          {txt}{c |} 
+        4 {c |}  {res}.068556  .0191654
+          {txt}{c |} {res}.0014414  .0005891
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. table racecat female, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 19}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}       female      
+other (4) {c |}        0         1
+{hline 10}{c +}{hline 19}
+        1 {c |} {res}.3648191  .3329458
+          {txt}{c |} {res}.0016059  .0012324
+          {txt}{c |} 
+        2 {c |} {res}.4019083  .3880702
+          {txt}{c |} {res}.0029476  .0025892
+          {txt}{c |} 
+        3 {c |} {res}.2915449   .252754
+          {txt}{c |} {res}.0032834   .002546
+          {txt}{c |} 
+        4 {c |} {res}.3176938  .2581056
+          {txt}{c |} {res}.0026558  .0018803
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. table racecat female, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 19}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}       female      
+other (4) {c |}        0         1
+{hline 10}{c +}{hline 19}
+        1 {c |} {res}.5813133  .6513315
+          {txt}{c |} {res}.0016459  .0012462
+          {txt}{c |} 
+        2 {c |} {res}.4049443  .5463246
+          {txt}{c |} {res}.0029512  .0026452
+          {txt}{c |} 
+        3 {c |}  {res}.601357  .7137513
+          {txt}{c |} {res}.0035373   .002648
+          {txt}{c |} 
+        4 {c |} {res}.6137502   .722729
+          {txt}{c |} {res}.0027773  .0019236
+{txt}{hline 10}{c BT}{hline 19}
+
+{com}. 
+. table racecat psychhosp if female==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0166582  .0149843  .0161015
+          {txt}{c |} {res}.0008022  .0004869  .0005204
+          {txt}{c |} 
+        2 {c |} {res}.0739336  .0723986  .0581708
+          {txt}{c |} {res}.0036031  .0023027  .0017703
+          {txt}{c |} 
+        3 {c |} {res}.0478326  .0322689  .0155469
+          {txt}{c |} {res}.0021305    .00162  .0014577
+          {txt}{c |} 
+        4 {c |}  {res}.023398  .0194454  .0177025
+          {txt}{c |} {res}.0017431  .0009557  .0008216
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if female==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.3323773  .3382639  .3275332
+          {txt}{c |} {res}.0029527  .0018961  .0019403
+          {txt}{c |} 
+        2 {c |} {res}.3764929  .3695721  .4049648
+          {txt}{c |} {res}.0066716  .0042891  .0037127
+          {txt}{c |} 
+        3 {c |} {res}.2573991  .2722689  .2140477
+          {txt}{c |} {res}.0043646  .0040806  .0048328
+          {txt}{c |} 
+        4 {c |} {res}.3072321   .243594  .2555223
+          {txt}{c |} {res}.0053197  .0029708  .0027176
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if female==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.6509645  .6467518  .6563654
+          {txt}{c |} {res}.0029878  .0019155  .0019635
+          {txt}{c |} 
+        2 {c |} {res}.5495735  .5580294  .5368644
+          {txt}{c |}  {res}.006851  .0044129  .0037713
+          {txt}{c |} 
+        3 {c |} {res}.6947683  .6954622  .7704054
+          {txt}{c |} {res}.0045972  .0042189  .0049555
+          {txt}{c |} 
+        4 {c |} {res}.6693699  .7369606  .7267751
+          {txt}{c |} {res}.0054246  .0030471  .0027765
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. table racecat psychhosp if female==0, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0453067  .0519995  .0587428
+          {txt}{c |}  {res}.001768  .0011483  .0011965
+          {txt}{c |} 
+        2 {c |} {res}.1959541  .2208661  .1750368
+          {txt}{c |} {res}.0068982  .0042739  .0031096
+          {txt}{c |} 
+        3 {c |} {res}.1358801  .1091693  .0596042
+          {txt}{c |} {res}.0043507  .0033223  .0036782
+          {txt}{c |} 
+        4 {c |} {res}.0613063  .0810342  .0610009
+          {txt}{c |} {res}.0036841  .0025419  .0019564
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if female==0, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.3486524   .354661  .3804432
+          {txt}{c |}  {res}.004051  .0024743  .0024703
+          {txt}{c |} 
+        2 {c |} {res}.4073068  .3655275  .4236641
+          {txt}{c |} {res}.0085388  .0049616  .0040437
+          {txt}{c |} 
+        3 {c |} {res}.2348485   .311507  .3339768
+          {txt}{c |} {res}.0053823  .0049337  .0073273
+          {txt}{c |} 
+        4 {c |} {res}.3565197  .2937706  .3251153
+          {txt}{c |} {res}.0073557  .0042428   .003829
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if female==0, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.6060409  .5933396   .560814
+          {txt}{c |} {res}.0041537  .0025405  .0025252
+          {txt}{c |} 
+        2 {c |} {res}.3967391  .4136065  .4012991
+          {txt}{c |} {res}.0085021  .0050739  .0040111
+          {txt}{c |} 
+        3 {c |} {res}.6292714  .5793236  .6064189
+          {txt}{c |} {res}.0061326  .0052592  .0075901
+          {txt}{c |} 
+        4 {c |}  {res}.582174  .6251952  .6138839
+          {txt}{c |} {res}.0075743  .0045091  .0039797
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. 
+. 
+. **************************************************************************
+. ** STRATIFY BY INSURANCE TYPE *
+. 
+. 
+. table racecat insurance, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 49}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}          Insurance categorical variable         
+other (4) {c |}        1         2         3         4         5
+{hline 10}{c +}{hline 49}
+        1 {c |} {res}.0376505  .0273951  .0147021  .0450578  .0239281
+          {txt}{c |} {res}.0007557  .0007676  .0003016  .0007314  .0010145
+          {txt}{c |} 
+        2 {c |} {res}.1674038  .1043531  .0795441  .1359264  .1028089
+          {txt}{c |}  {res}.003179  .0021739  .0014898   .002105  .0041155
+          {txt}{c |} 
+        3 {c |} {res}.0959173  .0488849  .0310631  .0926837  .0680387
+          {txt}{c |} {res}.0030728  .0017363  .0010607  .0025032  .0031209
+          {txt}{c |} 
+        4 {c |} {res}.0565137  .0389119  .0323593  .0360439  .0428635
+          {txt}{c |} {res}.0017839  .0011502  .0007536  .0011731  .0021373
+{txt}{hline 10}{c BT}{hline 49}
+
+{com}. table racecat insurance, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 49}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}          Insurance categorical variable         
+other (4) {c |}        1         2         3         4         5
+{hline 10}{c +}{hline 49}
+        1 {c |} {res}.4225399  .4343866  .3163587  .3389531  .3142819
+          {txt}{c |}  {res}.001961  .0023308  .0011652  .0016691  .0030817
+          {txt}{c |} 
+        2 {c |} {res}.4302182  .4391021  .3946587  .3670729  .3124656
+          {txt}{c |} {res}.0042158  .0035289  .0026912  .0029606  .0062807
+          {txt}{c |} 
+        3 {c |} {res}.3469788  .2824818  .2591956  .3123231  .2529565
+          {txt}{c |} {res}.0049671  .0036252  .0026791  .0040004  .0053877
+          {txt}{c |} 
+        4 {c |} {res}.3640867  .3072977  .2932107  .2529013  .2769984
+          {txt}{c |} {res}.0037172  .0027441  .0019388  .0027357  .0047222
+{txt}{hline 10}{c BT}{hline 49}
+
+{com}. table racecat insurance, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 49}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}          Insurance categorical variable         
+other (4) {c |}        1         2         3         4         5
+{hline 10}{c +}{hline 49}
+        1 {c |} {res}.5398096  .5382183  .6689392   .615989    .66179
+          {txt}{c |} {res}.0019787  .0023442  .0011791   .001715  .0031406
+          {txt}{c |} 
+        2 {c |}  {res}.402378  .4565448  .5257972  .4970008  .5847256
+          {txt}{c |} {res}.0041756  .0035419  .0027493  .0030711  .0066774
+          {txt}{c |} 
+        3 {c |}  {res}.557104  .6686333  .7097414  .5949933  .6790048
+          {txt}{c |} {res}.0051833  .0037902  .0027751  .0042374  .0057862
+          {txt}{c |} 
+        4 {c |} {res}.5793996  .6537904    .67443  .7110548  .6801381
+          {txt}{c |} {res}.0038136  .0028297  .0019957  .0028527  .0049217
+{txt}{hline 10}{c BT}{hline 49}
+
+{com}. 
+. table racecat if medicaid==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(schizo~a)   sem(schizo~a)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.0273951        .0007676
+        {txt}2 {c |}       {res}.1043531        .0021739
+        {txt}3 {c |}       {res}.0488849        .0017363
+        {txt}4 {c |}       {res}.0389119        .0011502
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. table racecat if medicaid==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(bipolar)   sem(bipolar)
+{hline 10}{c +}{hline 29}
+        1 {c |}      {res}.4343866       .0023308
+        {txt}2 {c |}      {res}.4391021       .0035289
+        {txt}3 {c |}      {res}.2824818       .0036252
+        {txt}4 {c |}      {res}.3072977       .0027441
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat if medicaid==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(major_~n)   sem(major_~n)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.5382183        .0023442
+        {txt}2 {c |}       {res}.4565448        .0035419
+        {txt}3 {c |}       {res}.6686333        .0037902
+        {txt}4 {c |}       {res}.6537904        .0028297
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. 
+. table racecat psychhosp if medicaid==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0229336  .0331699  .0232871
+          {txt}{c |} {res}.0014634  .0012933   .001208
+          {txt}{c |} 
+        2 {c |} {res}.0773409  .1556166  .0695621
+          {txt}{c |} {res}.0042969  .0041455  .0027984
+          {txt}{c |} 
+        3 {c |} {res}.0741525  .0396301  .0086957
+          {txt}{c |} {res}.0032235  .0025071  .0017676
+          {txt}{c |} 
+        4 {c |} {res}.0230335   .050576  .0344086
+          {txt}{c |} {res}.0022115  .0020789  .0016268
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if medicaid==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.4550406  .4058099   .455671
+          {txt}{c |} {res}.0048681  .0035463  .0039891
+          {txt}{c |} 
+        2 {c |}   {res}.49612  .3775337  .4693927
+          {txt}{c |} {res}.0080423  .0055439  .0054895
+          {txt}{c |} 
+        3 {c |} {res}.2946429  .2643659  .2931159
+          {txt}{c |} {res}.0056085  .0056673   .008666
+          {txt}{c |} 
+        4 {c |} {res}.3917862  .2846472   .296376
+          {txt}{c |} {res}.0071966  .0042809  .0040757
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if medicaid==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.5220258  .5610201  .5210418
+          {txt}{c |} {res}.0048831   .003584  .0040013
+          {txt}{c |} 
+        2 {c |} {res}.4265391  .4668497  .4610452
+          {txt}{c |} {res}.0079553  .0057055  .0054831
+          {txt}{c |} 
+        3 {c |} {res}.6312046   .696004  .6981884
+          {txt}{c |} {res}.0059358  .0059113  .0087393
+          {txt}{c |} 
+        4 {c |} {res}.5851803  .6647768  .6692154
+          {txt}{c |} {res}.0072635  .0044785  .0041992
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. table racecat if private==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(schizo~a)   sem(schizo~a)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.0147021        .0003016
+        {txt}2 {c |}       {res}.0795441        .0014898
+        {txt}3 {c |}       {res}.0310631        .0010607
+        {txt}4 {c |}       {res}.0323593        .0007536
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. table racecat if private==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(bipolar)   sem(bipolar)
+{hline 10}{c +}{hline 29}
+        1 {c |}      {res}.3163587       .0011652
+        {txt}2 {c |}      {res}.3946587       .0026912
+        {txt}3 {c |}      {res}.2591956       .0026791
+        {txt}4 {c |}      {res}.2932107       .0019388
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat if private==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(major_~n)   sem(major_~n)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.6689392        .0011791
+        {txt}2 {c |}       {res}.5257972        .0027493
+        {txt}3 {c |}       {res}.7097414        .0027751
+        {txt}4 {c |}         {res}.67443        .0019957
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. 
+. table racecat psychhosp if private==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0139111  .0112757  .0183485
+          {txt}{c |} {res}.0007322  .0004108  .0005161
+          {txt}{c |} 
+        2 {c |} {res}.0778839  .0482325   .096501
+          {txt}{c |} {res}.0041945  .0021412  .0021484
+          {txt}{c |} 
+        3 {c |} {res}.0493488  .0114057  .0326752
+          {txt}{c |} {res}.0021849  .0010764  .0020965
+          {txt}{c |} 
+        4 {c |} {res}.0299269  .0330752   .032507
+          {txt}{c |} {res}.0020011  .0013115  .0010363
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if private==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.2836935  .3138291  .3311895
+          {txt}{c |}  {res}.002818  .0018053  .0018097
+          {txt}{c |} 
+        2 {c |} {res}.3274553  .3836629  .4150124
+          {txt}{c |} {res}.0073451  .0048596   .003585
+          {txt}{c |} 
+        3 {c |} {res}.2470492  .2880189  .2367909
+          {txt}{c |} {res}.0043508  .0045906  .0050131
+          {txt}{c |} 
+        4 {c |} {res}.2996828  .2696569  .3065629
+          {txt}{c |} {res}.0053803  .0032546  .0026943
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if private==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.7023954  .6748952   .650462
+          {txt}{c |} {res}.0028581  .0018223  .0018335
+          {txt}{c |} 
+        2 {c |} {res}.5946608  .5681046  .4884866
+          {txt}{c |} {res}.0076844  .0049502   .003637
+          {txt}{c |} 
+        3 {c |}  {res}.703602  .7005754  .7305339
+          {txt}{c |} {res}.0046067  .0046429  .0052321
+          {txt}{c |} 
+        4 {c |} {res}.6703903  .6972679  .6609302
+          {txt}{c |} {res}.0055207  .0033694  .0027663
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. table racecat if medicare==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(schizo~a)   sem(schizo~a)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.0376505        .0007557
+        {txt}2 {c |}       {res}.1674038         .003179
+        {txt}3 {c |}       {res}.0959173        .0030728
+        {txt}4 {c |}       {res}.0565137        .0017839
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. table racecat if medicare==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(bipolar)   sem(bipolar)
+{hline 10}{c +}{hline 29}
+        1 {c |}      {res}.4225399        .001961
+        {txt}2 {c |}      {res}.4302182       .0042158
+        {txt}3 {c |}      {res}.3469788       .0049671
+        {txt}4 {c |}      {res}.3640867       .0037172
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat if medicare==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(major_~n)   sem(major_~n)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.5398096        .0019787
+        {txt}2 {c |}        {res}.402378        .0041756
+        {txt}3 {c |}        {res}.557104        .0051833
+        {txt}4 {c |}       {res}.5793996        .0038136
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. 
+. table racecat psychhosp if medicare==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0355631  .0287711  .0582772
+          {txt}{c |} {res}.0014403  .0009399  .0018947
+          {txt}{c |} 
+        2 {c |} {res}.1771307  .1321453  .2064644
+          {txt}{c |}   {res}.00665  .0043914  .0060027
+          {txt}{c |} 
+        3 {c |} {res}.1105121  .0698113  .1270772
+          {txt}{c |} {res}.0046994  .0041843  .0104183
+          {txt}{c |} 
+        4 {c |} {res}.0516782  .0596056  .0560247
+          {txt}{c |} {res}.0036136  .0028618  .0029308
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if medicare==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.3936132  .4241361    .45052
+          {txt}{c |} {res}.0037996  .0027789   .004024
+          {txt}{c |} 
+        2 {c |} {res}.3936912  .4465367  .4353562
+          {txt}{c |}   {res}.00851  .0064465  .0073527
+          {txt}{c |} 
+        3 {c |} {res}.3578167  .3334232  .3489736
+          {txt}{c |} {res}.0071851   .007741  .0149097
+          {txt}{c |} 
+        4 {c |} {res}.3782632  .3628926  .3567717
+          {txt}{c |} {res}.0079161  .0058122  .0061051
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if medicare==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.5708237  .5470929  .4912028
+          {txt}{c |} {res}.0038494   .002799  .0040432
+          {txt}{c |} 
+        2 {c |}  {res}.429178  .4213181  .3581794
+          {txt}{c |} {res}.0086214  .0064029  .0071104
+          {txt}{c |} 
+        3 {c |} {res}.5316712  .5967655  .5239491
+          {txt}{c |} {res}.0074794  .0080548  .0156223
+          {txt}{c |} 
+        4 {c |} {res}.5700586  .5775018  .5872036
+          {txt}{c |} {res}.0080812  .0059708  .0062745
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. table racecat if selfpay==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(schizo~a)   sem(schizo~a)
+{hline 10}{c +}{hline 31}
+        1 {c |}       {res}.0450578        .0007314
+        {txt}2 {c |}       {res}.1359264         .002105
+        {txt}3 {c |}       {res}.0926837        .0025032
+        {txt}4 {c |}       {res}.0360439        .0011731
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. table racecat if selfpay==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(bipolar)   sem(bipolar)
+{hline 10}{c +}{hline 29}
+        1 {c |}      {res}.3389531       .0016691
+        {txt}2 {c |}      {res}.3670729       .0029606
+        {txt}3 {c |}      {res}.3123231       .0040004
+        {txt}4 {c |}      {res}.2529013       .0027357
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat if selfpay==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 31}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}
+Hispanic  {c |}
+(3) or    {c |}
+other (4) {c |} mean(major_~n)   sem(major_~n)
+{hline 10}{c +}{hline 31}
+        1 {c |}        {res}.615989         .001715
+        {txt}2 {c |}       {res}.4970008        .0030711
+        {txt}3 {c |}       {res}.5949933        .0042374
+        {txt}4 {c |}       {res}.7110548        .0028527
+{txt}{hline 10}{c BT}{hline 31}
+
+{com}. 
+. table racecat psychhosp if selfpay==1, c(m schizophrenia sem schizophrenia) 
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.0359893  .0452447  .0461425
+          {txt}{c |} {res}.0024926  .0011269  .0010383
+          {txt}{c |} 
+        2 {c |} {res}.1300578   .163617  .1171421
+          {txt}{c |} {res}.0090449  .0036401  .0026441
+          {txt}{c |} 
+        3 {c |} {res}.1313433  .1064786  .0266059
+          {txt}{c |} {res}.0106601  .0031182   .003138
+          {txt}{c |} 
+        4 {c |} {res}.0592547  .0337755  .0349742
+          {txt}{c |} {res}.0058372  .0017523  .0016125
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if selfpay==1, c(m bipolar sem bipolar)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.2873769  .3341173  .3500367
+          {txt}{c |}  {res}.006056  .0025575  .0023606
+          {txt}{c |} 
+        2 {c |} {res}.3027457   .322006  .4045559
+          {txt}{c |} {res}.0123545  .0045977  .0040354
+          {txt}{c |} 
+        3 {c |} {res}.2686567  .3121807  .3295325
+          {txt}{c |} {res}.0139892  .0046845  .0091656
+          {txt}{c |} 
+        4 {c |} {res}.2504582  .2405683  .2633079
+          {txt}{c |} {res}.0107121  .0041461  .0038658
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if selfpay==1, c(m major_depression sem major_depression)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}.6766338   .620638  .6038207
+          {txt}{c |} {res}.0062597   .002631  .0024206
+          {txt}{c |} 
+        2 {c |} {res}.5671965   .514377   .478302
+          {txt}{c |}  {res}.013323  .0049179  .0041071
+          {txt}{c |} 
+        3 {c |}       {res}.6  .5813407  .6438617
+          {txt}{c |}  {res}.015461  .0049873  .0093374
+          {txt}{c |} 
+        4 {c |} {res}.6902871  .7256562  .7017179
+          {txt}{c |} {res}.0114315   .004328  .0040157
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. 
+. **************************************************************************
+. ** SENSITIVITY CHECK: ACUITY? **
+. 
+. table racecat psychhosp if schizophrenia==1, c(m total_charges m illness_severity m length_of_stay)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}39630.71  40122.18  16223.19
+          {txt}{c |}  {res}1.75457   1.58538   1.40198
+          {txt}{c |}  {res}27.1948   56.4173   15.1318
+          {txt}{c |} 
+        2 {c |} {res}43376.96  38741.35  13919.41
+          {txt}{c |}  {res}1.67556   1.55005   1.40978
+          {txt}{c |}  {res}31.8441   52.7626   12.9983
+          {txt}{c |} 
+        3 {c |} {res}30476.06   43376.6  28028.03
+          {txt}{c |}  {res}1.82859    1.4533   1.66969
+          {txt}{c |}  {res}14.2391   62.8499   32.9637
+          {txt}{c |} 
+        4 {c |} {res}33839.43  28143.41  17796.38
+          {txt}{c |}  {res}1.86667   1.72105    1.6791
+          {txt}{c |}  {res}12.2178   16.6236   10.7744
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if bipolar==1, c(m total_charges m illness_severity m length_of_stay)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}23813.72  17782.78  13867.22
+          {txt}{c |}  {res}1.72315   1.69087   1.58324
+          {txt}{c |}  {res}8.35856   11.7946    9.6654
+          {txt}{c |} 
+        2 {c |} {res}22690.89  18174.49  12330.09
+          {txt}{c |}  {res}1.70147   1.70288   1.57858
+          {txt}{c |}  {res}9.48134   14.3671    9.3514
+          {txt}{c |} 
+        3 {c |} {res}23544.75   19699.5   14997.7
+          {txt}{c |}  {res}1.76106   1.63679   1.57934
+          {txt}{c |}   {res}7.1612   14.5309   12.5051
+          {txt}{c |} 
+        4 {c |}  {res}21751.8  17551.11  15025.09
+          {txt}{c |}  {res}1.77823   1.69523   1.65945
+          {txt}{c |}  {res}7.13028   8.53148    9.3575
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. table racecat psychhosp if major_depression==1, c(m total_charges m illness_severity m length_of_stay)
+
+{txt}{hline 10}{c TT}{hline 29}
+Indicates {c |}
+race:     {c |}
+white (1) {c |}
+black (2) {c |}  0 if general, 1 if general 
+Hispanic  {c |} with psych ward, 2 if psych 
+(3) or    {c |}           hospital          
+other (4) {c |}        0         1         2
+{hline 10}{c +}{hline 29}
+        1 {c |} {res}20423.39  14912.96  13793.59
+          {txt}{c |}  {res}1.73645   1.67624    1.5921
+          {txt}{c |}  {res}6.23971   7.88147   8.49155
+          {txt}{c |} 
+        2 {c |} {res}20104.57  14518.78   11702.5
+          {txt}{c |}  {res}1.74226   1.70239   1.63391
+          {txt}{c |}  {res}6.15557   8.04221   7.83225
+          {txt}{c |} 
+        3 {c |} {res}19517.14  16931.52  13020.11
+          {txt}{c |}  {res}1.74463   1.69024   1.63312
+          {txt}{c |}  {res}5.30844   8.42114   7.84181
+          {txt}{c |} 
+        4 {c |} {res}18987.13  13862.36  13711.61
+          {txt}{c |}  {res}1.78159   1.64086   1.64251
+          {txt}{c |}  {res}6.05182   6.43952   7.92521
+{txt}{hline 10}{c BT}{hline 29}
+
+{com}. 
+. log close
       {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz//sonali_analysis.smcl
+       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/sonali_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}17 Apr 2021, 20:16:55
+ {txt}closed on:  {res}19 Apr 2021, 14:47:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
