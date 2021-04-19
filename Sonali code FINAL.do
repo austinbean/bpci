@@ -125,7 +125,7 @@ save "${datadir}sonali_data_`nm'_`qr'.dta", replace
 
 log close
 
-log using "$datadir/sonali_analysis.smcl"
+log using "${datadir}sonali_analysis.smcl", replace
 
 use "${datadir}sonali_data_2010_1.dta", clear 
 append using "${datadir}sonali_data_2010_2.dta", force
