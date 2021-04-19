@@ -48,16 +48,12 @@ capture rename patient_status pat_status
 			}
 */
 *rename, label, and drop variables
-rename fac_*_ind *
-label variable teaching "Teaching facility indicator"
-label variable psych "Psychiatric facility indicator"
-label variable rehab "Rehabilitation facility indicator"
-label variable acute_care "Acute care facility indicator"
-label variable snf "Skilled nursing facility indicator"
-label variable teaching "Teaching facility indicator"
-label variable long_term_ac "Long term acute care facility indicator"
-label variable other_ltc "other long term care facility indicator"
-label variable peds "Pediatric facility indicator"
+label variable fac_teaching_ind "Teaching facility indicator"
+label variable fac_rehab_ind "Rehabilitation facility indicator"
+label variable fac_acute_care_ind "Acute care facility indicator"
+label variable fac_snf_ind "Skilled nursing facility indicator"
+label variable fac_long_term_ac_ind "Long term acute care facility indicator"
+label variable fac_other_ltc_ind "other long term care facility indicator"
 rename length_of_stay los
 
 
@@ -186,55 +182,55 @@ label variable highsev "Severity risk: Major  of extreme loss of function"
 
 *gen teaching facility indicator
 gen teach=0
-foreach v of varlist teaching {
+foreach v of varlist fac_teaching_ind {
                 capture confirm string variable `v'
                 if !_rc {
-                        replace teach=1 if inlist(teaching, "A", "X", "(A)", "(X)")
+                        replace teach=1 if inlist(fac_teaching_ind, "A", "X", "(A)", "(X)")
                 }
                 else {
-                        replace teach=1 if teaching==1 
+                        replace teach=1 if fac_teaching_ind==1 
                 }
         }
 label variable teach "Indicates teaching hospital"
 
 *gen snf indicator
-gen snf_=0
-foreach v of varlist snf {
+gen snf=0
+foreach v of varlist fac_snf_ind {
                 capture confirm string variable `v'
                 if !_rc {
-                        replace snf_=1 if inlist(snf, "A", "X", "(A)", "(X)")
+                        replace fac_snf=1 if inlist(fac_snf_ind, "A", "X", "(A)", "(X)")
                 }
                 else {
-                        replace snf_=1 if snf==1 
+                        replace snf=1 if fac_snf_ind==1 
                 }
         }
-label variable snf_ "Indicates snf"
+label variable snf "Indicates snf"
 
 *gen rehab indicator
-gen rehab_=0
-foreach v of varlist rehab {
+gen rehab=0
+foreach v of varlist fac_rehab_ind {
                 capture confirm string variable `v'
                 if !_rc {
-                        replace rehab_=1 if inlist(rehab, "A", "X", "(A)", "(X)")
+                        replace rehab=1 if inlist(fac_rehab_ind, "A", "X", "(A)", "(X)")
                 }
                 else {
-                        replace rehab_=1 if rehab==1 
+                        replace rehab=1 if fac_rehab_ind==1 
                 }
         }
-label variable rehab_ "Indicates rehab"
+label variable rehab "Indicates rehab"
 
 *gen long term care indicator
-gen ltc_=0
-foreach v of varlist long_term_ac {
+gen ltc=0
+foreach v of varlist fac_long_term_ac_ind {
                 capture confirm string variable `v'
                 if !_rc {
-                        replace ltc_=1 if inlist(long_term_ac, "A", "X", "(A)", "(X)")
+                        replace ltc=1 if inlist(fac_long_term_ac_ind, "A", "X", "(A)", "(X)")
                 }
                 else {
-                        replace ltc_=1 if long_term_ac==1 
+                        replace ltc=1 if fac_long_term_ac_ind==1 
                 }
         }
-label variable ltc_ "Indicates long term care"
+label variable ltc "Indicates long term care"
 
 *gen var indicating that patient spent most days in icu  
 gen icu=0
