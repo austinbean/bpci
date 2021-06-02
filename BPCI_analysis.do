@@ -470,4 +470,10 @@ append using "${datadir}DiRienz_data_2018_4.dta", force
 
 save "${datadir}DiRienz_data_all.dta", replace
 
+*check how many BPCI hospitals drop out and when
+keep if bpci==1
+duplicates drop thcic_id year, force
+xtset thcic year
+xtdescribe
+
 log close
