@@ -422,7 +422,7 @@ drop if bpci_drg==0
 capture rename pat_county county 
 
 *Keep variables
-keep total_charges totchg_r totchg_w totchg_rlog los_r los_w los_rlog bpci bpci_drg medicare medicaid private insurance age* female highsev dual icu ethnicity racecat illness_severity year dqtr thcic_id snf teach rehab ltc icu drg postcare county
+keep total_charges totchg_r totchg_w totchg_rlog los_r los_w los_rlog bpci bpci_drg medicare medicaid private insurance age* female highsev dual icu ethnicity racecat illness_severity year dqtr thcic_id snf teach rehab ltc icu drg postcare county died
 
 save "${datadir}DiRienz_data_`nm'_`qr'.dta", replace
 
