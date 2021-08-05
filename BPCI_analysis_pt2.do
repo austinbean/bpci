@@ -176,9 +176,9 @@ tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
 tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
 tabstat los_w totchg_w postcare, by(medicare) stat(mean sem min max)
 
-tabstat record_id, by(year) stat(count)
-bysort year : inspect thcic_id
-display r(N_unique)
+*tabstat record_id, by(year) stat(count)
+*bysort year : inspect thcic_id
+*display r(N_unique)
 
 tab ethnicity, m
 tab racecat, m
@@ -330,7 +330,7 @@ use "${datadir}DiRienz_AIM2.dta"
 
 **TABLES**
 
-codebook record_id
+*codebook record_id
 table year bpci, stat(mean totchg_w)
 table year bpci, stat(mean los_w)
 table year bpci, stat(mean postcare)
@@ -342,9 +342,9 @@ tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
 tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
 tabstat los_w totchg_w postcare, by(bpci) stat(mean sem min max)
 
-tabstat record_id, by(year) stat(count)
-bysort year : inspect thcic_id
-display r(N_unique)
+*tabstat record_id, by(year) stat(count)
+*bysort year : inspect thcic_id
+*display r(N_unique)
 
 table year racecat, stat(mean totchg_w)
 table year racecat, stat(mean los_w)
