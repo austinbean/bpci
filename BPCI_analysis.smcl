@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}17 Apr 2021, 20:01:04
+ {txt}opened on:  {res} 5 Aug 2021, 17:02:33
 {txt}
 {com}. 
 . use "${c -(}datadir{c )-}DiRienz_data_all.dta", clear
@@ -15,13 +15,13 @@
 {res}{txt}
 {com}. merge m:1 fips using "${c -(}datadir{c )-}DiRienz_ahrf.dta"
 {res}
-{txt}{col 5}Result{col 38}# of obs.
+{txt}{col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
-{col 5}not matched{col 30}{res}         138,033
+{col 5}Not matched{col 30}{res}         138,033
 {txt}{col 9}from master{col 30}{res}         138,033{txt}  (_merge==1)
 {col 9}from using{col 30}{res}               0{txt}  (_merge==2)
 
-{col 5}matched{col 30}{res}       4,138,429{txt}  (_merge==3)
+{col 5}Matched{col 30}{res}       4,138,429{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}. drop _merge
@@ -54,12 +54,16 @@
 {com}. label variable median_householdincome "Median household income based on county"
 {txt}
 {com}. replace median_householdincome = median_householdincome/1000
-{txt}variable {bf}median_householdincome{sf} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
+{txt}variable {bf}{res}median_householdincome{sf}{txt} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
 {txt}(4,138,429 real changes made)
 
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
-{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+{txt}{p 0 4 2}
+file {bf}
+/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta{rm}
+saved
+{p_end}
 
 {com}. 
 . 
@@ -71,13 +75,13 @@
 . *Merge to get discharges, number of beds, and govt control variables
 . merge m:1 thcic_id using "${c -(}datadir{c )-}DiRienz_hosp.dta"
 {res}
-{txt}{col 5}Result{col 38}# of obs.
+{txt}{col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
-{col 5}not matched{col 30}{res}       3,919,723
+{col 5}Not matched{col 30}{res}       3,919,723
 {txt}{col 9}from master{col 30}{res}       3,919,723{txt}  (_merge==1)
 {col 9}from using{col 30}{res}               0{txt}  (_merge==2)
 
-{col 5}matched{col 30}{res}         356,739{txt}  (_merge==3)
+{col 5}Matched{col 30}{res}         356,739{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}. drop _merge
@@ -122,7 +126,11 @@
 {txt}
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
-{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+{txt}{p 0 4 2}
+file {bf}
+/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta{rm}
+saved
+{p_end}
 
 {com}. 
 . 
@@ -248,7 +256,11 @@
 
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_data_merged.dta", replace
-{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta saved
+{txt}{p 0 4 2}
+file {bf}
+/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_data_merged.dta{rm}
+saved
+{p_end}
 
 {com}. 
 . **-----------------------------------------
@@ -269,7 +281,11 @@
 
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_AIM2.dta", replace
-{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM2.dta saved
+{txt}{p 0 4 2}
+file {bf}
+/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM2.dta{rm}
+saved
+{p_end}
 
 {com}. clear
 {txt}
@@ -289,7 +305,11 @@
 
 {com}. 
 . save "${c -(}datadir{c )-}DiRienz_AIM1.dta", replace
-{txt}file /Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM1.dta saved
+{txt}{p 0 4 2}
+file {bf}
+/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/DiRienz_AIM1.dta{rm}
+saved
+{p_end}
 
 {com}. 
 . **-----------------------------------------
@@ -300,68 +320,77 @@
 . 
 . **TABLES** (assorted, won't be using all but good info to have)
 . 
-. table year medicare, c(mean totchg_w)
+. table year medicare, stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 3}{result:90983.85}   {space 3}{result:88694.14}   {space 2}{result:89507.37}
+  2011{space 8} {c |}  {space 3}{result:89084.17}   {space 3}{result:91289.73}   {space 2}{result:90562.89}
+  2012{space 8} {c |}  {space 3}{result:91972.25}   {space 3}{result:91811.15}   {space 2}{result:91860.19}
+  2013{space 8} {c |}  {space 3}{result:92215.11}   {space 3}{result:96280.64}   {space 2}{result:95067.71}
+  2014{space 8} {c |}  {space 3}{result:89305.36}   {space 3}{result:95377.28}   {space 2}{result:93585.75}
+  2015{space 8} {c |}  {space 3}{result:93274.05}   {space 3}{result:98366.65}   {space 2}{result:96874.94}
+  2016{space 8} {c |}  {space 3}{result:96496.21}   {space 5}{result:102203}   {space 2}{result:100503.1}
+  2017{space 8} {c |}  {space 4}{result:97491.9}   {space 3}{result:105416.5}   {space 2}{result:103087.6}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:80919.33}   {space 3}{result:83709.33}   {space 2}{result:82856.62}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
 
-{txt}{hline 10}{c TT}{hline 19}
-          {c |}  Primary expected 
-Discharge {c |} payer is medicare 
-year      {c |}        0         1
-{hline 10}{c +}{hline 19}
-     2009 {c |}        {res}0         0
-     {txt}2010 {c |} {res}90983.85  88694.14
-     {txt}2011 {c |} {res}89084.16  91289.73
-     {txt}2012 {c |} {res}91972.25  91811.15
-     {txt}2013 {c |} {res}92215.11  96280.64
-     {txt}2014 {c |} {res}89305.37  95377.27
-     {txt}2015 {c |} {res}93274.05  98366.65
-     {txt}2016 {c |} {res}96496.21    102203
-     {txt}2017 {c |} {res}97491.91  105416.5
-     {txt}2018 {c |}        {res}0         0
-{txt}{hline 10}{c BT}{hline 19}
+{com}. table year medicare, stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 4}{result:4.22449}   {space 3}{result:4.875342}   {space 2}{result:4.584977}
+  2010{space 8} {c |}  {space 3}{result:4.110231}   {space 3}{result:5.114145}   {space 2}{result:4.758011}
+  2011{space 8} {c |}  {space 3}{result:3.963438}   {space 3}{result:5.152964}   {space 2}{result:4.760958}
+  2012{space 8} {c |}  {space 3}{result:3.923805}   {space 3}{result:5.069235}   {space 2}{result:4.720548}
+  2013{space 8} {c |}  {space 3}{result:3.990609}   {space 3}{result:5.222955}   {space 2}{result:4.855291}
+  2014{space 8} {c |}  {space 3}{result:4.226103}   {space 3}{result:5.417676}   {space 2}{result:5.066102}
+  2015{space 8} {c |}  {space 3}{result:4.250502}   {space 3}{result:5.579911}   {space 2}{result:5.190504}
+  2016{space 8} {c |}  {space 3}{result:4.286715}   {space 3}{result:5.609796}   {space 3}{result:5.21569}
+  2017{space 8} {c |}  {space 3}{result:4.140354}   {space 3}{result:5.386944}   {space 2}{result:5.020594}
+  2018{space 8} {c |}  {space 3}{result:4.212677}   {space 3}{result:5.274829}   {space 2}{result:4.974276}
+  Total{space 7} {c |}  {space 3}{result:4.123364}   {space 3}{result:5.318828}   {space 2}{result:4.953514}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
 
-{com}. table year medicare, c(mean los_w)
+{com}. table year medicare, stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.4234694}   {space 3}{result:.5246575}   {space 2}{result:.4795144}
+  2010{space 8} {c |}  {space 3}{result:.3001067}   {space 3}{result:.5134023}   {space 2}{result:.4376469}
+  2011{space 8} {c |}  {space 3}{result:.2810265}   {space 3}{result:.5178553}   {space 2}{result:.4397503}
+  2012{space 8} {c |}  {space 3}{result:.2712559}   {space 3}{result:.4862749}   {space 3}{result:.420873}
+  2013{space 8} {c |}  {space 3}{result:.2572305}   {space 3}{result:.4837058}   {space 2}{result:.4161657}
+  2014{space 8} {c |}  {space 3}{result:.2016185}   {space 3}{result:.4448658}   {space 2}{result:.3728524}
+  2015{space 8} {c |}  {space 3}{result:.1809781}   {space 3}{result:.4188394}   {space 2}{result:.3491214}
+  2016{space 8} {c |}  {space 3}{result:.1997029}   {space 3}{result:.4481858}   {space 2}{result:.3741703}
+  2017{space 8} {c |}  {space 3}{result:.2030964}   {space 3}{result:.4882577}   {space 3}{result:.404454}
+  2018{space 8} {c |}  {space 3}{result:.2379066}   {space 3}{result:.5088456}   {space 2}{result:.4321789}
+  Total{space 7} {c |}  {space 3}{result:.2399774}   {space 3}{result:.4786244}   {space 2}{result:.4056547}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
 
-{txt}{hline 10}{c TT}{hline 19}
-          {c |}  Primary expected 
-Discharge {c |} payer is medicare 
-year      {c |}        0         1
-{hline 10}{c +}{hline 19}
-     2009 {c |}  {res}4.22449  4.875342
-     {txt}2010 {c |} {res}4.110231  5.114144
-     {txt}2011 {c |} {res}3.963438  5.152964
-     {txt}2012 {c |} {res}3.923805  5.069235
-     {txt}2013 {c |} {res}3.990609  5.222955
-     {txt}2014 {c |} {res}4.226103  5.417676
-     {txt}2015 {c |} {res}4.250502  5.579911
-     {txt}2016 {c |} {res}4.286715  5.609796
-     {txt}2017 {c |} {res}4.140355  5.386944
-     {txt}2018 {c |} {res}4.212677  5.274829
-{txt}{hline 10}{c BT}{hline 19}
-
-{com}. table year medicare, c(mean postcare)
-
-{txt}{hline 10}{c TT}{hline 19}
-          {c |}  Primary expected 
-Discharge {c |} payer is medicare 
-year      {c |}        0         1
-{hline 10}{c +}{hline 19}
-     2009 {c |} {res}.4234694  .5246575
-     {txt}2010 {c |} {res}.3001067  .5134023
-     {txt}2011 {c |} {res}.2810265  .5178553
-     {txt}2012 {c |} {res}.2712559  .4862749
-     {txt}2013 {c |} {res}.2572305  .4837058
-     {txt}2014 {c |} {res}.2016185  .4448658
-     {txt}2015 {c |} {res}.1809781  .4188394
-     {txt}2016 {c |} {res}.1997029  .4481858
-     {txt}2017 {c |} {res}.2030964  .4882577
-     {txt}2018 {c |} {res}.2379066  .5088456
-{txt}{hline 10}{c BT}{hline 19}
-
-{com}. *table year medicare, c(sum age3)
+{com}. *table year medicare, stat(sum age3)
 . tabstat totchg_r totchg_w totchg_rlog, by(year) stat(mean sem)
 
-{txt}Summary statistics: mean, se(mean)
-  by categories of: year (Discharge year)
+{txt}Summary statistics: Mean, se(mean)
+Group variable: year (Discharge year)
 
 {ralign 8:year} {...}
 {c |}{...}
@@ -447,8 +476,8 @@ year      {c |}        0         1
 
 {com}. tabstat los_r los_w los_rlog, by(year) stat(mean sem)
 
-{txt}Summary statistics: mean, se(mean)
-  by categories of: year (Discharge year)
+{txt}Summary statistics: Mean, se(mean)
+Group variable: year (Discharge year)
 
 {ralign 8:year} {...}
 {c |}{...}
@@ -532,19 +561,1200 @@ year      {c |}        0         1
  {res} .0126035  .0117056  .0020962
 {txt}{hline 9}{c BT}{hline 30}
 
-{com}. tabstat teach snf_ rehab_ ltc_, by(year) stat(count mean sem)
-{err}variable {bf}snf_{sf} not found
-{txt}{search r(111), local:r(111);}
+{com}. tabstat teach snf rehab ltc, by(year) stat(count mean sem)
+
+{txt}Summary statistics: N, Mean, se(mean)
+Group variable: year (Discharge year)
+
+{ralign 8:year} {...}
+{c |}{...}
+     teach       snf     rehab      ltc_
+{hline 9}{c +}{hline 40}
+{ralign 8:2009} {...}
+{c |}{...}
+ {res}     1318      1318      1318      1318
+{txt}{space 8} {...}
+{c |}{...}
+ {res}  .383915         0   .176783         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0134012         0   .010512         0
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2010} {...}
+{c |}{...}
+ {res}    13191     13191     13191     13191
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .2562353  .2230309   .536957         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0038011  .0036246  .0043417         0
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2011} {...}
+{c |}{...}
+ {res}    14441         0         0     14441
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .2602313         .         .  .0358008
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0036513         .         .  .0015461
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2012} {...}
+{c |}{...}
+ {res}    15262         0         0     15262
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3697418         .         .    .07214
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0039077         .         .  .0020943
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2013} {...}
+{c |}{...}
+ {res}    15348         0         0     15348
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3524238         .         .  .0719312
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0038563         .         .  .0020856
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2014} {...}
+{c |}{...}
+ {res}    14750         0         0     14750
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3257627         .         .   .076678
+{txt}{space 8} {...}
+{c |}{...}
+ {res}  .003859         .         .  .0021909
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2015} {...}
+{c |}{...}
+ {res}    15291         0         0     15291
+{txt}{space 8} {...}
+{c |}{...}
+ {res}  .323916         .         .   .039762
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0037845         .         .  .0015802
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2016} {...}
+{c |}{...}
+ {res}    15819         0         0     15819
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3223339         .         .         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0037161         .         .         0
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2017} {...}
+{c |}{...}
+ {res}    16704         0         0     16704
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3375838         .         .         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}  .003659         .         .         0
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:2018} {...}
+{c |}{...}
+ {res}    16949         0         0     16949
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .2975397         .         .         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0035118         .         .         0
+{txt}{hline 9}{c +}{hline 40}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res}   139073     14509     14509    139073
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .3180704  .2027707  .5042387  .0320767
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0012489   .003338   .004151  .0004725
+{txt}{hline 9}{c BT}{hline 40}
+
+{com}. tabstat totchg_w los_w postcare female highsev dual icu racecat percenturban median_householdincome bedsize hcontrl teach snf rehab ltc totaldisc, stat(mean sd min max) col(stat)
+
+{txt}{ralign 12:Variable} {...}
+{c |}      Mean        SD       Min       Max
+{hline 13}{c +}{hline 40}
+{ralign 12:totchg_w} {...}
+{c |}{...}
+ {res} 82856.62  74712.04         0  435267.4
+{txt}{ralign 12:los_w} {...}
+{c |}{...}
+ {res} 4.953514  4.364977         1        38
+{txt}{ralign 12:postcare} {...}
+{c |}{...}
+ {res} .4056547  .4910201         0         1
+{txt}{ralign 12:female} {...}
+{c |}{...}
+ {res} .5700531    .49507         0         1
+{txt}{ralign 12:highsev} {...}
+{c |}{...}
+ {res} .4263516   .494548         0         1
+{txt}{ralign 12:dual} {...}
+{c |}{...}
+ {res}  .099286  .2990467         0         1
+{txt}{ralign 12:icu} {...}
+{c |}{...}
+ {res} .3747672  .4840645         0         1
+{txt}{ralign 12:racecat} {...}
+{c |}{...}
+ {res} 1.417896  .7490154         1         3
+{txt}{ralign 12:percenturban} {...}
+{c |}{...}
+ {res} 86.99635  20.75069         0      99.3
+{txt}{ralign 12:median_hou~e} {...}
+{c |}{...}
+ {res}  64.5467  12.81343    24.794    93.645
+{txt}{ralign 12:bedsize} {...}
+{c |}{...}
+ {res} 2.825415  .3796127         2         3
+{txt}{ralign 12:hcontrl} {...}
+{c |}{...}
+ {res} 1.000029   .005363         1         2
+{txt}{ralign 12:teach} {...}
+{c |}{...}
+ {res} .3180704  .4657286         0         1
+{txt}{ralign 12:snf} {...}
+{c |}{...}
+ {res} .2027707   .402077         0         1
+{txt}{ralign 12:rehab} {...}
+{c |}{...}
+ {res} .5042387  .4999993         0         1
+{txt}{ralign 12:ltc_} {...}
+{c |}{...}
+ {res} .0320767  .1762044         0         1
+{txt}{ralign 12:totaldisc} {...}
+{c |}{...}
+ {res} 22178.86  12710.78      2749     58575
+{txt}{hline 13}{c BT}{hline 40}
+
+{com}. tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
+
+{txt}Summary statistics: Mean, se(mean), Min, Max
+Group variable: year (Discharge year)
+
+{ralign 8:year} {...}
+{c |}{...}
+     los_w  totchg_w  postcare
+{hline 9}{c +}{hline 30}
+{ralign 8:2009} {...}
+{c |}{...}
+ {res} 4.584977         0  .4795144
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .1034543         0  .0137661
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       29         0         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2010} {...}
+{c |}{...}
+ {res} 4.758011  89507.37  .4376469
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0344217   552.032  .0043196
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1   164.105         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  383135.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2011} {...}
+{c |}{...}
+ {res} 4.760958  90562.89  .4397503
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0332757  551.6133  .0041343
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  1029.057         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38    387379         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2012} {...}
+{c |}{...}
+ {res} 4.720548  91860.19   .420873
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0322337  543.7505      .004
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38    391813         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2013} {...}
+{c |}{...}
+ {res} 4.855291  95067.71  .4161657
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0342663  578.5674  .0039846
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  405792.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2014} {...}
+{c |}{...}
+ {res} 5.066102  93585.75  .3728524
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0369503  599.1732  .0040009
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  1313.272         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       36    413453         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2015} {...}
+{c |}{...}
+ {res} 5.190504  96874.94  .3491214
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0378374  611.7908  .0038745
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  3376.446         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  434664.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2016} {...}
+{c |}{...}
+ {res}  5.21569  100503.1  .3741703
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0377232  615.6509  .0038476
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  431162.1         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2017} {...}
+{c |}{...}
+ {res} 5.020594  103087.6   .404454
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0355783  612.9083  .0037975
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1     10.42         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       34  435267.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2018} {...}
+{c |}{...}
+ {res} 4.974276         0  .4321789
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0339143         0  .0038052
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       33         0         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res} 4.953514  82856.62  .4056547
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0117056  200.3407  .0013185
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38  435267.4         1
+{txt}{hline 9}{c BT}{hline 30}
+
+{com}. tabstat los_w totchg_w postcare, by(year) stat(mean sem min max)
+
+{txt}Summary statistics: Mean, se(mean), Min, Max
+Group variable: year (Discharge year)
+
+{ralign 8:year} {...}
+{c |}{...}
+     los_w  totchg_w  postcare
+{hline 9}{c +}{hline 30}
+{ralign 8:2009} {...}
+{c |}{...}
+ {res} 4.584977         0  .4795144
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .1034543         0  .0137661
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       29         0         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2010} {...}
+{c |}{...}
+ {res} 4.758011  89507.37  .4376469
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0344217   552.032  .0043196
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1   164.105         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  383135.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2011} {...}
+{c |}{...}
+ {res} 4.760958  90562.89  .4397503
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0332757  551.6133  .0041343
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  1029.057         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38    387379         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2012} {...}
+{c |}{...}
+ {res} 4.720548  91860.19   .420873
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0322337  543.7505      .004
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38    391813         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2013} {...}
+{c |}{...}
+ {res} 4.855291  95067.71  .4161657
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0342663  578.5674  .0039846
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  405792.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2014} {...}
+{c |}{...}
+ {res} 5.066102  93585.75  .3728524
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0369503  599.1732  .0040009
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  1313.272         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       36    413453         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2015} {...}
+{c |}{...}
+ {res} 5.190504  96874.94  .3491214
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0378374  611.7908  .0038745
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1  3376.446         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  434664.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2016} {...}
+{c |}{...}
+ {res}  5.21569  100503.1  .3741703
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0377232  615.6509  .0038476
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       35  431162.1         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2017} {...}
+{c |}{...}
+ {res} 5.020594  103087.6   .404454
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0355783  612.9083  .0037975
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1     10.42         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       34  435267.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:2018} {...}
+{c |}{...}
+ {res} 4.974276         0  .4321789
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0339143         0  .0038052
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       33         0         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res} 4.953514  82856.62  .4056547
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0117056  200.3407  .0013185
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38  435267.4         1
+{txt}{hline 9}{c BT}{hline 30}
+
+{com}. tabstat los_w totchg_w postcare, by(medicare) stat(mean sem min max)
+
+{txt}Summary statistics: Mean, se(mean), Min, Max
+Group variable: medicare (Primary expected payer is medicare)
+
+{ralign 8:medicare} {...}
+{c |}{...}
+     los_w  totchg_w  postcare
+{hline 9}{c +}{hline 30}
+{ralign 8:0} {...}
+{c |}{...}
+ {res} 4.123364  80919.33  .2399774
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0191613  349.1497   .002074
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       36  435267.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:1} {...}
+{c |}{...}
+ {res} 5.318828  83709.33  .4786244
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0144405  244.1376  .0016099
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38  435267.4         1
+{txt}{hline 9}{c +}{hline 30}
+{ralign 8:Total} {...}
+{c |}{...}
+ {res} 4.953514  82856.62  .4056547
+{txt}{space 8} {...}
+{c |}{...}
+ {res} .0117056  200.3407  .0013185
+{txt}{space 8} {...}
+{c |}{...}
+ {res}        1         0         0
+{txt}{space 8} {...}
+{c |}{...}
+ {res}       38  435267.4         1
+{txt}{hline 9}{c BT}{hline 30}
+
+{com}. 
+. *tabstat record_id, by(year) stat(count)
+. *bysort year : inspect thcic_id
+. *display r(N_unique)
+. 
+. tab ethnicity, m
+
+  {txt}Indicates {c |}
+   hispanic {c |}
+ origin (1) {c |}
+  or not of {c |}
+   hispanic {c |}
+ origin (2) {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      1,784        1.28        1.28
+{txt}          2 {c |}{res}     12,711        9.14       10.42
+{txt}          . {c |}{res}    124,578       89.58      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    139,073      100.00
+{txt}
+{com}. tab racecat, m
+
+  {txt}Indicates {c |}
+race: white {c |}
+  (1) black {c |}
+     (2) or {c |}
+  other (3) {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}    103,051       74.10       74.10
+{txt}          2 {c |}{res}     13,926       10.01       84.11
+{txt}          3 {c |}{res}     22,096       15.89      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    139,073      100.00
+{txt}
+{com}. table year racecat, stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+{space 14} {c |}  {space 3}Indicates race: white (1) black (2) or other (3){space 3}
+{space 14} {c |}  {space 11}1   {space 10}2   {space 10}3   {space 6}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+Discharge year {c |}  {space 12}   {space 11}   {space 11}   {space 11}
+  2009{space 8} {c |}  {space 11}{result:0}   {space 10}{result:0}   {space 10}{result:0}   {space 10}{result:0}
+  2010{space 8} {c |}  {space 4}{result:91589.39}   {space 3}{result:87952.64}   {space 3}{result:80648.92}   {space 3}{result:89507.37}
+  2011{space 8} {c |}  {space 4}{result:93329.82}   {space 3}{result:85452.19}   {space 3}{result:80813.57}   {space 3}{result:90562.89}
+  2012{space 8} {c |}  {space 5}{result:93711.9}   {space 3}{result:88797.93}   {space 3}{result:84938.33}   {space 3}{result:91860.19}
+  2013{space 8} {c |}  {space 5}{result:97695.9}   {space 3}{result:91368.12}   {space 3}{result:85228.72}   {space 3}{result:95067.71}
+  2014{space 8} {c |}  {space 4}{result:94804.29}   {space 3}{result:94183.87}   {space 3}{result:87812.46}   {space 3}{result:93585.75}
+  2015{space 8} {c |}  {space 4}{result:98438.49}   {space 3}{result:95445.07}   {space 3}{result:91067.57}   {space 3}{result:96874.94}
+  2016{space 8} {c |}  {space 4}{result:101973.4}   {space 3}{result:98106.88}   {space 3}{result:95156.03}   {space 3}{result:100503.1}
+  2017{space 8} {c |}  {space 4}{result:104317.9}   {space 3}{result:99978.88}   {space 3}{result:99344.94}   {space 3}{result:103087.6}
+  2018{space 8} {c |}  {space 11}{result:0}   {space 10}{result:0}   {space 10}{result:0}   {space 10}{result:0}
+  Total{space 7} {c |}  {space 4}{result:84287.68}   {space 3}{result:80476.53}   {space 4}{result:77682.5}   {space 3}{result:82856.62}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+
+{com}. table year racecat, stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+{space 14} {c |}  {space 3}Indicates race: white (1) black (2) or other (3){space 3}
+{space 14} {c |}  {space 11}1   {space 10}2   {space 10}3   {space 6}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+Discharge year {c |}  {space 12}   {space 11}   {space 11}   {space 11}
+  2009{space 8} {c |}  {space 4}{result:4.511111}   {space 3}{result:5.223077}   {space 3}{result:4.555556}   {space 3}{result:4.584977}
+  2010{space 8} {c |}  {space 4}{result:4.698821}   {space 3}{result:5.144914}   {space 3}{result:4.831618}   {space 3}{result:4.758011}
+  2011{space 8} {c |}  {space 6}{result:4.7444}   {space 3}{result:5.062831}   {space 3}{result:4.667514}   {space 3}{result:4.760958}
+  2012{space 8} {c |}  {space 4}{result:4.635095}   {space 3}{result:5.195254}   {space 3}{result:4.834656}   {space 3}{result:4.720548}
+  2013{space 8} {c |}  {space 4}{result:4.823622}   {space 3}{result:5.274227}   {space 3}{result:4.755707}   {space 3}{result:4.855291}
+  2014{space 8} {c |}  {space 4}{result:5.001951}   {space 3}{result:5.692456}   {space 3}{result:4.950678}   {space 3}{result:5.066102}
+  2015{space 8} {c |}  {space 4}{result:5.150054}   {space 4}{result:5.60799}   {space 3}{result:5.105669}   {space 3}{result:5.190504}
+  2016{space 8} {c |}  {space 4}{result:5.166096}   {space 3}{result:5.601535}   {space 3}{result:5.185231}   {space 4}{result:5.21569}
+  2017{space 8} {c |}  {space 4}{result:4.956405}   {space 3}{result:5.277102}   {space 3}{result:5.149119}   {space 3}{result:5.020594}
+  2018{space 8} {c |}  {space 4}{result:4.933783}   {space 3}{result:5.245495}   {space 3}{result:4.985564}   {space 3}{result:4.974276}
+  Total{space 7} {c |}  {space 4}{result:4.901189}   {space 3}{result:5.356532}   {space 3}{result:4.943559}   {space 3}{result:4.953514}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+
+{com}. table year racecat, stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+{space 14} {c |}  {space 3}Indicates race: white (1) black (2) or other (3){space 3}
+{space 14} {c |}  {space 11}1   {space 10}2   {space 10}3   {space 6}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+Discharge year {c |}  {space 12}   {space 11}   {space 11}   {space 11}
+  2009{space 8} {c |}  {space 4}{result:.4962963}   {space 3}{result:.4153846}   {space 3}{result:.3888889}   {space 3}{result:.4795144}
+  2010{space 8} {c |}  {space 4}{result:.4412801}   {space 3}{result:.4210054}   {space 3}{result:.4294393}   {space 3}{result:.4376469}
+  2011{space 8} {c |}  {space 4}{result:.4476208}   {space 3}{result:.4101592}   {space 3}{result:.4204497}   {space 3}{result:.4397503}
+  2012{space 8} {c |}  {space 4}{result:.4268882}   {space 3}{result:.4364378}   {space 3}{result:.3826851}   {space 4}{result:.420873}
+  2013{space 8} {c |}  {space 4}{result:.4239197}   {space 3}{result:.4001377}   {space 3}{result:.3901165}   {space 3}{result:.4161657}
+  2014{space 8} {c |}  {space 4}{result:.3776047}   {space 3}{result:.3853151}   {space 4}{result:.343957}   {space 3}{result:.3728524}
+  2015{space 8} {c |}  {space 4}{result:.3534608}   {space 3}{result:.3550221}   {space 3}{result:.3269903}   {space 3}{result:.3491214}
+  2016{space 8} {c |}  {space 5}{result:.376649}   {space 3}{result:.3760331}   {space 3}{result:.3610771}   {space 3}{result:.3741703}
+  2017{space 8} {c |}  {space 4}{result:.4096102}   {space 3}{result:.4076327}   {space 3}{result:.3772994}   {space 4}{result:.404454}
+  2018{space 8} {c |}  {space 4}{result:.4405234}   {space 3}{result:.4273649}   {space 3}{result:.3944596}   {space 3}{result:.4321789}
+  Total{space 7} {c |}  {space 4}{result:.4117819}   {space 3}{result:.4014835}   {space 3}{result:.3797233}   {space 3}{result:.4056547}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 12}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}
+
+{com}. table year insurance, stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+{space 14} {c |}  {space 6}Insurance categorical variable{space 5}
+{space 14} {c |}  {space 7}1   {space 7}2   {space 7}3   {space 3}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+Discharge year {c |}  {space 8}   {space 8}   {space 8}   {space 8}
+  2009{space 8} {c |}  {space 7}{result:0}   {space 7}{result:0}   {space 7}{result:0}   {space 7}{result:0}
+  2010{space 8} {c |}  {result:88694.14}   {result:83873.96}   {result:92197.26}   {result:89507.37}
+  2011{space 8} {c |}  {result:91289.73}   {result:80145.76}   {result:90868.69}   {result:90562.89}
+  2012{space 8} {c |}  {result:91811.15}   {result:83449.45}   {result:93678.57}   {result:91860.19}
+  2013{space 8} {c |}  {result:96280.64}   {result:85429.91}   {result:93569.66}   {result:95067.71}
+  2014{space 8} {c |}  {result:95377.28}   {result:87060.38}   {result:89865.48}   {result:93585.75}
+  2015{space 8} {c |}  {result:98366.65}   {result:90296.21}   {result:93970.52}   {result:96874.94}
+  2016{space 8} {c |}  {space 2}{result:102203}   {result:98139.07}   {result:96102.46}   {result:100503.1}
+  2017{space 8} {c |}  {result:105416.5}   {result:94671.05}   {result:98178.54}   {result:103087.6}
+  2018{space 8} {c |}  {space 7}{result:0}   {space 7}{result:0}   {space 7}{result:0}   {space 7}{result:0}
+  Total{space 7} {c |}  {result:83709.33}   {result:76040.78}   {space 1}{result:81993.5}   {result:82856.62}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+
+{com}. table year insurance, stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+{space 14} {c |}  {space 6}Insurance categorical variable{space 5}
+{space 14} {c |}  {space 7}1   {space 7}2   {space 7}3   {space 3}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+Discharge year {c |}  {space 8}   {space 8}   {space 8}   {space 8}
+  2009{space 8} {c |}  {result:4.875342}   {result:5.864407}   {result:4.041588}   {result:4.584977}
+  2010{space 8} {c |}  {result:5.114145}   {result:6.027941}   {result:3.783567}   {result:4.758011}
+  2011{space 8} {c |}  {result:5.152964}   {result:5.782828}   {result:3.600202}   {result:4.760958}
+  2012{space 8} {c |}  {result:5.069235}   {result:5.796129}   {result:3.548954}   {result:4.720548}
+  2013{space 8} {c |}  {result:5.222955}   {result:5.674541}   {result:3.654441}   {result:4.855291}
+  2014{space 8} {c |}  {result:5.417676}   {result:5.552359}   {result:3.895205}   {result:5.066102}
+  2015{space 8} {c |}  {result:5.579911}   {space 1}{result:5.52179}   {result:3.953168}   {result:5.190504}
+  2016{space 8} {c |}  {result:5.609796}   {result:5.686059}   {result:3.951329}   {space 1}{result:5.21569}
+  2017{space 8} {c |}  {result:5.386944}   {result:5.351717}   {result:3.845491}   {result:5.020594}
+  2018{space 8} {c |}  {result:5.274829}   {result:5.294351}   {result:3.924478}   {result:4.974276}
+  Total{space 7} {c |}  {result:5.318828}   {space 1}{result:5.61093}   {result:3.795865}   {result:4.953514}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+
+{com}. table year insurance, stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+{space 14} {c |}  {space 6}Insurance categorical variable{space 5}
+{space 14} {c |}  {space 7}1   {space 7}2   {space 7}3   {space 3}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+Discharge year {c |}  {space 8}   {space 8}   {space 8}   {space 8}
+  2009{space 8} {c |}  {result:.5246575}   {result:.1694915}   {result:.4517958}   {result:.4795144}
+  2010{space 8} {c |}  {result:.5134023}   {result:.2913616}   {result:.3015992}   {result:.4376469}
+  2011{space 8} {c |}  {result:.5178553}   {result:.2449495}   {result:.2882383}   {result:.4397503}
+  2012{space 8} {c |}  {result:.4862749}   {result:.2473958}   {result:.2759959}   {space 1}{result:.420873}
+  2013{space 8} {c |}  {result:.4837058}   {result:.2615588}   {result:.2563698}   {result:.4161657}
+  2014{space 8} {c |}  {result:.4448658}   {result:.2467986}   {result:.1904212}   {result:.3728524}
+  2015{space 8} {c |}  {result:.4188394}   {result:.2102748}   {result:.1741667}   {result:.3491214}
+  2016{space 8} {c |}  {result:.4481858}   {result:.2447859}   {result:.1888977}   {result:.3741703}
+  2017{space 8} {c |}  {result:.4882577}   {space 1}{result:.264308}   {result:.1881966}   {space 1}{result:.404454}
+  2018{space 8} {c |}  {result:.5088456}   {result:.2923687}   {result:.2233958}   {result:.4321789}
+  Total{space 7} {c |}  {result:.4786244}   {result:.2555003}   {result:.2365681}   {result:.4056547}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+
+{com}. *table year agecat, stat(mean totchg_w)
+. *table year agecat, stat(mean los_w)
+. *table year agecat, stat(mean postcare)
+. 
+. table year medicare, stat(mean teach)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.4336735}   {space 3}{result:.3438356}   {space 3}{result:.383915}
+  2010{space 8} {c |}  {space 4}{result:.315048}   {space 4}{result:.223842}   {space 2}{result:.2562353}
+  2011{space 8} {c |}  {space 3}{result:.3370456}   {space 3}{result:.2224747}   {space 2}{result:.2602313}
+  2012{space 8} {c |}  {space 3}{result:.4042187}   {space 3}{result:.3546534}   {space 2}{result:.3697418}
+  2013{space 8} {c |}  {space 3}{result:.3924438}   {space 3}{result:.3354072}   {space 2}{result:.3524238}
+  2014{space 8} {c |}  {space 3}{result:.3520221}   {space 3}{result:.3147721}   {space 2}{result:.3257627}
+  2015{space 8} {c |}  {space 3}{result:.3536504}   {space 3}{result:.3115982}   {space 3}{result:.323916}
+  2016{space 8} {c |}  {space 3}{result:.3357385}   {space 3}{result:.3166472}   {space 2}{result:.3223339}
+  2017{space 8} {c |}  {space 3}{result:.3742106}   {space 5}{result:.32234}   {space 2}{result:.3375838}
+  2018{space 8} {c |}  {space 3}{result:.3246455}   {space 3}{result:.2868428}   {space 2}{result:.2975397}
+  Total{space 7} {c |}  {space 3}{result:.3552994}   {space 3}{result:.3016838}   {space 2}{result:.3180704}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean snf)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 3}{result:.2260406}   {space 3}{result:.2213731}   {space 2}{result:.2230309}
+  2011{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2012{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2013{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2014{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2015{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2016{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2017{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2018{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  Total{space 7} {c |}  {space 3}{result:.2008344}   {space 3}{result:.2038761}   {space 2}{result:.2027707}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean rehab)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.1462585}   {space 3}{result:.2013699}   {space 3}{result:.176783}
+  2010{space 8} {c |}  {space 4}{result:.549413}   {space 3}{result:.5300964}   {space 3}{result:.536957}
+  2011{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2012{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2013{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2014{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2015{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2016{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2017{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  2018{space 8} {c |}  {space 10}{result:.}   {space 10}{result:.}   {space 9}{result:.}
+  Total{space 7} {c |}  {space 3}{result:.5044567}   {space 3}{result:.5041143}   {space 2}{result:.5042387}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean ltc)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2011{space 8} {c |}  {space 3}{result:.0283673}   {space 3}{result:.0394547}   {space 2}{result:.0358008}
+  2012{space 8} {c |}  {space 3}{result:.0695222}   {space 3}{result:.0732856}   {space 4}{result:.07214}
+  2013{space 8} {c |}  {space 3}{result:.0722865}   {space 3}{result:.0717801}   {space 2}{result:.0719312}
+  2014{space 8} {c |}  {space 3}{result:.0712316}   {space 3}{result:.0789575}   {space 3}{result:.076678}
+  2015{space 8} {c |}  {space 3}{result:.0346059}   {space 3}{result:.0418979}   {space 3}{result:.039762}
+  2016{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2017{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:.0295024}   {space 3}{result:.0332098}   {space 2}{result:.0320767}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. 
+. table year medicare if inlist(drg, 469, 470), stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 5}{result:127578}   {space 3}{result:118653.6}   {space 2}{result:122379.5}
+  2011{space 8} {c |}  {space 3}{result:123938.7}   {space 3}{result:124360.9}   {space 2}{result:124185.4}
+  2012{space 8} {c |}  {space 3}{result:133927.2}   {space 3}{result:135120.2}   {space 4}{result:134652}
+  2013{space 8} {c |}  {space 3}{result:127580.6}   {space 3}{result:133308.7}   {space 2}{result:131119.1}
+  2014{space 8} {c |}  {space 3}{result:111150.7}   {space 3}{result:120863.6}   {space 2}{result:117155.6}
+  2015{space 8} {c |}  {space 3}{result:115509.2}   {space 3}{result:121485.4}   {space 2}{result:119146.4}
+  2016{space 8} {c |}  {space 3}{result:122883.3}   {space 3}{result:128694.3}   {space 4}{result:126507}
+  2017{space 8} {c |}  {space 3}{result:118549.7}   {space 3}{result:122899.9}   {space 2}{result:121279.6}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:111310.1}   {space 3}{result:114458.8}   {space 2}{result:113216.8}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 391, 392), stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2010{space 8} {c |}  {space 3}{result:42720.67}   {space 3}{result:55950.58}   {space 5}{result:48047}
+  2011{space 8} {c |}  {space 3}{result:45051.29}   {space 4}{result:59247.5}   {space 2}{result:52019.15}
+  2012{space 8} {c |}  {space 3}{result:38850.32}   {space 3}{result:53841.12}   {space 2}{result:45618.01}
+  2013{space 8} {c |}  {space 3}{result:48234.56}   {space 3}{result:63943.63}   {space 2}{result:56837.14}
+  2014{space 8} {c |}  {space 3}{result:47288.23}   {space 3}{result:58291.14}   {space 2}{result:52217.13}
+  2015{space 8} {c |}  {space 3}{result:46645.32}   {space 3}{result:53729.15}   {space 2}{result:50423.36}
+  2016{space 8} {c |}  {space 3}{result:52489.61}   {space 3}{result:60892.62}   {space 2}{result:57281.95}
+  2017{space 8} {c |}  {space 3}{result:51109.31}   {space 4}{result:63926.2}   {space 2}{result:57483.48}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:42465.29}   {space 3}{result:50878.64}   {space 3}{result:46760.4}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 870, 871, 872), stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 3}{result:136463.4}   {space 5}{result:119278}   {space 2}{result:123496.3}
+  2011{space 8} {c |}  {space 3}{result:128498.1}   {space 3}{result:128789.5}   {space 2}{result:128721.4}
+  2012{space 8} {c |}  {space 3}{result:134352.9}   {space 3}{result:136505.6}   {space 2}{result:136015.6}
+  2013{space 8} {c |}  {space 3}{result:142990.1}   {space 3}{result:147115.3}   {space 2}{result:146117.2}
+  2014{space 8} {c |}  {space 3}{result:138963.3}   {space 5}{result:145329}   {space 2}{result:143769.3}
+  2015{space 8} {c |}  {space 3}{result:122895.9}   {space 3}{result:144397.8}   {space 2}{result:139207.3}
+  2016{space 8} {c |}  {space 3}{result:125840.8}   {space 3}{result:139604.4}   {space 2}{result:136129.7}
+  2017{space 8} {c |}  {space 3}{result:109744.6}   {space 3}{result:134381.8}   {space 2}{result:127620.2}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:98663.37}   {space 5}{result:110504}   {space 2}{result:107494.2}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 469, 470), stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:3.231818}   {space 3}{result:3.765363}   {space 2}{result:3.471178}
+  2010{space 8} {c |}  {space 3}{result:3.090713}   {space 3}{result:3.782766}   {space 2}{result:3.493838}
+  2011{space 8} {c |}  {space 4}{result:3.01567}   {space 3}{result:3.662785}   {space 2}{result:3.393904}
+  2012{space 8} {c |}  {space 3}{result:2.808379}   {space 3}{result:3.580451}   {space 2}{result:3.277406}
+  2013{space 8} {c |}  {space 3}{result:2.515523}   {space 3}{result:3.408999}   {space 2}{result:3.067458}
+  2014{space 8} {c |}  {space 3}{result:2.544166}   {space 3}{result:3.342088}   {space 2}{result:3.037469}
+  2015{space 8} {c |}  {space 3}{result:2.328753}   {space 3}{result:3.271244}   {space 2}{result:2.902358}
+  2016{space 8} {c |}  {space 3}{result:2.179185}   {space 3}{result:3.176166}   {space 2}{result:2.800889}
+  2017{space 8} {c |}  {space 3}{result:2.019982}   {space 3}{result:2.886792}   {space 2}{result:2.563938}
+  2018{space 8} {c |}  {space 4}{result:2.09542}   {space 3}{result:3.403677}   {space 2}{result:2.898871}
+  Total{space 7} {c |}  {space 3}{result:2.583758}   {space 3}{result:3.408653}   {space 2}{result:3.083272}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 391, 392), stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2010{space 8} {c |}  {space 7}{result:2.75}   {space 3}{result:3.822581}   {space 2}{result:3.181818}
+  2011{space 8} {c |}  {space 3}{result:2.963964}   {space 4}{result:4.28972}   {space 2}{result:3.614679}
+  2012{space 8} {c |}  {space 4}{result:3.00885}   {space 3}{result:3.967742}   {space 2}{result:3.441748}
+  2013{space 8} {c |}  {space 3}{result:3.355263}   {space 3}{result:4.543478}   {space 2}{result:4.005952}
+  2014{space 8} {c |}  {space 3}{result:3.139344}   {space 3}{result:3.888889}   {space 2}{result:3.475113}
+  2015{space 8} {c |}  {space 3}{result:3.276786}   {space 3}{result:3.484375}   {space 4}{result:3.3875}
+  2016{space 8} {c |}  {space 3}{result:3.209091}   {space 3}{result:3.506849}   {space 2}{result:3.378906}
+  2017{space 8} {c |}  {space 3}{result:3.095745}   {space 3}{result:3.709677}   {space 3}{result:3.40107}
+  2018{space 8} {c |}  {space 3}{result:2.935897}   {space 4}{result:3.03937}   {space 9}{result:3}
+  Total{space 7} {c |}  {space 5}{result:3.0837}   {space 3}{result:3.756072}   {space 2}{result:3.426954}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 870, 871, 872), stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:9}   {space 3}{result:7.268293}   {space 2}{result:7.775862}
+  2010{space 8} {c |}  {space 3}{result:8.407407}   {space 3}{result:7.156627}   {space 2}{result:7.463636}
+  2011{space 8} {c |}  {space 10}{result:8}   {space 3}{result:7.948229}   {space 2}{result:7.960334}
+  2012{space 8} {c |}  {space 3}{result:7.619433}   {space 3}{result:8.221957}   {space 2}{result:8.084793}
+  2013{space 8} {c |}  {space 7}{result:7.95}   {space 3}{result:8.588298}   {space 2}{result:8.433871}
+  2014{space 8} {c |}  {space 3}{result:7.888889}   {space 3}{result:8.440633}   {space 2}{result:8.305445}
+  2015{space 8} {c |}  {space 3}{result:7.231626}   {space 3}{result:8.627215}   {space 2}{result:8.290323}
+  2016{space 8} {c |}  {space 4}{result:7.13035}   {space 3}{result:8.244415}   {space 2}{result:7.963163}
+  2017{space 8} {c |}  {space 3}{result:6.229139}   {space 3}{result:7.660822}   {space 2}{result:7.267903}
+  2018{space 8} {c |}  {space 3}{result:6.101775}   {space 3}{result:6.996909}   {space 2}{result:6.753698}
+  Total{space 7} {c |}  {space 3}{result:7.040142}   {space 3}{result:7.906477}   {space 2}{result:7.686257}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 469, 470), stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.8681818}   {space 3}{result:.8044693}   {space 3}{result:.839599}
+  2010{space 8} {c |}  {space 3}{result:.6450684}   {space 3}{result:.7812178}   {space 2}{result:.7243763}
+  2011{space 8} {c |}  {space 3}{result:.6336422}   {space 3}{result:.8125633}   {space 2}{result:.7382292}
+  2012{space 8} {c |}  {space 3}{result:.6281056}   {space 3}{result:.7854637}   {space 2}{result:.7237283}
+  2013{space 8} {c |}  {space 3}{result:.5503686}   {space 3}{result:.7446809}   {space 2}{result:.6704225}
+  2014{space 8} {c |}  {space 3}{result:.3777533}   {space 3}{result:.6527967}   {space 3}{result:.547599}
+  2015{space 8} {c |}  {space 3}{result:.3344017}   {space 3}{result:.6109966}   {space 2}{result:.5027185}
+  2016{space 8} {c |}  {space 3}{result:.3154506}   {space 3}{result:.5880829}   {space 2}{result:.4854604}
+  2017{space 8} {c |}  {space 3}{result:.2960945}   {space 3}{result:.5504043}   {space 2}{result:.4556834}
+  2018{space 8} {c |}  {space 3}{result:.4058524}   {space 3}{result:.6842526}   {space 2}{result:.5768287}
+  Total{space 7} {c |}  {space 3}{result:.4960723}   {space 3}{result:.6992515}   {space 2}{result:.6190974}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 391, 392), stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2010{space 8} {c |}  {space 3}{result:.0217391}   {space 3}{result:.2258065}   {space 2}{result:.1038961}
+  2011{space 8} {c |}  {space 4}{result:.027027}   {space 3}{result:.2429907}   {space 2}{result:.1330275}
+  2012{space 8} {c |}  {space 3}{result:.0088496}   {space 3}{result:.2258065}   {space 2}{result:.1067961}
+  2013{space 8} {c |}  {space 3}{result:.0263158}   {space 3}{result:.2527473}   {space 2}{result:.1497006}
+  2014{space 8} {c |}  {space 3}{result:.0491803}   {space 3}{result:.2142857}   {space 2}{result:.1227273}
+  2015{space 8} {c |}  {space 6}{result:.0625}   {space 4}{result:.140625}   {space 2}{result:.1041667}
+  2016{space 8} {c |}  {space 3}{result:.0181818}   {space 3}{result:.1986301}   {space 2}{result:.1210938}
+  2017{space 8} {c |}  {space 3}{result:.0106383}   {space 3}{result:.2580645}   {space 2}{result:.1336898}
+  2018{space 8} {c |}  {space 3}{result:.0384615}   {space 3}{result:.1811024}   {space 2}{result:.1268293}
+  Total{space 7} {c |}  {space 3}{result:.0297357}   {space 4}{result:.210582}   {space 2}{result:.1219644}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare if inlist(drg, 870, 871, 872), stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.2352941}   {space 3}{result:.5365854}   {space 2}{result:.4482759}
+  2010{space 8} {c |}  {space 3}{result:.4212963}   {space 3}{result:.5873494}   {space 2}{result:.5465909}
+  2011{space 8} {c |}  {space 3}{result:.3482143}   {space 3}{result:.6147541}   {space 2}{result:.5523013}
+  2012{space 8} {c |}  {space 3}{result:.3441296}   {space 3}{result:.5859189}   {space 2}{result:.5308756}
+  2013{space 8} {c |}  {space 3}{result:.3299663}   {space 3}{result:.5747863}   {space 2}{result:.5158151}
+  2014{space 8} {c |}  {space 3}{result:.3242507}   {space 3}{result:.5346975}   {space 2}{result:.4828974}
+  2015{space 8} {c |}  {space 3}{result:.2488584}   {space 3}{result:.5195936}   {space 2}{result:.4542952}
+  2016{space 8} {c |}  {space 3}{result:.2840467}   {space 4}{result:.543364}   {space 2}{result:.4778978}
+  2017{space 8} {c |}  {space 3}{result:.2317881}   {space 3}{result:.5686373}   {space 2}{result:.4761905}
+  2018{space 8} {c |}  {space 3}{result:.2816568}   {space 3}{result:.5527594}   {space 2}{result:.4790997}
+  Total{space 7} {c |}  {space 3}{result:.2915816}   {space 3}{result:.5586291}   {space 2}{result:.4907239}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. 
+. 
+. **look at facility characteristics
+. 
+. table bpci, stat(mean icu urban income bedsize hcontr)
+{res}
+{smcl}
+{reset}{...}
+{hline 33}{c -}{c TT}{c -}{c -}{hline 59}{c -}{c -}{c -}{hline 27}{c -}{c -}{c -}{hline 37}{c -}{c -}{c -}{hline 34}{c -}{c -}{c -}{hline 41}
+{space 33} {c |}  Indicates ICU was where patient spent most days during stay   4 quantiles of percenturban   4 quantiles of median_householdincome   Categorical var for number of beds   Categorical variable for hospital control
+{hline 33}{c -}{c +}{c -}{c -}{hline 59}{c -}{c -}{c -}{hline 27}{c -}{c -}{c -}{hline 37}{c -}{c -}{c -}{hline 34}{c -}{c -}{c -}{hline 41}
+Indicates episode covered by BPCI {c |}  {space 59}   {space 27}   {space 37}   {space 34}   {space 41}
+  1{space 30} {c |}  {space 51}{result:.3747672}   {space 19}{result:2.871917}   {space 29}{result:3.089287}   {space 26}{result:2.825415}   {space 33}{result:1.000029}
+  Total{space 26} {c |}  {space 51}{result:.3747672}   {space 19}{result:2.871917}   {space 29}{result:3.089287}   {space 26}{result:2.825415}   {space 33}{result:1.000029}
+{hline 33}{c -}{c BT}{c -}{c -}{hline 59}{c -}{c -}{c -}{hline 27}{c -}{c -}{c -}{hline 37}{c -}{c -}{c -}{hline 34}{c -}{c -}{c -}{hline 41}
+
+{com}. 
+. *Parallel trends means: Medicare 65+ vs Private/Medicaid 45-64
+. table year medicare, stat(mean totchg_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 3}{result:90983.85}   {space 3}{result:88694.14}   {space 2}{result:89507.37}
+  2011{space 8} {c |}  {space 3}{result:89084.17}   {space 3}{result:91289.73}   {space 2}{result:90562.89}
+  2012{space 8} {c |}  {space 3}{result:91972.25}   {space 3}{result:91811.15}   {space 2}{result:91860.19}
+  2013{space 8} {c |}  {space 3}{result:92215.11}   {space 3}{result:96280.64}   {space 2}{result:95067.71}
+  2014{space 8} {c |}  {space 3}{result:89305.36}   {space 3}{result:95377.28}   {space 2}{result:93585.75}
+  2015{space 8} {c |}  {space 3}{result:93274.05}   {space 3}{result:98366.65}   {space 2}{result:96874.94}
+  2016{space 8} {c |}  {space 3}{result:96496.21}   {space 5}{result:102203}   {space 2}{result:100503.1}
+  2017{space 8} {c |}  {space 4}{result:97491.9}   {space 3}{result:105416.5}   {space 2}{result:103087.6}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:80919.33}   {space 3}{result:83709.33}   {space 2}{result:82856.62}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean los_w)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 4}{result:4.22449}   {space 3}{result:4.875342}   {space 2}{result:4.584977}
+  2010{space 8} {c |}  {space 3}{result:4.110231}   {space 3}{result:5.114145}   {space 2}{result:4.758011}
+  2011{space 8} {c |}  {space 3}{result:3.963438}   {space 3}{result:5.152964}   {space 2}{result:4.760958}
+  2012{space 8} {c |}  {space 3}{result:3.923805}   {space 3}{result:5.069235}   {space 2}{result:4.720548}
+  2013{space 8} {c |}  {space 3}{result:3.990609}   {space 3}{result:5.222955}   {space 2}{result:4.855291}
+  2014{space 8} {c |}  {space 3}{result:4.226103}   {space 3}{result:5.417676}   {space 2}{result:5.066102}
+  2015{space 8} {c |}  {space 3}{result:4.250502}   {space 3}{result:5.579911}   {space 2}{result:5.190504}
+  2016{space 8} {c |}  {space 3}{result:4.286715}   {space 3}{result:5.609796}   {space 3}{result:5.21569}
+  2017{space 8} {c |}  {space 3}{result:4.140354}   {space 3}{result:5.386944}   {space 2}{result:5.020594}
+  2018{space 8} {c |}  {space 3}{result:4.212677}   {space 3}{result:5.274829}   {space 2}{result:4.974276}
+  Total{space 7} {c |}  {space 3}{result:4.123364}   {space 3}{result:5.318828}   {space 2}{result:4.953514}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean postcare)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:.4234694}   {space 3}{result:.5246575}   {space 2}{result:.4795144}
+  2010{space 8} {c |}  {space 3}{result:.3001067}   {space 3}{result:.5134023}   {space 2}{result:.4376469}
+  2011{space 8} {c |}  {space 3}{result:.2810265}   {space 3}{result:.5178553}   {space 2}{result:.4397503}
+  2012{space 8} {c |}  {space 3}{result:.2712559}   {space 3}{result:.4862749}   {space 3}{result:.420873}
+  2013{space 8} {c |}  {space 3}{result:.2572305}   {space 3}{result:.4837058}   {space 2}{result:.4161657}
+  2014{space 8} {c |}  {space 3}{result:.2016185}   {space 3}{result:.4448658}   {space 2}{result:.3728524}
+  2015{space 8} {c |}  {space 3}{result:.1809781}   {space 3}{result:.4188394}   {space 2}{result:.3491214}
+  2016{space 8} {c |}  {space 3}{result:.1997029}   {space 3}{result:.4481858}   {space 2}{result:.3741703}
+  2017{space 8} {c |}  {space 3}{result:.2030964}   {space 3}{result:.4882577}   {space 3}{result:.404454}
+  2018{space 8} {c |}  {space 3}{result:.2379066}   {space 3}{result:.5088456}   {space 2}{result:.4321789}
+  Total{space 7} {c |}  {space 3}{result:.2399774}   {space 3}{result:.4786244}   {space 2}{result:.4056547}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. 
+. table year medicare, stat(mean totchg_r)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  2010{space 8} {c |}  {space 3}{result:92235.18}   {space 3}{result:89816.34}   {space 2}{result:90675.43}
+  2011{space 8} {c |}  {space 3}{result:90568.24}   {space 3}{result:92697.76}   {space 2}{result:91995.98}
+  2012{space 8} {c |}  {space 3}{result:93254.58}   {space 3}{result:93118.56}   {space 2}{result:93159.96}
+  2013{space 8} {c |}  {space 4}{result:93591.4}   {space 3}{result:98884.92}   {space 2}{result:97305.63}
+  2014{space 8} {c |}  {space 3}{result:91705.37}   {space 3}{result:97770.32}   {space 2}{result:95980.85}
+  2015{space 8} {c |}  {space 3}{result:95247.71}   {space 5}{result:100657}   {space 3}{result:99072.5}
+  2016{space 8} {c |}  {space 3}{result:98755.09}   {space 3}{result:104688.9}   {space 2}{result:102921.4}
+  2017{space 8} {c |}  {space 3}{result:99097.01}   {space 3}{result:107545.1}   {space 2}{result:105062.4}
+  2018{space 8} {c |}  {space 10}{result:0}   {space 10}{result:0}   {space 9}{result:0}
+  Total{space 7} {c |}  {space 3}{result:82401.35}   {space 3}{result:85443.51}   {space 2}{result:84513.73}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. table year medicare, stat(mean los_r)
+{res}
+{smcl}
+{reset}{...}
+{hline 14}{c -}{c TT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+{space 14} {c |}  {space 2}Primary expected payer is medicare{space 2}
+{space 14} {c |}  {space 10}0   {space 10}1   {space 5}Total
+{hline 14}{c -}{c +}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+Discharge year {c |}  {space 11}   {space 11}   {space 10}
+  2009{space 8} {c |}  {space 3}{result:4.229592}   {space 3}{result:5.019178}   {space 3}{result:4.66692}
+  2010{space 8} {c |}  {space 3}{result:4.127568}   {space 3}{result:5.122617}   {space 2}{result:4.769628}
+  2011{space 8} {c |}  {space 3}{result:3.988863}   {space 3}{result:5.158438}   {space 2}{result:4.773007}
+  2012{space 8} {c |}  {space 3}{result:3.925958}   {space 3}{result:5.077995}   {space 2}{result:4.727297}
+  2013{space 8} {c |}  {space 3}{result:4.003276}   {space 3}{result:5.260377}   {space 2}{result:4.885327}
+  2014{space 8} {c |}  {space 3}{result:4.259881}   {space 3}{result:5.436526}   {space 2}{result:5.089356}
+  2015{space 8} {c |}  {space 3}{result:4.298727}   {space 3}{result:5.598872}   {space 2}{result:5.218037}
+  2016{space 8} {c |}  {space 3}{result:4.383913}   {space 3}{result:5.623481}   {space 2}{result:5.254251}
+  2017{space 8} {c |}  {space 4}{result:4.16154}   {space 3}{result:5.405596}   {space 3}{result:5.03999}
+  2018{space 8} {c |}  {space 4}{result:4.22206}   {space 3}{result:5.293343}   {space 2}{result:4.990206}
+  Total{space 7} {c |}  {space 3}{result:4.152617}   {space 3}{result:5.336682}   {space 2}{result:4.974851}
+{hline 14}{c -}{c BT}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 11}{c -}{c -}{c -}{hline 10}
+
+{com}. 
+. 
+. **REGRESSIONS**
+. //stratified for snf, rehab, ltc, and teaching hospitals
+. //stratified for 3 most common BPCI drgs: Major Joint Replacement, Esophagitis, gastroenteritis and other digestive disorders, Sepsis 
+. //stratified for race and ethnicity
+. 
+. //total charges
+. reg totchg_r medicare post did, vce(cluster thcic_id)
+{txt}{p 0 6 2}note: {bf:post} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:did} omitted because of collinearity.{p_end}
+
+Linear regression                               Number of obs     = {res}    61,473
+                                                {txt}F(1, 9)           =  {res}     3.42
+                                                {txt}Prob > F          = {res}    0.0976
+                                                {txt}R-squared         = {res}    0.0005
+                                                {txt}Root MSE          =    {res}  90136
+
+{txt}{ralign 78:(Std. err. adjusted for {res:10} clusters in {res:thcic_id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    totchg_r{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}medicare {c |}{col 14}{res}{space 2} 4319.732{col 26}{space 2} 2337.321{col 37}{space 1}    1.85{col 46}{space 3}0.098{col 54}{space 4} -967.656{col 67}{space 3}  9607.12
+{txt}{space 8}post {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 9}did {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 7}_cons {c |}{col 14}{res}{space 2} 72640.75{col 26}{space 2} 3998.858{col 37}{space 1}   18.17{col 46}{space 3}0.000{col 54}{space 4} 63594.71{col 67}{space 3}  81686.8
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. reg totchg_w medicare post did, vce(cluster thcic_id)
+{txt}{p 0 6 2}note: {bf:post} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:did} omitted because of collinearity.{p_end}
+
+Linear regression                               Number of obs     = {res}    61,473
+                                                {txt}F(1, 9)           =  {res}     4.06
+                                                {txt}Prob > F          = {res}    0.0747
+                                                {txt}R-squared         = {res}    0.0006
+                                                {txt}Root MSE          =    {res}  79391
+
+{txt}{ralign 78:(Std. err. adjusted for {res:10} clusters in {res:thcic_id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}    totchg_w{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}medicare {c |}{col 14}{res}{space 2} 4121.823{col 26}{space 2} 2045.121{col 37}{space 1}    2.02{col 46}{space 3}0.075{col 54}{space 4} -504.562{col 67}{space 3} 8748.208
+{txt}{space 8}post {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 9}did {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 7}_cons {c |}{col 14}{res}{space 2} 71153.32{col 26}{space 2} 3866.063{col 37}{space 1}   18.40{col 46}{space 3}0.000{col 54}{space 4} 62407.68{col 67}{space 3} 79898.97
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. reg totchg_rlog medicare post did, vce(cluster thcic_id)
+{txt}{p 0 6 2}note: {bf:post} omitted because of collinearity.{p_end}
+{p 0 6 2}note: {bf:did} omitted because of collinearity.{p_end}
+
+Linear regression                               Number of obs     = {res}    45,344
+                                                {txt}F(1, 9)           =  {res}     6.06
+                                                {txt}Prob > F          = {res}    0.0360
+                                                {txt}R-squared         = {res}    0.0024
+                                                {txt}Root MSE          =    {res} .73772
+
+{txt}{ralign 78:(Std. err. adjusted for {res:10} clusters in {res:thcic_id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1} totchg_rlog{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}medicare {c |}{col 14}{res}{space 2}  .080224{col 26}{space 2} .0325753{col 37}{space 1}    2.46{col 46}{space 3}0.036{col 54}{space 4} .0065334{col 67}{space 3} .1539145
+{txt}{space 8}post {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 9}did {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 7}_cons {c |}{col 14}{res}{space 2} 11.21543{col 26}{space 2} .0564627{col 37}{space 1}  198.63{col 46}{space 3}0.000{col 54}{space 4}  11.0877{col 67}{space 3} 11.34316
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. reg totchg_r medicare post did female highsev dual icu ethnicity i.racecat i.urban i.income i.bedsize i.hcontrl i.year, vce(cluster thcic_id)
+{err}no observations
+{txt}{search r(2000), local:r(2000);}
 
 end of do-file
 
-{search r(111), local:r(111);}
+{search r(2000), local:r(2000);}
 
-{com}. log close
-      {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/austinbean/Google Drive/Texas PUDF Zipped Backup Files/other_analyses/DiRienz/BPCI_analysis.smcl
-  {txt}log type:  {res}smcl
- {txt}closed on:  {res}17 Apr 2021, 20:03:19
-{txt}{.-}
-{smcl}
-{txt}{sf}{ul off}
+{com}. 
