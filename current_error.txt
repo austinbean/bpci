@@ -53,10 +53,6 @@ pat_country
 fips
 public_health_region
 admit_weekday
-los_r
-age
-pat_status
-race
 ethnicity
 pay1
 pay2
@@ -506,4 +502,6 @@ time
 post
 did
 
+08/05/2021:
 
+- Current error is a regression between lines 234 and 244 for which there are no observations.  There are 139,000 observations in the data at this point so maybe it's a problem w/ the clustering?  Actually the error is the first one in the block, on line 234.  
