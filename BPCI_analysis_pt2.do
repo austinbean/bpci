@@ -128,7 +128,8 @@ label variable group4 "BPCI enacted 10/1/2015"
 //**CREATE VARIABLES FOR EVENT STUDY & did**//
 
 egen time = group(year dqtr)
-gen post=1 if group1==1 & time>15
+gen post=0
+replace post=1 if group1==1 & time>15
 replace post=1 if group2==1 & time>21
 replace post=1 if group3==1 & time>22
 replace post=1 if group4==1 & time>23
